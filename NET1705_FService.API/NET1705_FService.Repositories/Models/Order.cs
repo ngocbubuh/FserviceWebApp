@@ -29,7 +29,7 @@ public partial class Order
 
     public DateTime? StartDate { get; set; }
 
-    public virtual ApartmentPackage ApartmentPackage { get; set; }
+    //public virtual ApartmentPackage ApartmentPackage { get; set; }
 
     public virtual ICollection<ApartmentPackage> ApartmentPackages { get; } = new List<ApartmentPackage>();
 
