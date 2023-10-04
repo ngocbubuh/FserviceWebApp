@@ -19,5 +19,5 @@ public partial class Service
 
     public virtual ICollection<PackageDetail> PackageDetails { get; } = new List<PackageDetail>();
 
-    public virtual ICollection<ServiceJoinStaff> ServiceJoinStaffs { get; } = new List<ServiceJoinStaff>();
+    //public virtual ICollection<ServiceJoinStaff> ServiceJoinStaffs { get; } = new List<ServiceJoinStaff>();
 }

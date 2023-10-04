@@ -1,10 +1,15 @@
+using FServiceAPI.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NET1705_FService.Repositories.Models;
 using NET1715_FService.API.Repository.Inteface;
 using NET1715_FService.API.Repository.Repositories;
 using NET1715_FService.Service.Inteface;
 using NET1715_FService.Service.Services;
+using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -56,6 +61,29 @@ builder.Services.AddCors(options =>
         });
 });
 
+//Add Authentication - Ngoc Buh
+builder.Services.AddIdentity<Accounts, IdentityRole>()
+        .AddEntityFrameworkStores<FserviceApiDatabaseContext>().AddDefaultTokenProviders();
+//
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.SaveToken = true;
+    options.RequireHttpsMetadata = false;
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["JWT:ValidAudience"],
+        ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecretKey"]))
+    };
+});
+
 // add automapper
 //builder.Services.AddAutoMapper(typeof(AutomapperProfile).Assembly);
 
@@ -70,6 +98,13 @@ builder.Services.AddScoped<IApartmentRepository, ApartmentRepository>();
 builder.Services.AddScoped<IApartmentService, ApartmentService>();
 builder.Services.AddScoped<IApartmentTypeRepository, ApartmentTypeRepository>();
 builder.Services.AddScoped<IApartmentTypeService, ApartmentTypeService>();
+//NgocBuh
+builder.Services.AddScoped<IBannerRepository, BannerRepository>();
+builder.Services.AddScoped<IBannerService, BannerService>();
+builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+builder.Services.AddScoped<IServiceService, ServiceService>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 var app = builder.Build();
 
