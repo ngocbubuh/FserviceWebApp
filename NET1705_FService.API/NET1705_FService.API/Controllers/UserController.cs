@@ -8,7 +8,7 @@ using NET1715_FService.Service.Services;
 
 namespace NET1705_FService.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/accounts")]
     [ApiController]
     public class UserController : ControllerBase
     {

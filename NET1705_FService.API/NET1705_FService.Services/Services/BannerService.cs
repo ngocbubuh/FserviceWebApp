@@ -49,10 +49,10 @@ namespace NET1715_FService.Service.Services
             return package;
         }
 
-        public async Task<Banner> GetBannerByPage(string page)
+        public async Task<List<Banner>> GetBannerByPage(string page)
         {
-            var banner = await _repo.GetBannerByPageAsync(page);
-            return banner;
+            var banners = await _repo.GetBannerByPageAsync(page);
+            return banners;
         }
 
         public async Task<ResponseModel> UpdateBannerAsync(int id, Banner banner)

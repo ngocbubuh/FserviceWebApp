@@ -9,7 +9,7 @@ using NET1715_FService.Service.Services;
 
 namespace NET1715_FService.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/authentication")]
     [ApiController]
     public class AccountController : ControllerBase
     {

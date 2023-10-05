@@ -41,9 +41,9 @@ namespace FServiceAPI.Repositories
             return banner;
         }
 
-        public async Task<Banner> GetBannerByPageAsync(string page)
+        public async Task<List<Banner>> GetBannerByPageAsync(string page)
         {
-            var banners = await dbContext.Banners.FirstOrDefaultAsync(b => b.Page == page);
+            var banners = await dbContext.Banners!.ToListAsync();
             return banners; ;
         }
 

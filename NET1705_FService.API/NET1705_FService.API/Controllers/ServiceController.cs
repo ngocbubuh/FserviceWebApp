@@ -4,7 +4,7 @@ using NET1715_FService.Service.Inteface;
 
 namespace NET1715_FService.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/services")]
     [ApiController]
     public class ServiceController : ControllerBase
     {
