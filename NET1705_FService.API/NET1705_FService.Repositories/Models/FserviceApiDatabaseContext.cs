@@ -138,7 +138,7 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
         {
             entity.HasKey(e => e.Id).HasName("PK__Customer__3214EC07B63E5396");
 
-            entity.ToTable("Customer");
+            entity.ToTable("Account");
 
             entity.Property(e => e.Email).HasMaxLength(50);
             entity.Property(e => e.Name).HasMaxLength(50);

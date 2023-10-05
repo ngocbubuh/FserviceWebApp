@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FServiceAPI.Models
+namespace NET1705_FService.Repositories.Data
 {
     public class SignUpModel
     {
@@ -12,8 +12,6 @@ namespace FServiceAPI.Models
         public string? Address { get; set; }
         [Required]
         public string? DateOfBirth { get; set; }
-        [Required]
-        public string Role { get; set; }
         [Required, EmailAddress]
         public string Email { get; set; } = null!;
         [Required, EmailAddress]

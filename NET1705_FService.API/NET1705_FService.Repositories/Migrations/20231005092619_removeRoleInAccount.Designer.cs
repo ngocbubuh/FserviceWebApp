@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NET1705_FService.Repositories.Models;
 
@@ -11,9 +12,11 @@ using NET1705_FService.Repositories.Models;
 namespace NET1705_FService.Repositories.Migrations
 {
     [DbContext(typeof(FserviceApiDatabaseContext))]
-    partial class FserviceApiDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20231005092619_removeRoleInAccount")]
+    partial class removeRoleInAccount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

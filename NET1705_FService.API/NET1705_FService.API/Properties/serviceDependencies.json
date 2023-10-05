@@ -1,11 +1,15 @@
 {
   "dependencies": {
-    "apis1": {
-      "type": "apis"
-    },
     "mssql1": {
       "type": "mssql",
       "connectionId": "AZURE_SQL_CONNECTIONSTRING"
+    },
+    "apis1": {
+      "type": "apis"
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "FSERVICES"
     }
   }
 }

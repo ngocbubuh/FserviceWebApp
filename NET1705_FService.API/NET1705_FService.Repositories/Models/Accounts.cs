@@ -12,7 +12,5 @@ public partial class Accounts : IdentityUser
     public string? Address { get; set; }
     public string? DateOfBirth { get; set; }
     public string? Avatar { get; set; }
-    public string? Role { get; set; }
-
     public virtual ICollection<Apartment> Apartments { get; } = new List<Apartment>();
 }
