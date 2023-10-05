@@ -6,7 +6,7 @@ using NET1715_FService.Service.Inteface;
 
 namespace NET1715_FService.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/banners")]
     [ApiController]
     public class BannerController : ControllerBase
     {
@@ -16,12 +16,26 @@ namespace NET1715_FService.API.Controllers
             _bannerService = bannerService;
         }
 
-        [HttpGet, Authorize]
+        [HttpGet]
         public async Task<IActionResult> GetBannerAsync(string page)
         {
             try
             {
                 var banner = await _bannerService.GetBannerByPage(page);
+                return banner != null ? Ok(banner) : NotFound();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetBannerAsync(int id)
+        {
+            try
+            {
+                var banner = await _bannerService.GetBannerById(id);
                 return banner != null ? Ok(banner) : NotFound();
             }
             catch
