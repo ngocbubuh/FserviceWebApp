@@ -1,6 +1,6 @@
-﻿using FServiceAPI.Models;
-using FServiceAPI.Repositories;
+﻿using FServiceAPI.Repositories;
 using Microsoft.AspNetCore.Identity;
+using NET1705_FService.Repositories.Data;
 using NET1705_FService.Repositories.Models;
 using NET1715_FService.Service.Inteface;
 using System;
@@ -19,59 +19,45 @@ namespace NET1715_FService.Service.Services
         {
             _repo = repo;
         }
-        public async Task<ResponseModel> DeleteAccountAsync(string id)
-        {
-            var deleteAccount = await _repo.GetAccountAsync(id);
-            if (deleteAccount == null)
-            {
-                return new ResponseModel { Status = "Error", Message = $"Not found Package Id {id}" };
-            }
-            var result = await _repo.DeleteAccountAsync(id);
-            if (result == null)
-            {
-                return new ResponseModel { Status = "Error", Message = $"Can not delete package {deleteAccount.Id}" };
-            }
-            return new ResponseModel { Status = "Success", Message = $"Delete successfully package {deleteAccount.Id}" };
-        }
-
-        public async Task<Accounts> GetAccountAsync(string id)
-        {
-            var account = await _repo.GetAccountAsync(id);
-            return account;
-        }
 
         public async Task<string> SignInAsync(SignInModel model)
         {
             var token = await _repo.SignInAsync(model);
             if (token == null) 
             {
-                return null;
+                return "Error";
             }
             return token;
         }
 
-        public async Task<IdentityResult> SignUpAsync(SignUpModel model)
+        public async Task<ResponseModel> SignUpAdminAsync(SignUpModel model)
         {
-            var result = await _repo.SignUpAsync(model);
+            var result = await _repo.SignUpAdminAsync(model);
             if (result == null)
             {
-                return null;
+                return new ResponseModel { Status="Error", Message= "Oops! Our server is unable to fulfill this request at the moment! Please stand by!" };
             }
             return result;
         }
 
-        public async Task<ResponseModel> UpdateAccountAsync(string id, Accounts account)
+        public async Task<ResponseModel> SignUpAsync(SignUpModel model)
         {
-            if (id == account.Id)
+            var result = await _repo.SignUpAsync(model);
+            if (result == null)
             {
-                var result = await _repo.UpdateAccountAsync(id, account);
-                if (result != null)
-                {
-                    return new ResponseModel { Status = "Success", Message = result.ToString() };
-                }
-                return new ResponseModel { Status = "Error", Message = "Update error." };
+                return new ResponseModel { Status = "Error", Message = "Oops! Our server is unable to fulfill this request at the moment! Please stand by!" };
             }
-            return new ResponseModel { Status = "Error", Message = "Id invalid" };
+            return result;
+        }
+
+        public async Task<ResponseModel> SignUpStaffAsync(SignUpModel model)
+        {
+            var result = await _repo.SignUpStaffAsync(model);
+            if (result == null)
+            {
+                return new ResponseModel { Status = "Error", Message = "Oops! Our server is unable to fulfill this request at the moment! Please stand by!" };
+            }
+            return result;
         }
     }
 }

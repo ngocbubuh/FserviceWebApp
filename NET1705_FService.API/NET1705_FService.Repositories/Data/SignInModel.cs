@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FServiceAPI.Models
+namespace NET1705_FService.Repositories.Data
 {
     public class SignInModel
     {
