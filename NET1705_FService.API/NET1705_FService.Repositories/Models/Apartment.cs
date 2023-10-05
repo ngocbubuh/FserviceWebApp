@@ -13,11 +13,11 @@ public partial class Apartment
 
     public int? TypeId { get; set; }
 
-    public int? CustomerId { get; set; }
+    public string? AccountId { get; set; }
 
     public virtual ICollection<ApartmentPackage> ApartmentPackages { get; } = new List<ApartmentPackage>();
 
-    public virtual Customer Customer { get; set; }
+    public virtual Accounts Account { get; set; }
 
     public virtual Floor Floor { get; set; }
 

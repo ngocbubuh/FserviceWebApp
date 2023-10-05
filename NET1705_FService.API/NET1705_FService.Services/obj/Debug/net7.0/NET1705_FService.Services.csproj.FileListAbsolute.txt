@@ -13,3 +13,18 @@ D:\FPT_University\Fall_2023\PRN211\Workspace\NET7\NET1705_FService.API\NET1705_F
 D:\FPT_University\Fall_2023\PRN211\Workspace\NET7\NET1705_FService.API\NET1705_FService.Services\obj\Debug\net7.0\refint\NET1705_FService.Services.dll
 D:\FPT_University\Fall_2023\PRN211\Workspace\NET7\NET1705_FService.API\NET1705_FService.Services\obj\Debug\net7.0\NET1705_FService.Services.pdb
 D:\FPT_University\Fall_2023\PRN211\Workspace\NET7\NET1705_FService.API\NET1705_FService.Services\obj\Debug\net7.0\ref\NET1705_FService.Services.dll
+D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\NET1705_FService.Services\bin\Debug\net7.0\NET1705_FService.Services.deps.json
+D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\NET1705_FService.Services\bin\Debug\net7.0\NET1705_FService.Services.dll
+D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\NET1705_FService.Services\bin\Debug\net7.0\NET1705_FService.Services.pdb
+D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\NET1705_FService.Services\bin\Debug\net7.0\NET1705_FService.Repositories.dll
+D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\NET1705_FService.Services\bin\Debug\net7.0\NET1705_FService.Repositories.pdb
+D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\NET1705_FService.Services\obj\Debug\net7.0\NET1705_FService.Services.csproj.AssemblyReference.cache
+D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\NET1705_FService.Services\obj\Debug\net7.0\NET1705_FService.Services.GeneratedMSBuildEditorConfig.editorconfig
+D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\NET1705_FService.Services\obj\Debug\net7.0\NET1705_FService.Services.AssemblyInfoInputs.cache
+D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\NET1705_FService.Services\obj\Debug\net7.0\NET1705_FService.Services.AssemblyInfo.cs
+D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\NET1705_FService.Services\obj\Debug\net7.0\NET1705_FService.Services.csproj.CoreCompileInputs.cache
+D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\NET1705_FService.Services\obj\Debug\net7.0\NET1705_FService.Services.csproj.CopyComplete
+D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\NET1705_FService.Services\obj\Debug\net7.0\NET1705_FService.Services.dll
+D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\NET1705_FService.Services\obj\Debug\net7.0\refint\NET1705_FService.Services.dll
+D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\NET1705_FService.Services\obj\Debug\net7.0\NET1705_FService.Services.pdb
+D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\NET1705_FService.Services\obj\Debug\net7.0\ref\NET1705_FService.Services.dll

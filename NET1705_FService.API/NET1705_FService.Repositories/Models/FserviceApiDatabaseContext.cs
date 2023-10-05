@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace NET1705_FService.Repositories.Models;
 
-public partial class FserviceApiDatabaseContext : DbContext
+public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
 {
     public FserviceApiDatabaseContext()
     {
@@ -25,7 +26,9 @@ public partial class FserviceApiDatabaseContext : DbContext
 
     public virtual DbSet<Building> Buildings { get; set; }
 
-    public virtual DbSet<Customer> Customers { get; set; }
+    public virtual DbSet<Accounts> Accounts { get; set; }
+
+    public virtual DbSet<Banner> Banners { get; set; }
 
     public virtual DbSet<Floor> Floors { get; set; }
 
@@ -39,9 +42,9 @@ public partial class FserviceApiDatabaseContext : DbContext
 
     public virtual DbSet<Service> Services { get; set; }
 
-    public virtual DbSet<ServiceJoinStaff> ServiceJoinStaffs { get; set; }
+    //public virtual DbSet<ServiceJoinStaff> ServiceJoinStaffs { get; set; }
 
-    public virtual DbSet<Staff> Staff { get; set; }
+    //public virtual DbSet<Staff> Staff { get; set; }
 
 //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -49,6 +52,7 @@ public partial class FserviceApiDatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Apartment>(entity =>
         {
             entity.ToTable("Apartment");
@@ -57,8 +61,8 @@ public partial class FserviceApiDatabaseContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.Customer).WithMany(p => p.Apartments)
-                .HasForeignKey(d => d.CustomerId)
+            entity.HasOne(d => d.Account).WithMany(p => p.Apartments)
+                .HasForeignKey(d => d.AccountId)
                 .HasConstraintName("FK__Apartment__Custo__5165187F").IsRequired(false);
 
             entity.HasOne(d => d.Floor).WithMany(p => p.Apartments)
@@ -130,15 +134,25 @@ public partial class FserviceApiDatabaseContext : DbContext
             entity.Property(e => e.Name).HasMaxLength(50);
         });
 
-        modelBuilder.Entity<Customer>(entity =>
+        modelBuilder.Entity<Accounts>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Customer__3214EC07B63E5396");
 
-            entity.ToTable("Customer");
+            entity.ToTable("Account");
 
             entity.Property(e => e.Email).HasMaxLength(50);
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.PhoneNumber).HasMaxLength(10);
+        });
+
+        modelBuilder.Entity<Banner>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Banner_123456ABC");
+            entity.ToTable("Banners");
+
+            entity.Property(e => e.Page).HasMaxLength(50);
+
+            entity.Property(e => e.Title).HasMaxLength(500);
         });
 
         modelBuilder.Entity<Floor>(entity =>
@@ -168,9 +182,9 @@ public partial class FserviceApiDatabaseContext : DbContext
                 .IsFixedLength();
             entity.Property(e => e.StartDate).HasColumnType("datetime");
 
-            entity.HasOne(d => d.ApartmentPackage).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.ApartmentPackageId)
-                .HasConstraintName("FK__Order__Apartment__60A75C0F");
+            //entity.HasOne(d => d.ApartmentPackage).WithMany(p => p.Orders)
+            //    .HasForeignKey(d => d.ApartmentPackageId)
+            //    .HasConstraintName("FK__Order__Apartment__60A75C0F");
         });
 
         modelBuilder.Entity<OrderDetail>(entity =>
@@ -233,32 +247,32 @@ public partial class FserviceApiDatabaseContext : DbContext
             entity.Property(e => e.Name).HasMaxLength(50);
         });
 
-        modelBuilder.Entity<ServiceJoinStaff>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__ServiceJ__3214EC071F71799A");
+        //modelBuilder.Entity<ServiceJoinStaff>(entity =>
+        //{
+        //    entity.HasKey(e => e.Id).HasName("PK__ServiceJ__3214EC071F71799A");
 
-            entity.ToTable("ServiceJoinStaff");
+        //    entity.ToTable("ServiceJoinStaff");
 
-            entity.Property(e => e.DateComplete).HasColumnType("date");
-            entity.Property(e => e.WorkDate).HasColumnType("date");
+        //    entity.Property(e => e.DateComplete).HasColumnType("date");
+        //    entity.Property(e => e.WorkDate).HasColumnType("date");
 
-            entity.HasOne(d => d.Service).WithMany(p => p.ServiceJoinStaffs)
-                .HasForeignKey(d => d.ServiceId)
-                .HasConstraintName("FK__ServiceJo__Servi__06CD04F7");
+        //    entity.HasOne(d => d.Service).WithMany(p => p.ServiceJoinStaffs)
+        //        .HasForeignKey(d => d.ServiceId)
+        //        .HasConstraintName("FK__ServiceJo__Servi__06CD04F7");
 
-            entity.HasOne(d => d.Staff).WithMany(p => p.ServiceJoinStaffs)
-                .HasForeignKey(d => d.StaffId)
-                .HasConstraintName("FK__ServiceJo__Staff__07C12930");
-        });
+        //    entity.HasOne(d => d.Staff).WithMany(p => p.ServiceJoinStaffs)
+        //        .HasForeignKey(d => d.StaffId)
+        //        .HasConstraintName("FK__ServiceJo__Staff__07C12930");
+        //});
 
-        modelBuilder.Entity<Staff>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Staff__3214EC0798429772");
+        //modelBuilder.Entity<Staff>(entity =>
+        //{
+        //    entity.HasKey(e => e.Id).HasName("PK__Staff__3214EC0798429772");
 
-            entity.Property(e => e.Email).HasMaxLength(50);
-            entity.Property(e => e.Name).HasMaxLength(50);
-            entity.Property(e => e.PhoneNumber).HasMaxLength(50);
-        });
+        //    entity.Property(e => e.Email).HasMaxLength(50);
+        //    entity.Property(e => e.Name).HasMaxLength(50);
+        //    entity.Property(e => e.PhoneNumber).HasMaxLength(50);
+        //});
 
         OnModelCreatingPartial(modelBuilder);
     }
