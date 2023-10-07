@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NET1705_FService.Repositories.Models;
 using NET1715_FService.Service.Inteface;
@@ -16,11 +17,15 @@ namespace NET1705_FService.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPackages()
+        public async Task<IActionResult> GetAllPackages()
         {
             try
             {
                 var packages = await _packageService.GetAllPackagesAsync();
+                if (!packages.Any())
+                {
+                    return NotFound();
+                }
                 return Ok(packages);
             }
             catch
@@ -42,6 +47,7 @@ namespace NET1705_FService.API.Controllers
             }
         }
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> AddPackageAsync(Package newPackage)
         {
             try
@@ -60,6 +66,7 @@ namespace NET1705_FService.API.Controllers
             }
         }
         [HttpPut("{id}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> UpdatePackageAsync(int id, Package updatePackage)
         {
             try
@@ -78,6 +85,7 @@ namespace NET1705_FService.API.Controllers
             }
         }
         [HttpDelete("{id}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> DeletePackageAsync(int id)
         {
             try

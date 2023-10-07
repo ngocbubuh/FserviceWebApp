@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NET1705_FService.Repositories.Helper;
 using NET1705_FService.Repositories.Interface;
 using NET1705_FService.Repositories.Models;
 using NET1705_FService.Repositories.Repositories;
@@ -56,7 +57,7 @@ builder.Services.AddSwaggerGen(c =>
 
 // db local
 
-//builder.Services.AddDbContext<FserviceTestContext>(options =>
+//builder.Services.AddDbContext<FserviceApiDatabaseContext>(options =>
 //{
 //    options.UseSqlServer(builder.Configuration.GetConnectionString("FServiceLocal"));
 //});
@@ -112,7 +113,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 // add automapper
-//builder.Services.AddAutoMapper(typeof(AutomapperProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(AutomapperProfile).Assembly);
 
 // add scope
 builder.Services.AddScoped<IPackageRepository, PackageRepository>();
@@ -125,6 +126,17 @@ builder.Services.AddScoped<IApartmentRepository, ApartmentRepository>();
 builder.Services.AddScoped<IApartmentService, ApartmentService>();
 builder.Services.AddScoped<IApartmentTypeRepository, ApartmentTypeRepository>();
 builder.Services.AddScoped<IApartmentTypeService, ApartmentTypeService>();
+
+builder.Services.AddScoped<IApartmentPackageRepository, ApartmentPackageRepository>();
+builder.Services.AddScoped<IApartmentPackageService, NET1705_FService.Services.Services.ApartmentPackageService>();
+builder.Services.AddScoped<IApartPackageServiceRepository, ApartPackageServiceRepository>();
+
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+
+builder.Services.AddScoped<IOrderDetailsRepository, OrderDetailsRepository>();
+builder.Services.AddScoped<IOrderDetailsService, OrderDetailsService>();
+
 //NgocBuh
 builder.Services.AddScoped<IBannerRepository, BannerRepository>();
 builder.Services.AddScoped<IBannerService, BannerService>();

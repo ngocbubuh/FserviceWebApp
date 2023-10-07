@@ -21,6 +21,7 @@ namespace NET1715_FService.API.Repository.Repositories
         {
             var apartment = await _context.Apartments
                 .Include(a => a.Floor)
+                .Include(a => a.ApartmentPackages)
                 .SingleOrDefaultAsync(a => a.Id == id);
             return apartment;
         }
@@ -29,6 +30,15 @@ namespace NET1715_FService.API.Repository.Repositories
         {
             var apartments = await _context.Apartments.Where(a => a.FloorId == floorId && a.TypeId == typeId).ToListAsync();
             return apartments;
+        }
+
+        public async Task<int> RegisApartmentAsync(int id, string accountId)
+        {
+            var apartment = await _context.Apartments.FirstOrDefaultAsync(a => a.Id == id);
+            apartment.AccountId = accountId;
+            _context.Update(apartment);
+            await _context.SaveChangesAsync();
+            return apartment.Id;
         }
     }
 }

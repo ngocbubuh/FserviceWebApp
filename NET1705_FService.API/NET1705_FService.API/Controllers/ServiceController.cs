@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NET1715_FService.Service.Inteface;
 
@@ -41,7 +42,8 @@ namespace NET1715_FService.API.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> AddPackageAsync(NET1705_FService.Repositories.Models.Service newService)
+        [Authorize(Roles = "ADMIN")]
+        public async Task<IActionResult> AddServiceAsync(NET1705_FService.Repositories.Models.Service newService)
         {
             try
             {
@@ -59,7 +61,8 @@ namespace NET1715_FService.API.Controllers
             }
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePackageAsync(int id, NET1705_FService.Repositories.Models.Service updateService)
+        [Authorize(Roles = "ADMIN")]
+        public async Task<IActionResult> UpdateServiceAsync(int id, NET1705_FService.Repositories.Models.Service updateService)
         {
             try
             {
@@ -77,7 +80,8 @@ namespace NET1715_FService.API.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePackageAsync(int id)
+        [Authorize(Roles = "ADMIN")]
+        public async Task<IActionResult> DeleteServiceAsync(int id)
         {
             try
             {

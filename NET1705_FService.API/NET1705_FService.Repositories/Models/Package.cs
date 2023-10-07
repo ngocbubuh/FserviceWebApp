@@ -21,6 +21,8 @@ public partial class Package
 
     public int? DisplayIndex { get; set; }
 
+    public bool Status { get; set; }
+
     public virtual ICollection<ApartmentPackage> ApartmentPackages { get; } = new List<ApartmentPackage>();
 
     public virtual ICollection<PackageDetail> PackageDetails { get; } = new List<PackageDetail>();
