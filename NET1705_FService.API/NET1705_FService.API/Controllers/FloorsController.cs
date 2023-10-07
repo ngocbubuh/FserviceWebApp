@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NET1715_FService.Service.Inteface;
 
@@ -14,6 +15,7 @@ namespace NET1715_FService.API.Controllers
             _floorService = floorService;
         }
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetFloorsByBuildingId(int buidingId)
         {
             try

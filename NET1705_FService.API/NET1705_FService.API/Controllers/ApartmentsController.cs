@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NET1715_FService.Service.Inteface;
 
@@ -16,6 +17,7 @@ namespace NET1715_FService.API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetApartmentsOnFloor(int floorId, int typeId)
         {
             try
@@ -34,6 +36,7 @@ namespace NET1715_FService.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetApartmentById(int id)
         {
             try
@@ -43,6 +46,25 @@ namespace NET1715_FService.API.Controllers
                 {
                     return NotFound();
                 }
+                return Ok(apartment);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpPut("{id}")]
+        [Authorize(Roles = "USER")]
+        public async Task<IActionResult> RegisApartment(int id, string userName)
+        {
+            try
+            {
+                var result = await _apartmentService.RegisApartment(id, userName);
+                if (result.Status.Equals("Error"))
+                {
+                    return NotFound(result);
+                }
+                var apartment = await _apartmentService.GetApartmentByIdAsync(int.Parse(result.Message));
                 return Ok(apartment);
             }
             catch

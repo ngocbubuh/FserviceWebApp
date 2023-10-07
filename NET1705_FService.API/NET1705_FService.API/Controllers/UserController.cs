@@ -46,7 +46,7 @@ namespace NET1705_FService.API.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize]
+        [Authorize(Roles = "ADMIN, STAFF, USER")]
         public async Task<IActionResult> UpdateAccount(string id, Accounts model)
         {
             try
@@ -66,8 +66,8 @@ namespace NET1705_FService.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
-        public async Task<IActionResult> DeletePackage(string id)
+        [Authorize(Roles = "ADMIN")]
+        public async Task<IActionResult> DeleteUser(string id)
         {
             try
             {

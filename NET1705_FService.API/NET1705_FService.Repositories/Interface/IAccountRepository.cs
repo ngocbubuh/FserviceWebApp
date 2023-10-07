@@ -10,5 +10,9 @@ namespace FServiceAPI.Repositories
         public Task<string> SignInAsync(SignInModel model);
         public Task<ResponseModel> SignUpStaffAsync(SignUpModel model);
         public Task<ResponseModel> SignUpAdminAsync(SignUpModel model);
-    }
+
+        public Task<List<Accounts>> GetAllStaffsAsync();
+
+        public Task<Accounts> GetAccountByUserName(string userName);
+    } 
 }

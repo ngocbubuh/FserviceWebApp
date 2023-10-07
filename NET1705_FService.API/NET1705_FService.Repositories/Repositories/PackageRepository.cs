@@ -23,6 +23,7 @@ namespace NET1715_FService.API.Repository.Repositories
             {
                 return 0;
             }
+            package.Status = true;
             _context.Packages.Add(package);
             await _context.SaveChangesAsync();
             return package.Id;
@@ -30,10 +31,11 @@ namespace NET1715_FService.API.Repository.Repositories
 
         public async Task<int> DeletePackageAsync(int id)
         {
-            var deletePackage = _context.Packages!.SingleOrDefault(x => x.Id == id);
+            var deletePackage = _context.Packages!.SingleOrDefault(x => x.Id == id && x.Status == true);
             if (deletePackage != null)
             {
-                _context.Packages.Remove(deletePackage);
+                deletePackage.Status = false;
+                _context.Packages.Update(deletePackage);
                 await _context.SaveChangesAsync();
                 return deletePackage.Id;
             }
@@ -42,7 +44,9 @@ namespace NET1715_FService.API.Repository.Repositories
 
         public async Task<List<Package>> GetAllPackagesAsync()
         {
-            var packages = await _context.Packages!.ToListAsync();
+            var packages = await _context.Packages!
+                .Where(p => p.Status == true)
+                .ToListAsync();
             return packages;
         }
 
@@ -50,7 +54,7 @@ namespace NET1715_FService.API.Repository.Repositories
         {
             var package = await _context.Packages
                 .Include(p => p.PackageDetails)
-                .FirstOrDefaultAsync(p => p.Id == id);
+                .FirstOrDefaultAsync(p => p.Id == id && p.Status == true);
             return package;
         }
 
