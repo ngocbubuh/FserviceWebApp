@@ -17,10 +17,45 @@ namespace NET1715_FService.API.Repository.Repositories
         {
             _context = context;
         }
+
+        public async Task<int> AddBuildingAsync(Building building)
+        {
+            if (_context == null){
+                return 0;
+            }
+            _context.Add(building);
+            await _context.SaveChangesAsync();
+            return building.Id;
+        }
+
+        public async Task<int> DeleteBuildingAsync(int id)
+        {
+            var delBuilding = _context.Buildings!.SingleOrDefault(b => b.Id == id && b.Status == true);
+            delBuilding.Status = false;
+            _context.Update(delBuilding);
+            await _context.SaveChangesAsync();
+            return delBuilding.Id;
+        }
+
         public async Task<List<Building>> GetAllBuildingAsync()
         {
-            var buildings = await _context.Buildings.ToListAsync();
+            var buildings = await _context.Buildings
+                .Where(b => b.Status == true)
+                .ToListAsync();
             return buildings;
+        }
+
+        public async Task<Building> GetBuildingAsync(int id)
+        {
+            var building = _context.Buildings!.SingleOrDefault(b => b.Id == id && b.Status == true);
+            return building;
+        }
+
+        public async Task<int> UpdateBuildingAsync(int id, Building building)
+        {
+            _context.Update(building);
+            await _context.SaveChangesAsync();
+            return building.Id;
         }
     }
 }
