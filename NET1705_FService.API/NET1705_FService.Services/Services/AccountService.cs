@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace NET1715_FService.Service.Services
@@ -23,11 +24,11 @@ namespace NET1715_FService.Service.Services
         public async Task<string> SignInAsync(SignInModel model)
         {
             var token = await _repo.SignInAsync(model);
-            if (token == null) 
+            if (token != null) 
             {
-                return "Error";
+                return token;
             }
-            return token;
+            return "Error";
         }
 
         public async Task<ResponseModel> SignUpAdminAsync(SignUpModel model)

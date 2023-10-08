@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "tsqGhR00m+m1KdDVdEA0lbXIbCCDQ1bfNy4DF90v6VUbBkB6w115KBUukk4QDKhEjDZuUyeBjKw0zkJuQg9/Jg==",
+  "dgSpecHash": "tiqbP6YdoZ7wFckhGRFWvmV7VvzkPGkeczdwxnDAxWAa7izGaE5Y/+vmSE4U3B+JRdD9e74yLi1r8MMj/yx/qw==",
   "success": true,
   "projectFilePath": "D:\\Đại học FPT\\Semester 5_Fa23\\SWP391\\Project SWP Final\\NET1705_FService.API\\NET1705_FService.Repositories\\NET1705_FService.Repositories.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\1005h\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\1005h\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\1005h\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\1005h\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
     "C:\\Users\\1005h\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
@@ -14,6 +16,7 @@
     "C:\\Users\\1005h\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\7.0.4\\microsoft.aspnetcore.identity.entityframeworkcore.7.0.4.nupkg.sha512",
     "C:\\Users\\1005h\\.nuget\\packages\\microsoft.aspnetcore.metadata\\7.0.4\\microsoft.aspnetcore.metadata.7.0.4.nupkg.sha512",
     "C:\\Users\\1005h\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
+    "C:\\Users\\1005h\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\1005h\\.nuget\\packages\\microsoft.data.sqlclient\\5.0.1\\microsoft.data.sqlclient.5.0.1.nupkg.sha512",
     "C:\\Users\\1005h\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\5.0.1\\microsoft.data.sqlclient.sni.runtime.5.0.1.nupkg.sha512",
     "C:\\Users\\1005h\\.nuget\\packages\\microsoft.data.sqlite.core\\7.0.4\\microsoft.data.sqlite.core.7.0.4.nupkg.sha512",

@@ -40,7 +40,7 @@ namespace FServiceAPI.Repositories
 
             if (!result.Succeeded) 
             {
-                return "Error! Something went wrong, please try again later!";
+                return "Error! Incorrect Username or Password!";
             }
 
             var authClaims = new List<Claim>
@@ -82,6 +82,7 @@ namespace FServiceAPI.Repositories
                 DateOfBirth = model.DateOfBirth,
                 Email = model.Email,
                 UserName = model.Email,
+                Status = true
             };
 
             var result = await accountManager.CreateAsync(user, model.Password);
@@ -116,6 +117,7 @@ namespace FServiceAPI.Repositories
                 DateOfBirth = model.DateOfBirth,
                 Email = model.Email,
                 UserName = model.Email,
+                Status = true
             };
             var result = await accountManager.CreateAsync(user, model.Password);
             if(result.Succeeded)
@@ -148,6 +150,7 @@ namespace FServiceAPI.Repositories
                 DateOfBirth = model.DateOfBirth,
                 Email = model.Email,
                 UserName = model.Email,
+                Status = true
             };
             var result = await accountManager.CreateAsync(user, model.Password);
             if (result.Succeeded)

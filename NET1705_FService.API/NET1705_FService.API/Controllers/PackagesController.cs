@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NET1705_FService.Repositories.Data;
 using NET1705_FService.Repositories.Models;
 using NET1715_FService.Service.Inteface;
+using Newtonsoft.Json;
 
 namespace NET1705_FService.API.Controllers
 {
@@ -16,11 +19,21 @@ namespace NET1705_FService.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPackages()
+        public async Task<IActionResult> GetPackages([FromQuery] PaginationParameter paginationParameter)
         {
             try
             {
-                var packages = await _packageService.GetAllPackagesAsync();
+                var packages = await _packageService.GetAllPackagesAsync(paginationParameter);
+                var metadata = new
+                {
+                    packages.TotalCount,
+                    packages.PageSize,
+                    packages.CurrentPage,
+                    packages.TotalPages,
+                    packages.HasNext,
+                    packages.HasPrevious
+                };
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
                 return Ok(packages);
             }
             catch
@@ -42,6 +55,7 @@ namespace NET1705_FService.API.Controllers
             }
         }
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> AddPackageAsync(Package newPackage)
         {
             try
@@ -60,6 +74,7 @@ namespace NET1705_FService.API.Controllers
             }
         }
         [HttpPut("{id}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> UpdatePackageAsync(int id, Package updatePackage)
         {
             try
@@ -77,7 +92,9 @@ namespace NET1705_FService.API.Controllers
                 return BadRequest();
             }
         }
+
         [HttpDelete("{id}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> DeletePackageAsync(int id)
         {
             try

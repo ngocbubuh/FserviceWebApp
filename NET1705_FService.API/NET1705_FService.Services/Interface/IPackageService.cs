@@ -10,7 +10,7 @@ namespace NET1715_FService.Service.Inteface
 {
     public interface IPackageService
     {
-        public Task<List<Package>> GetAllPackagesAsync();
+        public Task<PagedList<Package>> GetAllPackagesAsync(PaginationParameter paginationParameter);
         public Task<Package> GetPackageAsync(int id);
         public Task<ResponseModel> AddPackageAsync(Package package);
         public Task<ResponseModel> UpdatePackageAsync(int id, Package package);

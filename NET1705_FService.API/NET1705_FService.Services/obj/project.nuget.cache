@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "6DgjlYk8PWdQtkPkldONeWKhLHEu+0SXlGJDshITprscMFNXrtoVYKX1Oy5SVMJ/JWoG8H5nYN97lJ1tickxhw==",
+  "dgSpecHash": "T8OC96rmy+YDxt7wY1q77cPymTaWmp263Uv5njUH+OfzImURU5DxLBai6LXeGmxSPeFR1CnZDjxNkW1bgMomtw==",
   "success": true,
   "projectFilePath": "D:\\Đại học FPT\\Semester 5_Fa23\\SWP391\\Project SWP Final\\NET1705_FService.API\\NET1705_FService.Services\\NET1705_FService.Services.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\1005h\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\1005h\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\1005h\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\1005h\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
     "C:\\Users\\1005h\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\7.0.4\\microsoft.aspnetcore.authentication.jwtbearer.7.0.4.nupkg.sha512",
@@ -13,6 +15,7 @@
     "C:\\Users\\1005h\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\7.0.4\\microsoft.aspnetcore.identity.entityframeworkcore.7.0.4.nupkg.sha512",
     "C:\\Users\\1005h\\.nuget\\packages\\microsoft.aspnetcore.metadata\\7.0.4\\microsoft.aspnetcore.metadata.7.0.4.nupkg.sha512",
     "C:\\Users\\1005h\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
+    "C:\\Users\\1005h\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\1005h\\.nuget\\packages\\microsoft.data.sqlclient\\5.0.1\\microsoft.data.sqlclient.5.0.1.nupkg.sha512",
     "C:\\Users\\1005h\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\5.0.1\\microsoft.data.sqlclient.sni.runtime.5.0.1.nupkg.sha512",
     "C:\\Users\\1005h\\.nuget\\packages\\microsoft.data.sqlite.core\\7.0.4\\microsoft.data.sqlite.core.7.0.4.nupkg.sha512",

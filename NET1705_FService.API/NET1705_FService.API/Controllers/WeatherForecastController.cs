@@ -1,7 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Identity.Web.Resource;
 
 namespace NET1705_FService.API.Controllers
 {
+    [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase

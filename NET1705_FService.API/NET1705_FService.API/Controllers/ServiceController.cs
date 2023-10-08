@@ -1,6 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NET1705_FService.Repositories.Data;
+using NET1705_FService.Repositories.Models;
 using NET1715_FService.Service.Inteface;
+using Newtonsoft.Json;
 
 namespace NET1715_FService.API.Controllers
 {
@@ -15,11 +20,21 @@ namespace NET1715_FService.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllServiceAsync()
+        public async Task<IActionResult> GetAllServiceAsync([FromQuery] PaginationParameter paginationParameter)
         {
             try
             {
-                var services = await _serviceService.GetAllServicesAsync();
+                var services = await _serviceService.GetAllServicesAsync(paginationParameter);
+                var metadata = new
+                {
+                    services.TotalCount,
+                    services.PageSize,
+                    services.CurrentPage,
+                    services.TotalPages,
+                    services.HasNext,
+                    services.HasPrevious
+                };
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
                 return Ok(services);
             }
             catch
@@ -27,6 +42,7 @@ namespace NET1715_FService.API.Controllers
                 return BadRequest();
             }
         }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetServiceAsync(int id)
         {
@@ -41,15 +57,16 @@ namespace NET1715_FService.API.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> AddPackageAsync(NET1705_FService.Repositories.Models.Service newService)
+        [Authorize(Roles = "ADMIN")]
+        public async Task<IActionResult> AddServiceAsync(NET1705_FService.Repositories.Models.Service newService)
         {
             try
             {
                 var result = await _serviceService.AddServiceAsync(newService);
                 if (result.Status.Equals("Success"))
                 {
-                    var package = await _serviceService.GetServiceAsync(int.Parse(result.Message));
-                    return Ok(package);
+                    var service = await _serviceService.GetServiceAsync(int.Parse(result.Message));
+                    return Ok(service);
                 }
                 return BadRequest(result);
             }
@@ -58,16 +75,18 @@ namespace NET1715_FService.API.Controllers
                 return BadRequest();
             }
         }
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePackageAsync(int id, NET1705_FService.Repositories.Models.Service updateService)
+        [Authorize(Roles = "ADMIN")]
+        public async Task<IActionResult> UpdateServiceAsync(int id, NET1705_FService.Repositories.Models.Service updateService)
         {
             try
             {
                 var result = await _serviceService.UpdateServiceAsync(id, updateService);
                 if (result.Status.Equals("Success"))
                 {
-                    var package = await _serviceService.GetServiceAsync(int.Parse(result.Message));
-                    return Ok(package);
+                    var service = await _serviceService.GetServiceAsync(int.Parse(result.Message));
+                    return Ok(service);
                 }
                 return NotFound(result);
             }
@@ -77,7 +96,8 @@ namespace NET1715_FService.API.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePackageAsync(int id)
+        [Authorize(Roles = "ADMIN")]
+        public async Task<IActionResult> DeleteServiceAsync(int id)
         {
             try
             {
@@ -86,7 +106,7 @@ namespace NET1715_FService.API.Controllers
                 {
                     return Ok(result);
                 }
-                return BadRequest(result);
+                return NotFound(result);
             }
             catch
             {
