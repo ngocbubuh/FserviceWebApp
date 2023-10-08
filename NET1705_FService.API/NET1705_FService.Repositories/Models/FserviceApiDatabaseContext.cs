@@ -132,6 +132,8 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
             entity.ToTable("Building");
 
             entity.Property(e => e.Name).HasMaxLength(50);
+
+            entity.Property(e => e.Status).HasColumnType("bit");
         });
 
         modelBuilder.Entity<Accounts>(entity =>
