@@ -31,6 +31,26 @@ namespace FServiceAPI.Repositories
             this.roleManager = roleManager;
         }
 
+        public async Task<Accounts> GetAccountByUserName(string userName)
+        {
+            var account = await accountManager.FindByNameAsync(userName);
+            return account;
+        }
+
+        public async Task<List<Accounts>> GetAllStaffsAsync()
+        {
+            bool roleExists = await roleManager.RoleExistsAsync("staff");
+
+            if (!roleExists)
+            {
+                return null;
+            }
+
+            var staffAccounts = await accountManager.GetUsersInRoleAsync("staff");
+
+            return staffAccounts.ToList();
+        }
+
         public async Task<string> SignInAsync(SignInModel model)
         {
             var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
