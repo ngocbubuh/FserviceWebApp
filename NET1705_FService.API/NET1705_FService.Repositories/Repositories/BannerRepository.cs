@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NET1705_FService.Repositories.Data;
 using NET1705_FService.Repositories.Models;
 
 namespace FServiceAPI.Repositories
@@ -27,7 +28,18 @@ namespace FServiceAPI.Repositories
             var deleteBanner = dbContext.Banners!.SingleOrDefault(x => x.Id == id);
             if (deleteBanner != null)
             {
-                dbContext.Banners.Remove(deleteBanner);
+                //Delete mềm, ko xóa khỏi database
+                //dbContext.Banners.Update(new Banner
+                //{
+                //    Id = deleteBanner.Id,
+                //    Title = deleteBanner.Title,
+                //    Description = deleteBanner.Description,
+                //    Image = deleteBanner.Image,
+                //    Page = deleteBanner.Page,
+                //    Status = false
+                //});
+                deleteBanner.Status = false;
+                dbContext.Banners.Update(deleteBanner);
                 await dbContext.SaveChangesAsync();
                 return deleteBanner.Id;
             }
@@ -36,14 +48,16 @@ namespace FServiceAPI.Repositories
 
         public async Task<Banner> GetBannerAsync(int id)
         {
+            //Get status == true
             var banner = await dbContext.Banners
-                .FirstOrDefaultAsync(b => b.Id == id);
+                .FirstOrDefaultAsync(b => b.Id == id && b.Status == true);
             return banner;
         }
 
         public async Task<List<Banner>> GetBannerByPageAsync(string page)
         {
-            var banners = await dbContext.Banners!.ToListAsync();
+            //Get status == true
+            var banners = await dbContext.Banners!.Where(b => b.Status == true && b.Page == page).ToListAsync();
             return banners; ;
         }
 

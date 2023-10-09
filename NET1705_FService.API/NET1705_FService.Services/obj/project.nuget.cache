@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "RWS1CKgkLIQRvaS1xwQmmmSEM3YDB6yM7B+XdBBotxEBI5vRBYtHL9x0NcO5sdaUjTQo4LvrDy91kqbSj4gf1A==",
+  "dgSpecHash": "nklYTz3No4Gr8KNQehpE6V8BJrlmaxgHxDcI+iPUsq7O4Kd8UoaqqwcOtPXvzYZiYNS2wi4M+aADuNJ7WyUyHQ==",
   "success": true,
-  "projectFilePath": "D:\\FPT_University\\Fall_2023\\SWP391\\ProjectCode\\FService_WebApp_Ducdpg\\NET1705_FService.API\\NET1705_FService.Services\\NET1705_FService.Services.csproj",
+  "projectFilePath": "D:\\FPT_University\\Fall_2023\\SWP391\\ProjectCode\\FServiceWebApp_Git\\NET1705_FService.API\\NET1705_FService.Services\\NET1705_FService.Services.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\giadu\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\giadu\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

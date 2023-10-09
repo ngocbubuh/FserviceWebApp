@@ -10,5 +10,6 @@ namespace NET1705_FService.Repositories.Models;
         public string Description { get; set; }
         public string Image { get; set; }
         public string Page { get; set; }
+        public bool Status { get; set; }
     }
 

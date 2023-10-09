@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NET1705_FService.Repositories.Data;
 using NET1705_FService.Repositories.Models;
 using NET1715_FService.API.Repository.Inteface;
 using System;
@@ -42,12 +43,14 @@ namespace NET1715_FService.API.Repository.Repositories
             return 0;
         }
 
-        public async Task<List<Package>> GetAllPackagesAsync()
+        public async Task<PagedList<Package>> GetAllPackagesAsync(PaginationParameter paginationParameter)
         {
-            var packages = await _context.Packages!
-                .Where(p => p.Status == true)
-                .ToListAsync();
-            return packages;
+            var packages = await _context.Packages!.Where(y => y.Status == true)
+                .OrderBy(y => y.Id).ToListAsync();
+
+            return PagedList<Package>.ToPagedList(packages,
+                paginationParameter.PageNumber,
+                paginationParameter.PageSize);
         }
 
         public async Task<Package> GetPackageAsync(int id)

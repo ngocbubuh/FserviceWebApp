@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NET1705_FService.API", "NET1705_FService.API\NET1705_FService.API.csproj", "{C820E5E6-0710-47A3-A726-3DFD9F324CDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NET1705_FService.API", "NET1705_FService.API\NET1705_FService.API.csproj", "{C820E5E6-0710-47A3-A726-3DFD9F324CDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NET1705_FService.Services", "NET1705_FService.Services\NET1705_FService.Services.csproj", "{8D010DC8-A68F-41BD-A853-A04661F006F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NET1705_FService.Services", "NET1705_FService.Services\NET1705_FService.Services.csproj", "{8D010DC8-A68F-41BD-A853-A04661F006F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NET1705_FService.Repositories", "NET1705_FService.Repositories\NET1705_FService.Repositories.csproj", "{DF3D5D44-2505-47D4-8309-0A09224BB91F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NET1705_FService.Repositories", "NET1705_FService.Repositories\NET1705_FService.Repositories.csproj", "{DF3D5D44-2505-47D4-8309-0A09224BB91F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -21,16 +21,16 @@ namespace NET1705_FService.Services.Services
         public async Task<ResponseModel> DeleteAccountAsync(string id)
         {
             var deleteAccount = await _repo.GetAccountAsync(id);
-            if (deleteAccount == null)
+            if (deleteAccount != null)
             {
-                return new ResponseModel { Status = "Error", Message = $"Not found Package Id {id}" };
+                var result = await _repo.DeleteAccountAsync(id);
+                if (result != null)
+                {
+                    return new ResponseModel { Status = "Success", Message = $"Delete successfully Account {deleteAccount.Id}!" };
+                }
+                return new ResponseModel { Status = "Error", Message = $"Cannot delete Account {deleteAccount.Id}, something went wrong!" };
             }
-            var result = await _repo.DeleteAccountAsync(id);
-            if (result == null)
-            {
-                return new ResponseModel { Status = "Error", Message = $"Can not delete package {deleteAccount.Id}" };
-            }
-            return new ResponseModel { Status = "Success", Message = $"Delete successfully package {deleteAccount.Id}" };
+            return new ResponseModel { Status = "Error", Message = $"Not found Account Id {id}!" };
         }
 
         public async Task<Accounts> GetAccountAsync(string id)
@@ -39,9 +39,9 @@ namespace NET1705_FService.Services.Services
             return account;
         }
 
-        public async Task<List<Accounts>> GetAllAccountAsync()
+        public async Task<PagedList<Accounts>> GetAllAccountAsync(PaginationParameter paginationParameter)
         {
-            var accounts = await _repo.GetAllAccountAsync();
+            var accounts = await _repo.GetAllAccountAsync(paginationParameter);
             return accounts;
         }
 
@@ -54,9 +54,9 @@ namespace NET1705_FService.Services.Services
                 {
                     return new ResponseModel { Status = "Success", Message = result.ToString() };
                 }
-                return new ResponseModel { Status = "Error", Message = "Update error." };
+                return new ResponseModel { Status = "Error", Message = "Update error!" };
             }
-            return new ResponseModel { Status = "Error", Message = "Id invalid" };
+            return new ResponseModel { Status = "Error", Message = "Invalid Id!" };
         }
     }
 }

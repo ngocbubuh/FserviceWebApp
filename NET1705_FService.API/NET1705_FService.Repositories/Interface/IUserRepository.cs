@@ -1,4 +1,5 @@
-﻿using NET1705_FService.Repositories.Models;
+﻿using NET1705_FService.Repositories.Data;
+using NET1705_FService.Repositories.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace NET1705_FService.Repositories.Interface
 {
     public interface IUserRepository
     {
-        public Task<List<Accounts>> GetAllAccountAsync();
+        public Task<PagedList<Accounts>> GetAllAccountAsync(PaginationParameter paginationParameter);
         public Task<Accounts> GetAccountAsync(string id);
         public Task<string> UpdateAccountAsync(string id, Accounts account);
         public Task<string> DeleteAccountAsync(string id);
