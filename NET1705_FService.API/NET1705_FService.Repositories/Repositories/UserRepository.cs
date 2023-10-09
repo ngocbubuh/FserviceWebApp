@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NET1705_FService.Repositories.Data;
 using NET1705_FService.Repositories.Interface;
 using NET1705_FService.Repositories.Models;
 using SQLitePCL;
@@ -24,7 +25,19 @@ namespace NET1705_FService.Repositories.Repositories
             var deleteAcc = _context.Accounts!.SingleOrDefault(x => x.Id == id);
             if (deleteAcc != null)
             {
-                _context.Accounts.Remove(deleteAcc);
+                //_context.Accounts.Update(new Accounts
+                //{
+                //    Id = deleteAcc.Id,
+                //    Name = deleteAcc.Name,
+                //    PhoneNumber = deleteAcc.PhoneNumber,
+                //    Email = deleteAcc.Email,
+                //    Address = deleteAcc.Address,
+                //    DateOfBirth = deleteAcc.DateOfBirth,
+                //    Avatar = deleteAcc.Avatar,
+                //    Status = false
+                //});
+                deleteAcc.Status = false;
+                _context.Accounts.Update(deleteAcc);
                 await _context.SaveChangesAsync();
                 return deleteAcc.Id;
             }
@@ -34,14 +47,17 @@ namespace NET1705_FService.Repositories.Repositories
         public async Task<Accounts> GetAccountAsync(string id)
         {
             var acc = await _context.Accounts
-                .FirstOrDefaultAsync(p => p.Id == id);
+                .FirstOrDefaultAsync(p => p.Id == id && p.Status == true);
             return acc;
         }
 
-        public async Task<List<Accounts>> GetAllAccountAsync()
+        public async Task<PagedList<Accounts>> GetAllAccountAsync(PaginationParameter paginationParameter)
         {
-            var acc = await _context.Accounts!.ToListAsync();
-            return acc;
+            var acc = await _context.Accounts!.Where(p => p.Status == true)
+                .OrderBy(p => p.Id).ToListAsync();
+            return PagedList<Accounts>.ToPagedList(acc,
+                paginationParameter.PageNumber,
+                paginationParameter.PageSize); ;
         }
 
         public async Task<string> UpdateAccountAsync(string id, Accounts account)

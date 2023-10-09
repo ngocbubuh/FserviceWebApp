@@ -1,10 +1,12 @@
 ﻿using FServiceAPI.Repositories;
 using NET1705_FService.Repositories.Data;
+using NET1705_FService.Repositories.Models;
 using NET1715_FService.Service.Inteface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace NET1715_FService.Service.Services
@@ -25,27 +27,27 @@ namespace NET1715_FService.Service.Services
             {
                 return new ResponseModel { Status = "Success", Message = result.ToString() };
             }
-            return new ResponseModel { Status = "Error", Message = "Error! Try again." };
+            return new ResponseModel { Status = "Error", Message = "Error! Something went wrong, please try again!" };
         }
 
         public async Task<ResponseModel> DeleteServiceAsync(int id)
         {
             var deleteService = await _repo.GetServiceAsync(id);
-            if (deleteService == null)
+            if (deleteService != null)
             {
-                return new ResponseModel { Status = "Error", Message = $"Not found Service Id {id}" };
+                var result = await _repo.DeleteServiceAsync(id);
+                if (result != 0)
+                {
+                    return new ResponseModel { Status = "Success", Message = $"Delete successfully Service {deleteService.Name}!" };
+                }
+                return new ResponseModel { Status = "Error", Message = $"Cannot delete Service {deleteService.Name}, something went wrong!" };
             }
-            var result = await _repo.DeleteServiceAsync(id);
-            if (result == 0)
-            {
-                return new ResponseModel { Status = "Error", Message = $"Can not delete service {deleteService.Name}" };
-            }
-            return new ResponseModel { Status = "Success", Message = $"Delete successfully service {deleteService.Name}" };
+            return new ResponseModel { Status = "Error", Message = $"Not found Service Id {id}!" };
         }
 
-        public async Task<List<NET1705_FService.Repositories.Models.Service>> GetAllServicesAsync()
+        public async Task<PagedList<NET1705_FService.Repositories.Models.Service>> GetAllServicesAsync(PaginationParameter paginationParameter)
         {
-            var services = await _repo.GetAllServiceAsync();
+            var services = await _repo.GetAllServiceAsync(paginationParameter);
             return services;
         }
 
@@ -64,9 +66,9 @@ namespace NET1715_FService.Service.Services
                 {
                     return new ResponseModel { Status = "Success", Message = result.ToString() };
                 }
-                return new ResponseModel { Status = "Error", Message = "Update error." };
+                return new ResponseModel { Status = "Error", Message = "Update error!" };
             }
-            return new ResponseModel { Status = "Error", Message = "Id invalid" };
+            return new ResponseModel { Status = "Error", Message = "Service not found!" };
         }
     }
 }

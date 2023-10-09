@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NET1705_FService.Repositories.Data;
 using NET1705_FService.Repositories.Models;
 using NET1705_FService.Services.Interface;
 using NET1715_FService.Service.Inteface;
 using NET1715_FService.Service.Services;
+using Newtonsoft.Json;
 
 namespace NET1705_FService.API.Controllers
 {
@@ -20,17 +22,28 @@ namespace NET1705_FService.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAccountAsync()
+        [Authorize(Roles = "ADMIN")]
+        public async Task<IActionResult> GetAllAccountAsync([FromQuery] PaginationParameter paginationParameter)
         {
-            //try
+            try
             {
-                var accounts = await accountService.GetAllAccountAsync();
+                var accounts = await accountService.GetAllAccountAsync(paginationParameter);
+                var metadata = new
+                {
+                    accounts.TotalCount,
+                    accounts.PageSize,
+                    accounts.CurrentPage,
+                    accounts.TotalPages,
+                    accounts.HasNext,
+                    accounts.HasPrevious
+                };
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
                 return Ok(accounts);
             }
-            //catch
-            //{
-            //    return BadRequest();
-            //}
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost("{id}")]
@@ -46,7 +59,7 @@ namespace NET1705_FService.API.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "ADMIN, STAFF, USER")]
+        [Authorize]
         public async Task<IActionResult> UpdateAccount(string id, Accounts model)
         {
             try
@@ -66,8 +79,8 @@ namespace NET1705_FService.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "ADMIN")]
-        public async Task<IActionResult> DeleteUser(string id)
+        [Authorize]
+        public async Task<IActionResult> DeleteAccount(string id)
         {
             try
             {

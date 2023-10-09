@@ -40,7 +40,7 @@ namespace FServiceAPI.Repositories
 
             if (!result.Succeeded) 
             {
-                return "Error! Incorrect Username or Password";
+                return "Error! Incorrect Username or Password!";
             }
 
             var authClaims = new List<Claim>
@@ -82,6 +82,7 @@ namespace FServiceAPI.Repositories
                 DateOfBirth = model.DateOfBirth,
                 Email = model.Email,
                 UserName = model.Email,
+                Status = true
             };
 
             var result = await accountManager.CreateAsync(user, model.Password);
@@ -116,6 +117,7 @@ namespace FServiceAPI.Repositories
                 DateOfBirth = model.DateOfBirth,
                 Email = model.Email,
                 UserName = model.Email,
+                Status = true
             };
             var result = await accountManager.CreateAsync(user, model.Password);
             if(result.Succeeded)
@@ -130,7 +132,7 @@ namespace FServiceAPI.Repositories
                 }
             }
 
-            return new ResponseModel { Status = "Success", Message = "Register successfully!" };
+            return new ResponseModel { Status = "Sucess", Message = "Register successfully!" };
         }
 
         public async Task<ResponseModel> SignUpStaffAsync(SignUpModel model)
@@ -148,6 +150,7 @@ namespace FServiceAPI.Repositories
                 DateOfBirth = model.DateOfBirth,
                 Email = model.Email,
                 UserName = model.Email,
+                Status = true
             };
             var result = await accountManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
@@ -162,27 +165,7 @@ namespace FServiceAPI.Repositories
                 }
             }
 
-            return new ResponseModel { Status = "Success", Message = "Register successfully!" };
-        }
-
-        public async Task<List<Accounts>> GetAllStaffsAsync()
-        {
-            bool roleExists = await roleManager.RoleExistsAsync("staff");
-
-            if (!roleExists)
-            {
-                return null;
-            }
-
-            var staffAccounts = await accountManager.GetUsersInRoleAsync("staff");
-
-            return staffAccounts.ToList();
-        }
-
-        public async Task<Accounts> GetAccountByUserName(string userName)
-        {
-            var account = await accountManager.FindByNameAsync(userName);
-            return account;
+            return new ResponseModel { Status = "Sucess", Message = "Register successfully!" };
         }
     }
 }

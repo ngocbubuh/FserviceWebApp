@@ -43,9 +43,9 @@ namespace NET1715_FService.Service.Services
             return new ResponseModel { Status = "Success", Message = $"Delete successfully package {deletePackage.Name}" };
         }
 
-        public async Task<List<Package>> GetAllPackagesAsync()
+        public async Task<PagedList<Package>> GetAllPackagesAsync(PaginationParameter paginationParameter)
         {
-            var packages = await _repo.GetAllPackagesAsync();
+            var packages = await _repo.GetAllPackagesAsync(paginationParameter);
             return packages;
         }
 

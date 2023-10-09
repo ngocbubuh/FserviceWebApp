@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace NET1715_FService.Service.Services
@@ -18,6 +19,7 @@ namespace NET1715_FService.Service.Services
         {
             _repo = repo;
         }
+
         public async Task<ResponseModel> AddBannerAsync(Banner banner)
         {
             var result = await _repo.AddBannerAsync(banner);
@@ -25,7 +27,7 @@ namespace NET1715_FService.Service.Services
             {
                 return new ResponseModel { Status = "Success", Message = result.ToString() };
             }
-            return new ResponseModel { Status = "Error", Message = "Error! Try again." };
+            return new ResponseModel { Status = "Error", Message = "Error! Something went wrong, please try again!" };
         }
 
         public async Task<ResponseModel> DeleteBannerAsync(int id)
@@ -33,14 +35,14 @@ namespace NET1715_FService.Service.Services
             var deleteBanner = await _repo.GetBannerAsync(id);
             if (deleteBanner == null)
             {
-                return new ResponseModel { Status = "Error", Message = $"Not found Banner Id {id}" };
+                return new ResponseModel { Status = "Error", Message = $"Not found Banner Id {id}!" };
             }
             var result = await _repo.DeleteBannerAsync(id);
             if (result == 0)
             {
-                return new ResponseModel { Status = "Error", Message = $"Can not delete banner: ID = {deleteBanner.Id}" };
+                return new ResponseModel { Status = "Error", Message = $"Cannot delete banner: ID = {deleteBanner.Id}, something went wrong!" };
             }
-            return new ResponseModel { Status = "Success", Message = $"Delete successfully banner: ID = {deleteBanner.Id}" };
+            return new ResponseModel { Status = "Success", Message = $"Delete successfully banner: ID = {deleteBanner.Id}!" };
         }
 
         public async Task<Banner> GetBannerById(int id)
@@ -59,14 +61,15 @@ namespace NET1715_FService.Service.Services
         {
             if (id == banner.Id)
             {
+                //Update Banner
                 var result = await _repo.UpdateBannerAsync(id, banner);
                 if (result != 0)
                 {
                     return new ResponseModel { Status = "Success", Message = result.ToString() };
                 }
-                return new ResponseModel { Status = "Error", Message = "Update error." };
+                return new ResponseModel { Status = "Error", Message = "Update Error!" };
             }
-            return new ResponseModel { Status = "Error", Message = "Id invalid" };
+            return new ResponseModel { Status = "Error", Message = "Banner not found!" };
         }
     }
 }

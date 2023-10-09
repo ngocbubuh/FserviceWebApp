@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NET1705_FService.Repositories.Data;
+using NET1705_FService.Repositories.Models;
 using NET1715_FService.Service.Inteface;
+using Newtonsoft.Json;
 
 namespace NET1715_FService.API.Controllers
 {
@@ -16,11 +20,21 @@ namespace NET1715_FService.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllServiceAsync()
+        public async Task<IActionResult> GetAllServiceAsync([FromQuery] PaginationParameter paginationParameter)
         {
             try
             {
-                var services = await _serviceService.GetAllServicesAsync();
+                var services = await _serviceService.GetAllServicesAsync(paginationParameter);
+                var metadata = new
+                {
+                    services.TotalCount,
+                    services.PageSize,
+                    services.CurrentPage,
+                    services.TotalPages,
+                    services.HasNext,
+                    services.HasPrevious
+                };
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
                 return Ok(services);
             }
             catch
@@ -28,6 +42,7 @@ namespace NET1715_FService.API.Controllers
                 return BadRequest();
             }
         }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetServiceAsync(int id)
         {
@@ -50,8 +65,8 @@ namespace NET1715_FService.API.Controllers
                 var result = await _serviceService.AddServiceAsync(newService);
                 if (result.Status.Equals("Success"))
                 {
-                    var package = await _serviceService.GetServiceAsync(int.Parse(result.Message));
-                    return Ok(package);
+                    var service = await _serviceService.GetServiceAsync(int.Parse(result.Message));
+                    return Ok(service);
                 }
                 return BadRequest(result);
             }
@@ -60,6 +75,7 @@ namespace NET1715_FService.API.Controllers
                 return BadRequest();
             }
         }
+
         [HttpPut("{id}")]
         [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> UpdateServiceAsync(int id, NET1705_FService.Repositories.Models.Service updateService)
@@ -69,8 +85,8 @@ namespace NET1715_FService.API.Controllers
                 var result = await _serviceService.UpdateServiceAsync(id, updateService);
                 if (result.Status.Equals("Success"))
                 {
-                    var package = await _serviceService.GetServiceAsync(int.Parse(result.Message));
-                    return Ok(package);
+                    var service = await _serviceService.GetServiceAsync(int.Parse(result.Message));
+                    return Ok(service);
                 }
                 return NotFound(result);
             }
@@ -90,7 +106,7 @@ namespace NET1715_FService.API.Controllers
                 {
                     return Ok(result);
                 }
-                return BadRequest(result);
+                return NotFound(result);
             }
             catch
             {

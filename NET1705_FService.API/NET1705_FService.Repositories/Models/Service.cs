@@ -12,6 +12,7 @@ public partial class Service
     public string Description { get; set; }
 
     public string Image { get; set; }
+    public bool Status { get; set; }
 
     public virtual ICollection<ApartmentPackageService> ApartmentPackageServices { get; } = new List<ApartmentPackageService>();
 

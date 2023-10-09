@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NET1705_FService.Repositories.Data;
 using NET1705_FService.Repositories.Models;
 using NET1715_FService.Service.Inteface;
+using Newtonsoft.Json;
 
 namespace NET1715_FService.API.Controllers
 {
@@ -45,6 +47,7 @@ namespace NET1715_FService.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> AddBannerAsync(Banner newBanner)
         {
             try
@@ -63,6 +66,7 @@ namespace NET1715_FService.API.Controllers
             }
         }
         [HttpPut("{id}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> UpdateBannerAsync(int id, Banner updateBanner)
         {
             try
@@ -80,7 +84,9 @@ namespace NET1715_FService.API.Controllers
                 return BadRequest();
             }
         }
+
         [HttpDelete("{id}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> DeletePackageAsync(int id)
         {
             try

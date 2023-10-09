@@ -16,10 +16,13 @@ using NET1715_FService.Service.Inteface;
 using NET1715_FService.Service.Services;
 using System.Text;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.Identity.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddAutoMapper(typeof(Program));
 
 //builder.Services.AddControllers();
 builder.Services.AddControllers().AddJsonOptions(x =>
@@ -29,7 +32,7 @@ builder.Services.AddControllers().AddJsonOptions(x =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "FService API", Version = "v.10.23" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "FService API", Version = "v.10.24" });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -162,6 +165,8 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 
 app.UseCors("app-cors");
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
