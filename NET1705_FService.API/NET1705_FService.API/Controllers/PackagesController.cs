@@ -19,11 +19,11 @@ namespace NET1705_FService.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPackages([FromQuery] PaginationParameter paginationParameter)
+        public async Task<IActionResult> GetPackages([FromQuery] PaginationParameter paginationParameter, string? search, string? sort)
         {
             try
             {
-                var packages = await _packageService.GetAllPackagesAsync(paginationParameter);
+                var packages = await _packageService.GetAllPackagesAsync(search, sort, paginationParameter);
                 var metadata = new
                 {
                     packages.TotalCount,

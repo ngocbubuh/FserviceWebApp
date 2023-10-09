@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NET1705_FService.Repositories.Repositories
+namespace NET1705_FService.Repositories.Interface
 {
     public interface IOrderDetailsRepository
     {

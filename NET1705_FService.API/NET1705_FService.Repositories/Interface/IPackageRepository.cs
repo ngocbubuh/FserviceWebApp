@@ -10,7 +10,7 @@ namespace NET1715_FService.API.Repository.Inteface
 {
     public interface IPackageRepository
     {
-        public Task<PagedList<Package>> GetAllPackagesAsync(PaginationParameter paginationParameter);
+        public Task<PagedList<Package>> GetAllPackagesAsync(string search, string sort, PaginationParameter paginationParameter);
         public Task<Package> GetPackageAsync(int id);
         public Task<int> AddPackageAsync(Package package);
         public Task<int> UpdatePackageAsync(int id, Package package);

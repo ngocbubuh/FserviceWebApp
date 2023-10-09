@@ -13,5 +13,12 @@ namespace NET1705_FService.Services.Interface
         public Task<ResponseModel> AddOrderAsync(OrderModel order);
         public Task<ResponseModel> AddExtraOrderAsync(OrderModel extraModel);
 
+        public Task<PagedList<Order>> GetOrdersByUserName(PaginationParameter paginationParameter, string userName);
+
+        public Task<PagedList<Order>> GetAllOrdersAsync(PaginationParameter paginationParameter, string search);
+
+        public Task<ResponseModel> UpdateOrderAsync(int id, Order order);
+
+        public Task<Order> GetOrderByIdAsync(int id);
     }
 }
