@@ -234,6 +234,7 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
             entity.Property(e => e.Status).HasColumnType("bit");
             entity.Property(e => e.Image).HasMaxLength(500);
             entity.Property(e => e.Name).HasMaxLength(50);
+            entity.Property(e => e.UnsignName).HasMaxLength(50);
 
             entity.HasOne(d => d.Type).WithMany(p => p.Packages)
                 .HasForeignKey(d => d.TypeId)

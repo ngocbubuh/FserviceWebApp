@@ -49,11 +49,14 @@ namespace NET1705_FService.Repositories.Repositories
                 .Include(a => a.ApartmentPackageServices)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
-            if (apartmentPackage.EndDate < DateTime.Now.Date)
+            if (apartmentPackage != null)
             {
-                apartmentPackage.PackageStatus = "Expired";
-                _context.Update(apartmentPackage);
-                await _context.SaveChangesAsync();
+                if (apartmentPackage.EndDate < DateTime.Now.Date)
+                {
+                    apartmentPackage.PackageStatus = "Expired";
+                    _context.Update(apartmentPackage);
+                    await _context.SaveChangesAsync();
+                }
             }
 
             return apartmentPackage;

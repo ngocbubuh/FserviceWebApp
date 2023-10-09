@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using NET1705_FService.Repositories.Data;
 using NET1705_FService.Repositories.Interface;
 using NET1705_FService.Repositories.Models;
 using NET1715_FService.API.Repository.Inteface;
@@ -109,6 +110,53 @@ namespace NET1705_FService.Repositories.Repositories
             return extraOrder.Id;
         }
 
+        public async Task<PagedList<Order>> GetOrderByUserNameAsync(PaginationParameter paginationParameter, string userName)
+        {
+            if (_context == null)
+            {
+                return null;
+            }
+            var orders = await _context.Orders.Where(o => o.UserName.Equals(userName)).ToListAsync();
 
+            return PagedList<Order>.ToPagedList(orders,
+                paginationParameter.PageNumber,
+                paginationParameter.PageSize);
+        }
+
+        public async Task<PagedList<Order>> GetAllOrdersAsync(PaginationParameter paginationParameter, string search)
+        {
+            if (_context == null)
+            {
+                return null;
+            }
+            var orders = _context.Orders.AsQueryable();
+            if (!string.IsNullOrEmpty(search))
+            {
+                orders = orders.Where(o => o.UserName.Contains(search));
+            }
+
+            var allOrders = await orders.ToListAsync();
+
+            return PagedList<Order>.ToPagedList(allOrders,
+                paginationParameter.PageNumber,
+                paginationParameter.PageSize);
+        }
+
+        public async Task<int> UpdateOrderAsync(int id, Order order)
+        {
+            if (id == order.Id)
+            {
+                _context.Orders.Update(order);
+                await _context.SaveChangesAsync();
+                return order.Id;
+            }
+            return 0;
+        }
+
+        public async Task<Order> GetOrderByIdAsync(int id)
+        {
+            var order = _context.Orders.FirstOrDefault(o => o.Id == id);
+            return order;
+        }
     }
 }

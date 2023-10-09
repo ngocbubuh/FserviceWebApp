@@ -7,6 +7,8 @@ public partial class Package
 {
     public int Id { get; set; }
 
+    public string UnsignName { get; set; }
+
     public string Name { get; set; }
 
     public string Description { get; set; }
@@ -27,5 +29,5 @@ public partial class Package
 
     public virtual ICollection<PackageDetail> PackageDetails { get; } = new List<PackageDetail>();
 
-    public virtual ApartmentType Type { get; set; }
+    public virtual ApartmentType? Type { get; set; }
 }
