@@ -22,5 +22,7 @@ namespace NET1705_FService.Repositories.Data
                 _pageSize = (value > maxPageSize) ? maxPageSize : value;
             }
         }
+        public string? Search { get; set; } = string.Empty;
+        public string? Sort { get; set; } = string.Empty;
     }
 }

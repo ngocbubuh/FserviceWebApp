@@ -53,11 +53,11 @@ namespace NET1705_FService.API.Controllers
 
         [HttpGet]
         [Authorize(Roles = "ADMIN")]
-        public async Task<IActionResult> GetAllOrdersAsync([FromQuery] PaginationParameter paginationParameter, string? search)
+        public async Task<IActionResult> GetAllOrdersAsync([FromQuery] PaginationParameter paginationParameter)
         {
             try
             {
-                var orders = await _orderService.GetAllOrdersAsync(paginationParameter, search);
+                var orders = await _orderService.GetAllOrdersAsync(paginationParameter);
                 var metadata = new
                 {
                     orders.TotalCount,

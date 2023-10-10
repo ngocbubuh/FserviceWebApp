@@ -47,18 +47,18 @@ namespace NET1715_FService.API.Repository.Repositories
             return 0;
         }
 
-        public async Task<PagedList<Package>> GetAllPackagesAsync(string search, string sort, PaginationParameter paginationParameter)
+        public async Task<PagedList<Package>> GetAllPackagesAsync(PaginationParameter paginationParameter)
         {
             var allPackages = _context.Packages.Where(y => y.Status == true).AsQueryable();
 
-            if (!string.IsNullOrEmpty(search))
+            if (!string.IsNullOrEmpty(paginationParameter.Search))
             {
-                allPackages = allPackages.Where(p => p.Name.Contains(search) || p.UnsignName.Contains(search));
+                allPackages = allPackages.Where(p => p.Name.Contains(paginationParameter.Search) || p.UnsignName.Contains(paginationParameter.Search));
             }
 
-            if (!string.IsNullOrEmpty(sort))
+            if (!string.IsNullOrEmpty(paginationParameter.Sort))
             {
-                switch (sort)
+                switch (paginationParameter.Sort)
                 {
                     case "price_asc":
                         allPackages = allPackages.OrderBy(p => p.Price);

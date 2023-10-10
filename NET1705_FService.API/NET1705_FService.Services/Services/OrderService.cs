@@ -71,9 +71,9 @@ namespace NET1705_FService.Services.Services
             return orders;
         }
 
-        public async Task<PagedList<Order>> GetAllOrdersAsync(PaginationParameter paginationParameter, string search)
+        public async Task<PagedList<Order>> GetAllOrdersAsync(PaginationParameter paginationParameter)
         {
-            var orders = await _repo.GetAllOrdersAsync(paginationParameter ,search);
+            var orders = await _repo.GetAllOrdersAsync(paginationParameter);
             return orders;
         }
 
