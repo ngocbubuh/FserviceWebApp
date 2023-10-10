@@ -16,7 +16,7 @@ namespace NET1705_FService.Repositories.Interface
 
         public Task<PagedList<Order>> GetOrderByUserNameAsync(PaginationParameter paginationParameter, string userName);
 
-        public Task<PagedList<Order>> GetAllOrdersAsync(PaginationParameter paginationParameter, string search);
+        public Task<PagedList<Order>> GetAllOrdersAsync(PaginationParameter paginationParameter);
 
         public Task<int> UpdateOrderAsync(int id, Order order);
 
