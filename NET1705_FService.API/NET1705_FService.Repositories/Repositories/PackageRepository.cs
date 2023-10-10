@@ -4,9 +4,12 @@ using NET1705_FService.Repositories.Models;
 using NET1715_FService.API.Repository.Inteface;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NET1705_FService.Repositories.Helper;
+using System.Text.RegularExpressions;
 
 namespace NET1715_FService.API.Repository.Repositories
 {
@@ -25,6 +28,7 @@ namespace NET1715_FService.API.Repository.Repositories
                 return 0;
             }
             package.Status = true;
+            package.UnsignName = StringExtensions.ConvertToUnSign(package.Name);
             _context.Packages.Add(package);
             await _context.SaveChangesAsync();
             return package.Id;
@@ -43,10 +47,35 @@ namespace NET1715_FService.API.Repository.Repositories
             return 0;
         }
 
-        public async Task<PagedList<Package>> GetAllPackagesAsync(PaginationParameter paginationParameter)
+        public async Task<PagedList<Package>> GetAllPackagesAsync(string search, string sort, PaginationParameter paginationParameter)
         {
-            var packages = await _context.Packages!.Where(y => y.Status == true)
-                .OrderBy(y => y.Id).ToListAsync();
+            var allPackages = _context.Packages.Where(y => y.Status == true).AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                allPackages = allPackages.Where(p => p.Name.Contains(search) || p.UnsignName.Contains(search));
+            }
+
+            if (!string.IsNullOrEmpty(sort))
+            {
+                switch (sort)
+                {
+                    case "price_asc":
+                        allPackages = allPackages.OrderBy(p => p.Price);
+                        break;
+                    case "price_desc":
+                        allPackages = allPackages.OrderByDescending(p => p.Price);
+                        break;
+                    case "name_asc":
+                        allPackages = allPackages.OrderBy(p => p.Name);
+                        break;
+                    case "name_desc":
+                        allPackages = allPackages.OrderByDescending(p => p.Name);
+                        break;
+                }
+            }
+
+            var packages = await allPackages.ToListAsync();
 
             return PagedList<Package>.ToPagedList(packages,
                 paginationParameter.PageNumber,

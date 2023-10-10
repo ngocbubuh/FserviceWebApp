@@ -31,6 +31,26 @@ namespace FServiceAPI.Repositories
             this.roleManager = roleManager;
         }
 
+        public async Task<Accounts> GetAccountByUserName(string userName)
+        {
+            var account = await accountManager.FindByNameAsync(userName);
+            return account;
+        }
+
+        public async Task<List<Accounts>> GetAllStaffsAsync()
+        {
+            bool roleExists = await roleManager.RoleExistsAsync("staff");
+
+            if (!roleExists)
+            {
+                return null;
+            }
+
+            var staffAccounts = await accountManager.GetUsersInRoleAsync("staff");
+
+            return staffAccounts.ToList();
+        }
+
         public async Task<string> SignInAsync(SignInModel model)
         {
             var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
@@ -59,7 +79,7 @@ namespace FServiceAPI.Repositories
             var token = new JwtSecurityToken(
                 issuer: configuration["JWT:ValidIssuer"],
                 audience: configuration["JWT:ValidAudience"],
-                expires: DateTime.Now.AddMinutes(5),
+                expires: DateTime.Now.AddMinutes(15),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authKey, SecurityAlgorithms.HmacSha512Signature)
                 );

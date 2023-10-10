@@ -11,5 +11,7 @@ namespace NET1715_FService.API.Repository.Inteface
     {
         public Task<List<Apartment>> GetApartmentsOnFloorAsync(int floorId, int typeId);
         public Task<Apartment> GetApartmentByIdAsync(int id);
+
+        public Task<int> RegisApartmentAsync(int id, string accountId);
     }
 }

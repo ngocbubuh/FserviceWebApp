@@ -82,7 +82,7 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
 
             entity.Property(e => e.EndDate).HasColumnType("date");
             entity.Property(e => e.StartDate).HasColumnType("date");
-            entity.Property(e => e.Status).HasMaxLength(30);
+            entity.Property(e => e.PackageStatus).HasMaxLength(10);
 
             entity.HasOne(d => d.Apartment).WithMany(p => p.ApartmentPackages)
                 .HasForeignKey(d => d.ApartmentId)
@@ -132,6 +132,8 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
             entity.ToTable("Building");
 
             entity.Property(e => e.Name).HasMaxLength(50);
+
+            entity.Property(e => e.Status).HasColumnType("bit");
         });
 
         modelBuilder.Entity<Accounts>(entity =>
@@ -171,7 +173,7 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
 
             entity.ToTable("Order");
 
-            entity.Property(e => e.CustomerName).HasMaxLength(50);
+            entity.Property(e => e.UserName).HasMaxLength(250);
             entity.Property(e => e.OrderDate).HasColumnType("datetime");
             entity.Property(e => e.PaymentDate).HasColumnType("datetime");
             entity.Property(e => e.PaymentMethod)
@@ -193,6 +195,15 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
 
             entity.ToTable("OrderDetail");
 
+            entity.Property(e => e.CustomerPhone)
+                .HasMaxLength(10)
+                .IsFixedLength();
+
+            entity.Property(e => e.CustomerName)
+                .HasMaxLength(50);
+
+            entity.Property(e => e.Note).HasMaxLength(500);
+
             entity.Property(e => e.CompleteDate).HasColumnType("datetime");
             entity.Property(e => e.CreatedDate).HasColumnType("datetime");
             entity.Property(e => e.Feedback).HasMaxLength(500);
@@ -208,6 +219,10 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
             entity.HasOne(d => d.Service).WithMany(p => p.OrderDetails)
                 .HasForeignKey(d => d.ServiceId)
                 .HasConstraintName("FK__OrderDeta__Servi__6A30C649");
+
+            entity.HasOne(d => d.Accounts).WithMany(p => p.OrderDetails)
+                .HasForeignKey(d => d.StaffId)
+                .HasConstraintName("FK_OrderDetail_Staff").IsRequired(false);
         });
 
         modelBuilder.Entity<Package>(entity =>
@@ -216,8 +231,10 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
 
             entity.ToTable("Package");
 
+            entity.Property(e => e.Status).HasColumnType("bit");
             entity.Property(e => e.Image).HasMaxLength(500);
             entity.Property(e => e.Name).HasMaxLength(50);
+            entity.Property(e => e.UnsignName).HasMaxLength(50);
 
             entity.HasOne(d => d.Type).WithMany(p => p.Packages)
                 .HasForeignKey(d => d.TypeId)

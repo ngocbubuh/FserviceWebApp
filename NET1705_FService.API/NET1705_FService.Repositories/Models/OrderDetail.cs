@@ -15,19 +15,31 @@ public partial class OrderDetail
 
     public int? Quantity { get; set; }
 
-    public DateTime? CreatedDate { get; set; }
+    public DateTime CreatedDate { get; set; }
 
-    public int? StaffId { get; set; }
+    public string? CustomerName { get; set; }
+
+    public string? CustomerPhone { get; set; }
+
+    public string? Note {  get; set; }
+
+    public string StaffId { get; set; }
 
     public DateTime? CompleteDate { get; set; }
 
     public bool? IsConfirm { get; set; }
 
-    public string Feedback { get; set; }
+    public string? Feedback { get; set; }
+
+    //public bool? IsExtraOrder { get; set; }
+
+    public double? Amount { get; set; }
 
     public virtual ApartmentPackage ApartmentPackage { get; set; }
 
     public virtual Order Order { get; set; }
 
     public virtual Service Service { get; set; }
+
+    public virtual Accounts Accounts { get; set; }
 }

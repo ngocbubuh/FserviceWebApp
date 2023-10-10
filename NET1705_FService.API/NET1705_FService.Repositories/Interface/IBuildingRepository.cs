@@ -10,9 +10,13 @@ namespace NET1715_FService.API.Repository.Inteface
     public interface IBuildingRepository
     {
         public Task<List<Building>> GetAllBuildingAsync();
-        //public Task<Building> GetBuildingAsync(int id);
-        //public Task<int> AddBuildingAsync(Building building);
-        //public Task<int> UpdateBuildingAsync(int id, Package package);
-        //public Task<int> DeleteBuildingAsync(int id);
+
+        public Task<Building> GetBuildingAsync(int id);
+
+        public Task<int> AddBuildingAsync(Building building);
+
+        public Task<int> UpdateBuildingAsync(int id, Building building);
+
+        public Task<int> DeleteBuildingAsync(int id);
     }
 }

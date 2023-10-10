@@ -28,3 +28,18 @@ D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.AP
 D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\NET1705_FService.Services\obj\Release\net7.0\refint\NET1705_FService.Services.dll
 D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\NET1705_FService.Services\obj\Release\net7.0\NET1705_FService.Services.pdb
 D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\NET1705_FService.Services\obj\Release\net7.0\ref\NET1705_FService.Services.dll
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Services\bin\Release\net7.0\NET1705_FService.Services.deps.json
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Services\bin\Release\net7.0\NET1705_FService.Services.dll
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Services\bin\Release\net7.0\NET1705_FService.Services.pdb
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Services\bin\Release\net7.0\NET1705_FService.Repositories.dll
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Services\bin\Release\net7.0\NET1705_FService.Repositories.pdb
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Services\obj\Release\net7.0\NET1705_FService.Services.csproj.AssemblyReference.cache
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Services\obj\Release\net7.0\NET1705_FService.Services.GeneratedMSBuildEditorConfig.editorconfig
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Services\obj\Release\net7.0\NET1705_FService.Services.AssemblyInfoInputs.cache
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Services\obj\Release\net7.0\NET1705_FService.Services.AssemblyInfo.cs
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Services\obj\Release\net7.0\NET1705_FService.Services.csproj.CoreCompileInputs.cache
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Services\obj\Release\net7.0\NET1705_FService.Services.csproj.CopyComplete
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Services\obj\Release\net7.0\NET1705_FService.Services.dll
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Services\obj\Release\net7.0\refint\NET1705_FService.Services.dll
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Services\obj\Release\net7.0\NET1705_FService.Services.pdb
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Services\obj\Release\net7.0\ref\NET1705_FService.Services.dll

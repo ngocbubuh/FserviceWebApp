@@ -9,6 +9,8 @@ public partial class Building
 
     public string Name { get; set; }
 
+    public bool Status { get; set; } = true;
+
     public virtual ICollection<ApartmentType> ApartmentTypes { get; } = new List<ApartmentType>();
 
     public virtual ICollection<Floor> Floors { get; } = new List<Floor>();
