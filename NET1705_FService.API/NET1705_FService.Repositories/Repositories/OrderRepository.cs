@@ -123,16 +123,16 @@ namespace NET1705_FService.Repositories.Repositories
                 paginationParameter.PageSize);
         }
 
-        public async Task<PagedList<Order>> GetAllOrdersAsync(PaginationParameter paginationParameter, string search)
+        public async Task<PagedList<Order>> GetAllOrdersAsync(PaginationParameter paginationParameter)
         {
             if (_context == null)
             {
                 return null;
             }
             var orders = _context.Orders.AsQueryable();
-            if (!string.IsNullOrEmpty(search))
+            if (!string.IsNullOrEmpty(paginationParameter.Search))
             {
-                orders = orders.Where(o => o.UserName.Contains(search));
+                orders = orders.Where(o => o.UserName.Contains(paginationParameter.Search));
             }
 
             var allOrders = await orders.ToListAsync();

@@ -53,8 +53,33 @@ namespace NET1705_FService.Repositories.Repositories
 
         public async Task<PagedList<Accounts>> GetAllAccountAsync(PaginationParameter paginationParameter)
         {
-            var acc = await _context.Accounts!.Where(p => p.Status == true)
-                .OrderBy(p => p.Id).ToListAsync();
+            var allAccounts = _context.Accounts.Where(y => y.Status == true).AsQueryable();
+
+            if (!string.IsNullOrEmpty(paginationParameter.Search))
+            {
+                allAccounts = allAccounts.Where(p => p.Email.Contains(paginationParameter.Search));
+            }
+
+            if (!string.IsNullOrEmpty(paginationParameter.Sort))
+            {
+                switch (paginationParameter.Sort)
+                {
+                    case "email_asc":
+                        allAccounts = allAccounts.OrderBy(p => p.Email);
+                        break;
+                    case "email_desc":
+                        allAccounts = allAccounts.OrderByDescending(p => p.Email);
+                        break;
+                    case "name_asc":
+                        allAccounts = allAccounts.OrderBy(p => p.Name);
+                        break;
+                    case "name_desc":
+                        allAccounts = allAccounts.OrderByDescending(p => p.Name);
+                        break;
+                }
+            }
+
+            var acc = await allAccounts.ToListAsync();
             return PagedList<Accounts>.ToPagedList(acc,
                 paginationParameter.PageNumber,
                 paginationParameter.PageSize); ;

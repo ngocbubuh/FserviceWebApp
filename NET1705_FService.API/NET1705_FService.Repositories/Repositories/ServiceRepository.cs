@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NET1705_FService.Repositories.Data;
+using NET1705_FService.Repositories.Helper;
 using NET1705_FService.Repositories.Models;
 
 namespace FServiceAPI.Repositories
@@ -17,6 +18,7 @@ namespace FServiceAPI.Repositories
             {
                 return 0;
             }
+            service.UnsignName = StringExtensions.ConvertToUnSign(service.Name);
             _context.Services.Add(service);
             await _context.SaveChangesAsync();
             return service.Id;
@@ -45,15 +47,27 @@ namespace FServiceAPI.Repositories
 
         public async Task<PagedList<Service>> GetAllServiceAsync(PaginationParameter paginationParameter)
         {
-            //var services = await _context.Services!.Where(y => y.Status == true)
-            //    .OrderBy(y => y.Id)
-            //    .Skip((paginationParameter.PageNumber - 1) * paginationParameter.PageSize)
-            //    .Take(paginationParameter.PageSize)
-            //    .ToListAsync();
-            //return services;
+            var allServices = _context.Services.Where(y => y.Status == true).AsQueryable();
 
-            var services = await _context.Services!.Where(y => y.Status == true)
-                .OrderBy(y => y.Id).ToListAsync();
+            if (!string.IsNullOrEmpty(paginationParameter.Search))
+            {
+                allServices = allServices.Where(p => p.Name.Contains(paginationParameter.Search) || p.UnsignName.Contains(paginationParameter.Search));
+            }
+
+            if (!string.IsNullOrEmpty(paginationParameter.Sort))
+            {
+                switch (paginationParameter.Sort)
+                {
+                    case "name_asc":
+                        allServices = allServices.OrderBy(p => p.Name);
+                        break;
+                    case "name_desc":
+                        allServices = allServices.OrderByDescending(p => p.Name);
+                        break;
+                }
+            }
+
+            var services = await allServices.ToListAsync();
 
             return PagedList<Service>.ToPagedList(services,
                 paginationParameter.PageNumber,
