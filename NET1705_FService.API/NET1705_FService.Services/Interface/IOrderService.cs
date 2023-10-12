@@ -1,4 +1,5 @@
-﻿using NET1705_FService.Repositories.Data;
+﻿using Microsoft.AspNetCore.Http;
+using NET1705_FService.Repositories.Data;
 using NET1705_FService.Repositories.Models;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,8 @@ namespace NET1705_FService.Services.Interface
 {
     public interface IOrderService
     {
-        public Task<ResponseModel> AddOrderAsync(OrderModel order);
-        public Task<ResponseModel> AddExtraOrderAsync(OrderModel extraModel);
+        public Task<ResponseModel> AddOrderAsync(OrderModel order, HttpContext httpContext);
+        public Task<ResponseModel> AddExtraOrderAsync(OrderModel extraModel, HttpContext httpContext);
 
         public Task<PagedList<Order>> GetOrdersByUserName(PaginationParameter paginationParameter, string userName);
 

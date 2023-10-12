@@ -11,11 +11,15 @@ public partial class PackageDetail
 
     public int? ServiceId { get; set; }
 
-    public int? Quantity { get; set; }
+    public int Quantity { get; set; }
 
-    public double? ExtraPrice { get; set; }
+    public int TypeId { get; set; }
 
-    public virtual Package Package { get; set; }
+    public double ExtraPrice { get; set; }
 
-    public virtual Service Service { get; set; }
+    public virtual Package? Package { get; set; }
+
+    public virtual Service? Service { get; set; }
+
+    public virtual ApartmentType? Type { get; set; }
 }

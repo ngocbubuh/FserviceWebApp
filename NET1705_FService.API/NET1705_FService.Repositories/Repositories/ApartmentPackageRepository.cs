@@ -47,6 +47,7 @@ namespace NET1705_FService.Repositories.Repositories
         {
             var apartmentPackage = await _context.ApartmentPackages
                 .Include(a => a.ApartmentPackageServices)
+                .Include(a => a.Apartment)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             if (apartmentPackage != null)

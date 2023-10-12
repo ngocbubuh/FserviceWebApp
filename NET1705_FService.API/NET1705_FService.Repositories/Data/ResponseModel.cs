@@ -10,5 +10,7 @@ namespace NET1705_FService.Repositories.Data
     {
         public string Status { get; set; }
         public string Message { get; set; }
+
+        public string? PaymentUrl { get; set; }
     }
 }

@@ -11,7 +11,7 @@ public partial class Apartment
 
     public string RoomNo { get; set; }
 
-    public int? TypeId { get; set; }
+    public int TypeId { get; set; }
 
     public string? AccountId { get; set; }
 
