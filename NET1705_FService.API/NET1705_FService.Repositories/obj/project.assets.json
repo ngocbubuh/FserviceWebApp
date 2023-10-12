@@ -4136,24 +4136,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\1005h\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\giadu\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Đại học FPT\\Semester 5_Fa23\\SWP391\\Project SWP Final\\NET1705_FService.API\\NET1705_FService.Repositories\\NET1705_FService.Repositories.csproj",
+      "projectUniqueName": "D:\\FPT_University\\Fall_2023\\SWP391\\ProjectCode\\FService_WebApp_Ducdpg\\NET1705_FService.API\\NET1705_FService.Repositories\\NET1705_FService.Repositories.csproj",
       "projectName": "NET1705_FService.Repositories",
-      "projectPath": "D:\\Đại học FPT\\Semester 5_Fa23\\SWP391\\Project SWP Final\\NET1705_FService.API\\NET1705_FService.Repositories\\NET1705_FService.Repositories.csproj",
-      "packagesPath": "C:\\Users\\1005h\\.nuget\\packages\\",
-      "outputPath": "D:\\Đại học FPT\\Semester 5_Fa23\\SWP391\\Project SWP Final\\NET1705_FService.API\\NET1705_FService.Repositories\\obj\\",
+      "projectPath": "D:\\FPT_University\\Fall_2023\\SWP391\\ProjectCode\\FService_WebApp_Ducdpg\\NET1705_FService.API\\NET1705_FService.Repositories\\NET1705_FService.Repositories.csproj",
+      "packagesPath": "C:\\Users\\giadu\\.nuget\\packages\\",
+      "outputPath": "D:\\FPT_University\\Fall_2023\\SWP391\\ProjectCode\\FService_WebApp_Ducdpg\\NET1705_FService.API\\NET1705_FService.Repositories\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\1005h\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\giadu\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4161,7 +4156,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -4245,7 +4239,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
       }
     }
   }

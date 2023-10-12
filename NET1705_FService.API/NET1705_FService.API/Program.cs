@@ -140,6 +140,7 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 
 builder.Services.AddScoped<IOrderDetailsRepository, OrderDetailsRepository>();
 builder.Services.AddScoped<IOrderDetailsService, OrderDetailsService>();
+builder.Services.AddScoped<IVnpayService, VnpayService>();
 
 //NgocBuh
 builder.Services.AddScoped<IBannerRepository, BannerRepository>();

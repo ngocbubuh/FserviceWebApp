@@ -1,11 +1,15 @@
-﻿using NET1705_FService.Repositories.Data;
+﻿using FServiceAPI.Repositories;
+using Microsoft.AspNetCore.Http;
+using NET1705_FService.Repositories.Data;
 using NET1705_FService.Repositories.Interface;
 using NET1705_FService.Repositories.Models;
 using NET1705_FService.Services.Interface;
 using NET1715_FService.API.Repository.Inteface;
+using NET1715_FService.Service.Inteface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,38 +20,52 @@ namespace NET1705_FService.Services.Services
         private readonly IOrderRepository _repo;
         private readonly IPackageRepository _packageRepo;
         private readonly IApartmentPackageRepository _apartmentPackageRepo;
+        private readonly IApartmentService _apartmentService;
+        private readonly IServiceRepository _serviceRepo;
+        private readonly IVnpayService _vnpayService;
 
         public OrderService(IOrderRepository repo, IPackageRepository packageRepo,
-            IApartmentPackageRepository apartmentPackageRepo) 
+            IApartmentPackageRepository apartmentPackageRepo, IVnpayService vnpayService,
+            IApartmentService apartmentService, IServiceRepository serviceRepo) 
         { 
             _repo = repo;
             _packageRepo = packageRepo;
             _apartmentPackageRepo = apartmentPackageRepo;
+            _apartmentService = apartmentService;
+            _serviceRepo = serviceRepo;
+            _vnpayService = vnpayService;
         }
 
-        public async Task<ResponseModel> AddOrderAsync(OrderModel orderModel)
+        public async Task<ResponseModel> AddOrderAsync(OrderModel orderModel, HttpContext httpContext)
         {
-            var package = await _packageRepo.GetPackageAsync(orderModel.PackageId);
+            var apartment = await _apartmentService.GetApartmentByIdAsync(orderModel.ApartmentId);
+            var typeId = apartment.TypeId;
+            var package = await _packageRepo.GetPackageAsync(orderModel.PackageId, typeId);
             if (package == null)
             {
                 return new ResponseModel { Status="Error", Message="Package was Not found."};
             }
             var result = await _repo.AddOrderAsync(orderModel);
-            if (result == 0)
+            if (result == null)
             {
                 return new ResponseModel { Status = "Error", Message = "Somethings was error. Try again." };
             }
-            return new ResponseModel { Status = "Success", Message = "Create order successfully" };
+            // payment
+            var paymentURL = _vnpayService.CreatePaymentUrl(result, httpContext, package.UnsignName);
+
+            return new ResponseModel { Status = "Success", Message = "Create order successfully", PaymentUrl = paymentURL};
         }
 
-        public async Task<ResponseModel> AddExtraOrderAsync(OrderModel extraModel)
+        public async Task<ResponseModel> AddExtraOrderAsync(OrderModel extraModel, HttpContext httpContext)
         {
             var apmPackage = await _apartmentPackageRepo.GetApartmentPackageByIdAsync(extraModel.ApartmentPackageId);
             if (apmPackage == null)
             {
                 return new ResponseModel { Status = "Error", Message = "Apartment Package was not found." };
             }
-            var package = await _packageRepo.GetPackageAsync(extraModel.PackageId);
+            var apartment = await _apartmentService.GetApartmentByIdAsync(extraModel.ApartmentId);
+            var typeId = apartment.TypeId;
+            var package = await _packageRepo.GetPackageAsync(extraModel.PackageId, typeId);
             if (package == null)
             {
                 return new ResponseModel { Status = "Error", Message = "Package was not found." };
@@ -58,11 +76,14 @@ namespace NET1705_FService.Services.Services
                 return new ResponseModel { Status = "Error", Message = "Service was not found." };
             }
             var result = await _repo.AddExtraOrderAsync(extraModel);
-            if (result == 0)
+            if (result == null)
             {
                 return new ResponseModel { Status = "Error", Message = "Somethings was error. Try again." };
             }
-            return new ResponseModel { Status = "Success", Message = "Create order successfully" };
+            // payment
+            var service = await _serviceRepo.GetServiceAsync(extraModel.ServiceId);
+            var paymentURL = _vnpayService.CreatePaymentUrl(result, httpContext, service.UnsignName);
+            return new ResponseModel { Status = "Success", Message = "Create order successfully", PaymentUrl = paymentURL };
         }
 
         public async Task<PagedList<Order>> GetOrdersByUserName(PaginationParameter paginationParameter,string userName)

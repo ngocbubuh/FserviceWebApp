@@ -45,6 +45,7 @@ namespace NET1705_FService.Repositories.Repositories
         public async Task<ResponseModel> AddOrderDetailsAsync(UsingPackageModel usingPackage)
         {
             var apartmentPackage = await _apartmentPackageRepo.GetApartmentPackageByIdAsync(usingPackage.ApartmentPackageId);
+            var typeId = apartmentPackage.Apartment.TypeId;
             var apmPackageService = apartmentPackage.ApartmentPackageServices.FirstOrDefault(a => a.ServiceId == usingPackage.ServiceId);
             //var apmPackageServices = apartmentPackage.ApartmentPackageServices;
             if (apartmentPackage == null || !apartmentPackage.PackageStatus.Equals("Active"))
@@ -55,7 +56,7 @@ namespace NET1705_FService.Repositories.Repositories
             {
                 if (apmPackageService.IsExtra == true && apmPackageService.CountExtra > 0)
                 {
-                    var usePackage = await _packageRepo.GetPackageAsync(apartmentPackage.PackageId);
+                    var usePackage = await _packageRepo.GetPackageAsync(apartmentPackage.PackageId, typeId);
                     var priceService = usePackage.PackageDetails.SingleOrDefault(p => p.ServiceId == usingPackage.ServiceId).ExtraPrice;
                     var staffWorkExtra = await AssignStaff();
                     OrderDetail orderDetailExtra = _mapper.Map<OrderDetail>(usingPackage);
