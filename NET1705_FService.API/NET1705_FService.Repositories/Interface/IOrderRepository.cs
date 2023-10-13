@@ -10,9 +10,9 @@ namespace NET1705_FService.Repositories.Interface
 {
     public interface IOrderRepository
     {
-        public Task<int> AddOrderAsync(OrderModel orderModel);
+        public Task<Order> AddOrderAsync(OrderModel orderModel);
 
-        public Task<int> AddExtraOrderAsync(OrderModel extraModel);
+        public Task<Order> AddExtraOrderAsync(OrderModel extraModel);
 
         public Task<PagedList<Order>> GetOrderByUserNameAsync(PaginationParameter paginationParameter, string userName);
 

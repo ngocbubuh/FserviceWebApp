@@ -42,6 +42,8 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
 
     public virtual DbSet<Service> Services { get; set; }
 
+    public virtual DbSet<PackagePrice> PackagePrices { get; set; }
+
     //public virtual DbSet<ServiceJoinStaff> ServiceJoinStaffs { get; set; }
 
     //public virtual DbSet<Staff> Staff { get; set; }
@@ -236,9 +238,9 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.UnsignName).HasMaxLength(50);
 
-            entity.HasOne(d => d.Type).WithMany(p => p.Packages)
-                .HasForeignKey(d => d.TypeId)
-                .HasConstraintName("FK_Package_ApartmentType").IsRequired(false);
+            //entity.HasOne(d => d.Type).WithMany(p => p.Packages)
+            //    .HasForeignKey(d => d.TypeId)
+            //    .HasConstraintName("FK_Package_ApartmentType").IsRequired(false);
         });
 
         modelBuilder.Entity<PackageDetail>(entity =>
@@ -252,6 +254,10 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
             entity.HasOne(d => d.Service).WithMany(p => p.PackageDetails)
                 .HasForeignKey(d => d.ServiceId)
                 .HasConstraintName("FK__PackageDe__Servi__05D8E0BE");
+
+            entity.HasOne(d => d.Type).WithMany(p => p.PackageDetails)
+                .HasForeignKey(d => d.TypeId)
+                .HasConstraintName("FK_PackageDetails_ApartmentType").IsRequired(false);
         });
 
         modelBuilder.Entity<Service>(entity =>
@@ -262,6 +268,20 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
 
             entity.Property(e => e.Image).HasMaxLength(500);
             entity.Property(e => e.Name).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<PackagePrice>(entity =>
+        {
+            entity.ToTable("PackagePrice");
+            entity.HasKey(e => e.Id).HasName("PK_PackagePrice");
+
+            entity.HasOne(e => e.Package).WithMany(p => p.PackagePrices)
+                .HasForeignKey(e => e.PackageId)
+                .HasConstraintName("FK_PackagePrice_Package").IsRequired(false);
+
+            //entity.HasOne(e => e.Type).WithMany(p => p.PackagePrices)
+            //    .HasForeignKey(e => e.TypeId)
+            //    .HasConstraintName("FK_PackagePrice_ApartmentType").IsRequired(false);
         });
 
         //modelBuilder.Entity<ServiceJoinStaff>(entity =>

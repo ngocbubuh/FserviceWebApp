@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NET1705_FService.Repositories.Data;
 using NET1705_FService.Repositories.Helper;
 using NET1705_FService.Repositories.Models;
 using NET1715_FService.Service.Inteface;
@@ -42,16 +43,16 @@ namespace NET1705_FService.API.Controllers
             }
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetPackageAsync(int id)
+        public async Task<IActionResult> GetPackageAsync(int id, int typeId)
         {
             try
             {
-                var package = await _packageService.GetPackageAsync(id);
+                var package = await _packageService.GetPackageAsync(id, typeId);
                 return package != null ? Ok(package) : NotFound();
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex);
             }
         }
         [HttpPost]
@@ -63,7 +64,7 @@ namespace NET1705_FService.API.Controllers
                 var result = await _packageService.AddPackageAsync(newPackage);
                 if (result.Status.Equals("Success"))
                 {
-                    var package = await _packageService.GetPackageAsync(int.Parse(result.Message));
+                    var package = await _packageService.GetPackageAsync(int.Parse(result.Message), 1);
                     return Ok(package);
                 }
                 return BadRequest(result);
@@ -82,8 +83,9 @@ namespace NET1705_FService.API.Controllers
                 var result = await _packageService.UpdatePackageAsync(id, updatePackage);
                 if (result.Status.Equals("Success"))
                 {
-                    var package = await _packageService.GetPackageAsync(int.Parse(result.Message));
-                    return Ok(package);
+                    //var package = await _packageService.GetPackageAsync(int.Parse(result.Message), 1);
+                    return Ok( new ResponseModel { Status = "Success", Message = $"Update package {updatePackage.Name} successfully"}
+                        );
                 }
                 return NotFound(result);
             }

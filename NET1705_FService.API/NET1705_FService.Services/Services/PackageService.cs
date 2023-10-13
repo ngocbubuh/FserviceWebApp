@@ -31,7 +31,8 @@ namespace NET1715_FService.Service.Services
 
         public async Task<ResponseModel> DeletePackageAsync(int id)
         {
-            var deletePackage = await _repo.GetPackageAsync(id);
+            var typeId = 1;
+            var deletePackage = await _repo.GetPackageAsync(id, typeId);
             if (deletePackage == null)
             {
                 return new ResponseModel { Status = "Error", Message = $"Not found Package Id {id}" };
@@ -50,9 +51,9 @@ namespace NET1715_FService.Service.Services
             return packages;
         }
 
-        public async Task<Package> GetPackageAsync(int id)
+        public async Task<Package> GetPackageAsync(int id, int typeId)
         {
-            var package = await _repo.GetPackageAsync(id);
+            var package = await _repo.GetPackageAsync(id, typeId);
             return package;
         }
 

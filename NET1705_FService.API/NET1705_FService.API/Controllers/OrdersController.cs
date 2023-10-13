@@ -28,7 +28,7 @@ namespace NET1705_FService.API.Controllers
             {
                 if (order.Type != "extra")
                 {
-                    var result = await _orderService.AddOrderAsync(order);
+                    var result = await _orderService.AddOrderAsync(order, HttpContext);
                     if (result.Status.Equals("Success"))
                     {
                         return Ok(result);
@@ -38,7 +38,7 @@ namespace NET1705_FService.API.Controllers
                 }
                 else
                 {
-                    var result = await _orderService.AddExtraOrderAsync(order);
+                    var result = await _orderService.AddExtraOrderAsync(order, HttpContext);
                     if (result.Status.Equals("Success"))
                     {
                         return Ok(result);
@@ -51,6 +51,32 @@ namespace NET1705_FService.API.Controllers
                 return BadRequest();
             }
         }
+
+        //[HttpPost]
+        ////[Authorize(Roles = "USER")]
+        //public async Task<IActionResult> AddOrderAsync(OrderModel order)
+        //{
+
+        //        if (order.Type != "extra")
+        //        {
+        //            var result = await _orderService.AddOrderAsync(order, HttpContext);
+        //            if (result.Status.Equals("Success"))
+        //            {
+        //                return Ok(result);
+        //            }
+        //            return BadRequest(result);
+
+        //        }
+        //        else
+        //        {
+        //            var result = await _orderService.AddExtraOrderAsync(order);
+        //            if (result.Status.Equals("Success"))
+        //            {
+        //                return Ok(result);
+        //            }
+        //            return BadRequest(result);
+        //        }
+        //}
 
         [HttpGet]
         [Authorize(Roles = "ADMIN")]

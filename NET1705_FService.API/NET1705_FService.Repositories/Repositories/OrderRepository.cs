@@ -18,34 +18,40 @@ namespace NET1705_FService.Repositories.Repositories
         private readonly IPackageRepository _packageRepo;
         private readonly IApartmentPackageRepository _apartmentPackageRepo;
         private readonly IApartPackageServiceRepository _apartPackageServiceRepo;
+        private readonly IApartmentRepository _apartmentRepo;
         private readonly IMapper _mapper;
 
         public OrderRepository(FserviceApiDatabaseContext context, IPackageRepository packageRepo,
             IApartmentPackageRepository apartmentPackageRepo, IApartPackageServiceRepository apartPackageServiceRepo,
+            IApartmentRepository apartmentRepo,
             IMapper mapper)
         {
             _context = context;
             _packageRepo = packageRepo;
             _apartmentPackageRepo = apartmentPackageRepo;
             _apartPackageServiceRepo = apartPackageServiceRepo;
+            _apartmentRepo = apartmentRepo;
             _mapper = mapper;
         }
 
-        public async Task<int> AddOrderAsync(OrderModel orderModel)
+        public async Task<Order> AddOrderAsync(OrderModel orderModel)
         {
             if (_context == null)
             {
-                return 0;
+                return null;
             }
             var newOrder = _mapper.Map<Order>(orderModel);
             newOrder.ApartmentPackageId = null;
             newOrder.IsExtraOrder = false;
             newOrder.ServiceId = null;
 
-            var package = await _packageRepo.GetPackageAsync(newOrder.PackageId);
+            var apartment = await _apartmentRepo.GetApartmentByIdAsync(orderModel.ApartmentId);
+            var typeId = apartment.TypeId;
+
+            var package = await _packageRepo.GetPackageAsync(newOrder.PackageId, typeId);
 
             newOrder.OrderDate = DateTime.Now;
-            newOrder.TotalPrice = package.Price;
+            newOrder.TotalPrice = package.PackagePrices.FirstOrDefault().Price;
 
             _context.Add(newOrder);
             await _context.SaveChangesAsync();
@@ -67,7 +73,7 @@ namespace NET1705_FService.Repositories.Repositories
                 PackageId = orderModel.PackageId,
                 StartDate = orderModel.StartDate,
                 EndDate = endDate,
-                PackageStatus = "Active",
+                PackageStatus = "Disable",
             };
             int apmPackageId = await _apartmentPackageRepo.AddApartmentPackageAsync(apartmentPackage);
             // add apartment package service
@@ -85,14 +91,16 @@ namespace NET1705_FService.Repositories.Repositories
                 await _apartPackageServiceRepo.AddApartPackageServiceAsync(apmService);
             }
 
-            return newOrder.Id;
+            return newOrder;
         }
 
-        public async Task<int> AddExtraOrderAsync(OrderModel orderModel)
+        public async Task<Order> AddExtraOrderAsync(OrderModel orderModel)
         {
             var apartmentPackage = await _apartmentPackageRepo.GetApartmentPackageByIdAsync(orderModel.ApartmentPackageId);
             var extraOrder = _mapper.Map<Order>(orderModel);
-            var package = await _packageRepo.GetPackageAsync(extraOrder.PackageId);
+            var apartment = await _apartmentRepo.GetApartmentByIdAsync(orderModel.ApartmentId);
+            var typeId = apartment.TypeId;
+            var package = await _packageRepo.GetPackageAsync(extraOrder.PackageId, typeId);
             var buyService = package.PackageDetails.SingleOrDefault(p => p.ServiceId == extraOrder.ServiceId);
 
             extraOrder.OrderDate = DateTime.Now;
@@ -104,10 +112,10 @@ namespace NET1705_FService.Repositories.Repositories
             // update apartment package service
             var apartmentService = apartmentPackage.ApartmentPackageServices.SingleOrDefault(a => a.ServiceId == extraOrder.ServiceId);
             apartmentService.IsExtra = true;
-            apartmentService.CountExtra = 1;
+            apartmentService.CountExtra = 0;
             await _apartPackageServiceRepo.UpdateApartPackageServiceAsync(apartmentService.Id ,apartmentService);
 
-            return extraOrder.Id;
+            return extraOrder;
         }
 
         public async Task<PagedList<Order>> GetOrderByUserNameAsync(PaginationParameter paginationParameter, string userName)
@@ -155,7 +163,9 @@ namespace NET1705_FService.Repositories.Repositories
 
         public async Task<Order> GetOrderByIdAsync(int id)
         {
-            var order = _context.Orders.FirstOrDefault(o => o.Id == id);
+            var order = _context.Orders
+                .Include(o => o.ApartmentPackages)
+                .FirstOrDefault(o => o.Id == id);
             return order;
         }
     }

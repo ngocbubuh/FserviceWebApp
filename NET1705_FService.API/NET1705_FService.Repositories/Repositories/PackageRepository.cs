@@ -48,7 +48,22 @@ namespace NET1715_FService.API.Repository.Repositories
 
         public async Task<PagedList<Package>> GetAllPackagesAsync(PaginationParameter paginationParameter)
         {
-            var allPackages = _context.Packages.Where(y => y.Status == true).AsQueryable();
+            var allPackages = _context.Packages.Where(y => y.Status == true)
+                .Include(p => p.PackagePrices)
+                .AsQueryable();
+
+            foreach (var package in allPackages)
+            {
+                var firstPackagePrice = package.PackagePrices.FirstOrDefault();
+                if (firstPackagePrice != null)
+                {
+                    package.Price = firstPackagePrice.Price;
+                }
+                else
+                {
+                    package.Price = 0;
+                }
+            }
 
             if (!string.IsNullOrEmpty(paginationParameter.Search))
             {
@@ -60,10 +75,10 @@ namespace NET1715_FService.API.Repository.Repositories
                 switch (paginationParameter.Sort)
                 {
                     case "price_asc":
-                        allPackages = allPackages.OrderBy(p => p.Price);
+                        allPackages = allPackages.OrderBy(p => p.PackagePrices.FirstOrDefault().Price);
                         break;
                     case "price_desc":
-                        allPackages = allPackages.OrderByDescending(p => p.Price);
+                        allPackages = allPackages.OrderByDescending(p => p.PackagePrices.FirstOrDefault().Price); ;
                         break;
                     case "name_asc":
                         allPackages = allPackages.OrderBy(p => p.Name);
@@ -81,18 +96,47 @@ namespace NET1715_FService.API.Repository.Repositories
                 paginationParameter.PageSize);
         }
 
-        public async Task<Package> GetPackageAsync(int id)
+        public async Task<Package> GetPackageAsync(int id, int? typeId)
+        {
+            if (typeId == null || typeId == 0)
+            {
+                var package = await _context.Packages
+                .Include(p => p.PackageDetails)
+                .Include(p => p.PackagePrices)
+                .FirstOrDefaultAsync(p => p.Id == id && p.Status == true);
+                return package;
+            } else
+            {
+                var package = await _context.Packages
+                .Include(p => p.PackageDetails.Where(pd => pd.TypeId == typeId))
+                .Include(p => p.PackagePrices.Where(pr => pr.TypeId == typeId))
+                .FirstOrDefaultAsync(p => p.Id == id && p.Status == true);
+                return package;
+            } 
+        }
+
+        public async Task<double>GetPricePackageByTypeIdAsync(int packageId ,int typeId)
         {
             var package = await _context.Packages
-                .Include(p => p.PackageDetails)
-                .FirstOrDefaultAsync(p => p.Id == id && p.Status == true);
-            return package;
+                .FirstOrDefaultAsync(p => p.Id == packageId && p.Status == true);
+            var packageServices = package.PackageDetails;
+            double packagePrice = 0;
+            foreach (var service in packageServices)
+            {
+                if (service.TypeId == typeId)
+                {
+                    packagePrice += service.ExtraPrice * service.Quantity;
+                }
+            }
+            packagePrice = packagePrice * 0.9;
+            return packagePrice;
         }
 
         public async Task<int> UpdatePackageAsync(int id, Package package)
         {
             if (id == package.Id)
             {
+                package.UnsignName = StringExtensions.ConvertToUnSign(package.Name);
                 _context.Packages!.Update(package);
                 await _context.SaveChangesAsync();
                 return package.Id;
