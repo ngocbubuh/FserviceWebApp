@@ -12,6 +12,7 @@ namespace NET1705_FService.Services.Interface
     public interface IUserService
     {
         public Task<Accounts> GetAccountAsync(string id);
+        public Task<Accounts> GetAccountByUsernameAsync(string name);
         public Task<PagedList<Accounts>> GetAllAccountAsync(PaginationParameter paginationParameter);
         public Task<ResponseModel> UpdateAccountAsync(string id, Accounts account);
         public Task<ResponseModel> DeleteAccountAsync(string id);

@@ -51,6 +51,13 @@ namespace NET1705_FService.Repositories.Repositories
             return acc;
         }
 
+        public async Task<Accounts> GetAccountByUsernameAsync(string UserName)
+        {
+            var acc = await _context.Accounts
+                .SingleOrDefaultAsync(a => a.UserName == UserName && a.Status == true);
+            return acc;
+        }
+
         public async Task<PagedList<Accounts>> GetAllAccountAsync(PaginationParameter paginationParameter)
         {
             var allAccounts = _context.Accounts.Where(y => y.Status == true).AsQueryable();

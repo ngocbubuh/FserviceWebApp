@@ -40,6 +40,12 @@ namespace NET1705_FService.Services.Services
             return account;
         }
 
+        public async Task<Accounts> GetAccountByUsernameAsync(string name)
+        {
+            var account = await _repo.GetAccountByUsernameAsync(name);
+            return account;
+        }
+
         public async Task<PagedList<Accounts>> GetAllAccountAsync(PaginationParameter paginationParameter)
         {
             var accounts = await _repo.GetAllAccountAsync(paginationParameter);

@@ -20,9 +20,14 @@ namespace NET1705_FService.Services.Services
             _repo = repo;
         }
 
-        public async Task SendEmailAsync(MailRequest mailRequest)
+        public async Task<ResponseModel> SendEmailAsync(MailRequest mailRequest)
         {
-            await _repo.SendEmailAsync(mailRequest);
+            var result = await _repo.SendEmailAsync(mailRequest);
+            if(result == 1)
+            {
+                return new ResponseModel { Status = "Success", Message = "Send mail successfully!" };
+            }
+            return new ResponseModel { Status = "Error", Message = "Error! Something went wrong, please try again!" };
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using FServiceAPI.Repositories;
 using Microsoft.AspNetCore.Identity;
 using NET1705_FService.Repositories.Data;
+using NET1705_FService.Repositories.Interface;
 using NET1705_FService.Repositories.Models;
 using NET1715_FService.Service.Inteface;
 using System;
@@ -15,20 +16,23 @@ namespace NET1715_FService.Service.Services
     public class AccountService : IAccountService
     {
         private readonly IAccountRepository _repo;
+        private readonly IUserRepository _userRepository;
 
-        public AccountService(IAccountRepository repo)
+        public AccountService(IAccountRepository repo, IUserRepository userRepository)
         {
             _repo = repo;
+            _userRepository = userRepository;
         }
 
         public async Task<string> SignInAsync(SignInModel model)
         {
-            var token = await _repo.SignInAsync(model);
-            if (token != null) 
+            var result = await _userRepository.GetAccountByUsernameAsync(model.Email);
+            if (result != null)
             {
+                var token = await _repo.SignInAsync(model);
                 return token;
             }
-            return "Error";
+            return "UserName does not exist!";
         }
 
         public async Task<ResponseModel> SignUpAdminAsync(SignUpModel model)

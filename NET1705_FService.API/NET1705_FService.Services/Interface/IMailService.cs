@@ -1,4 +1,5 @@
-﻿using NET1705_FService.Repositories.Data;
+﻿using Azure;
+using NET1705_FService.Repositories.Data;
 using NET1705_FService.Repositories.Helper;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,6 @@ namespace NET1705_FService.Services.Interface
 {
     public interface IMailService
     {
-        public Task SendEmailAsync(MailRequest mailRequest);
+        public Task<ResponseModel> SendEmailAsync(MailRequest mailRequest);
     }
 }

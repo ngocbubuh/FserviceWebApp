@@ -58,6 +58,18 @@ namespace NET1705_FService.API.Controllers
             catch { return BadRequest(); }
         }
 
+        [HttpPost("{name}")]
+        [Authorize]
+        public async Task<IActionResult> GetAccountByUsername(string name)
+        {
+            try
+            {
+                var account = await accountService.GetAccountByUsernameAsync(name);
+                return account == null ? NotFound() : Ok(account);
+            }
+            catch { return BadRequest(); }
+        }
+
         [HttpPut("{id}")]
         [Authorize]
         public async Task<IActionResult> UpdateAccount(string id, Accounts model)

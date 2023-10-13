@@ -55,13 +55,13 @@ namespace FServiceAPI.Repositories
         {
             var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
 
-            var account = await accountManager.FindByNameAsync(model.Email);
-            var roles = await accountManager.GetRolesAsync(account);
-
             if (!result.Succeeded) 
             {
                 return "Error! Incorrect Username or Password!";
             }
+
+            var account = await accountManager.FindByNameAsync(model.Email);
+            var roles = await accountManager.GetRolesAsync(account);
 
             var authClaims = new List<Claim>
             {
@@ -139,6 +139,14 @@ namespace FServiceAPI.Repositories
                 UserName = model.Email,
                 Status = true
             };
+
+            var userMail = new Accounts
+            {
+                Name = model.Name,
+                Email = model.Email,
+            };
+
+
             var result = await accountManager.CreateAsync(user, model.Password);
             if(result.Succeeded)
             {

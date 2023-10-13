@@ -19,8 +19,8 @@ namespace NET1705_FService.API.Controllers
         {
             try
             {
-                await mailService.SendEmailAsync(request);
-                return Ok();
+                var result = await mailService.SendEmailAsync(request);
+                return Ok(result);
             }
             catch 
             {
