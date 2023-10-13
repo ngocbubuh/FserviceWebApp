@@ -1,6 +1,7 @@
 ﻿using FServiceAPI.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NET1705_FService.Repositories.Data;
 using NET1705_FService.Repositories.Models;
@@ -14,6 +15,7 @@ namespace NET1715_FService.API.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService accountService;
+        private readonly UserManager<Accounts> accountManager;
 
         public AccountController(IAccountService repo)
         {
@@ -30,8 +32,9 @@ namespace NET1715_FService.API.Controllers
                 {
                     return Ok(result);
                 }
-                return Unauthorized();
-            } catch { return BadRequest(); }
+                return Unauthorized(result);
+            }
+            catch { return BadRequest(); }
         }
 
         [HttpPost("SignUp-Admin")]
@@ -41,11 +44,11 @@ namespace NET1715_FService.API.Controllers
             try
             {
                 var result = await accountService.SignUpAdminAsync(model);
-                if (result != null)
+                if (result.Status.Equals("Success"))
                 {
                     return Ok(result);
                 }
-                return Unauthorized();
+                return Unauthorized(result);
             }
             catch { return BadRequest(); }
         }
@@ -57,11 +60,11 @@ namespace NET1715_FService.API.Controllers
             try
             {
                 var result = await accountService.SignUpStaffAsync(model);
-                if (result != null)
+                if (result.Status.Equals("Success"))
                 {
                     return Ok(result);
                 }
-                return Unauthorized();
+                return Unauthorized(result);
             }
             catch { return BadRequest(); }
         }
@@ -72,9 +75,9 @@ namespace NET1715_FService.API.Controllers
             try
             {
                 var result = await accountService.SignInAsync(model);
-                if (string.IsNullOrEmpty(result))
+                if (result.Status.Equals(false))
                 {
-                    return Unauthorized();
+                    return Unauthorized(result);
                 }
                 return Ok(result);
             }
@@ -83,5 +86,18 @@ namespace NET1715_FService.API.Controllers
                 return BadRequest();
             }
         }
+
+        //[HttpPost("ConfirmEmail")]
+        //public async Task<IActionResult> ConfirmEmail(string token, string email)
+        //{
+        //    try
+        //    {
+
+        //    }
+        //    catch
+        //    {
+
+        //    }
+        //}
     }
 }

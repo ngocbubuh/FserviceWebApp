@@ -62,3 +62,5 @@ D:\FPT_University\Fall_2023\SWP391\ProjectCode\FService_WebApp_Ducdpg\NET1705_FS
 D:\FPT_University\Fall_2023\SWP391\ProjectCode\FService_WebApp_Ducdpg\NET1705_FService.API\NET1705_FService.Services\bin\Debug\net7.0\NET1705_FService.Library.pdb
 D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Services\bin\Debug\net7.0\NET1705_FService.Library.dll
 D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Services\bin\Debug\net7.0\NET1705_FService.Library.pdb
+D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\NET1705_FService.Services\bin\Debug\net7.0\NET1705_FService.Library.dll
+D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\NET1705_FService.Services\bin\Debug\net7.0\NET1705_FService.Library.pdb

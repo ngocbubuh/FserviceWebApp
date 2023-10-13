@@ -155,9 +155,7 @@ builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IMailRepository, MailRepository>();
 builder.Services.AddScoped<IMailService, MailService>();
-builder.Services.AddTransient<IMailRepository, MailRepository>();
 builder.Services.AddTransient<IMailService, MailService>();
 
 var app = builder.Build();
