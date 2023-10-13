@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NET1705_FService.Repositories.Data;
+using NET1705_FService.Repositories.Helper;
 using NET1705_FService.Repositories.Models;
 using NET1705_FService.Services.Interface;
 using NET1715_FService.Service.Inteface;
@@ -53,6 +53,18 @@ namespace NET1705_FService.API.Controllers
             try
             {
                 var account = await accountService.GetAccountAsync(id);
+                return account == null ? NotFound() : Ok(account);
+            }
+            catch { return BadRequest(); }
+        }
+
+        [HttpPost("{name}")]
+        [Authorize]
+        public async Task<IActionResult> GetAccountByUsername(string name)
+        {
+            try
+            {
+                var account = await accountService.GetAccountByUsernameAsync(name);
                 return account == null ? NotFound() : Ok(account);
             }
             catch { return BadRequest(); }

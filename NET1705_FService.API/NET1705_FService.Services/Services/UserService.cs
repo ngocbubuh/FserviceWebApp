@@ -1,4 +1,5 @@
 ﻿using NET1705_FService.Repositories.Data;
+using NET1705_FService.Repositories.Helper;
 using NET1705_FService.Repositories.Interface;
 using NET1705_FService.Repositories.Models;
 using NET1705_FService.Services.Interface;
@@ -36,6 +37,12 @@ namespace NET1705_FService.Services.Services
         public async Task<Accounts> GetAccountAsync(string id)
         {
             var account = await _repo.GetAccountAsync(id);
+            return account;
+        }
+
+        public async Task<Accounts> GetAccountByUsernameAsync(string name)
+        {
+            var account = await _repo.GetAccountByUsernameAsync(name);
             return account;
         }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NET1705_FService.Repositories.Data
+namespace NET1705_FService.Repositories.Helper
 {
     public class PagedList<T> : List<T>
     {

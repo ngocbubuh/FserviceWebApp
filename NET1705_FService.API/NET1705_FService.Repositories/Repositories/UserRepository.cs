@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NET1705_FService.Repositories.Data;
+using NET1705_FService.Repositories.Helper;
 using NET1705_FService.Repositories.Interface;
 using NET1705_FService.Repositories.Models;
 using SQLitePCL;
@@ -48,6 +48,13 @@ namespace NET1705_FService.Repositories.Repositories
         {
             var acc = await _context.Accounts
                 .FirstOrDefaultAsync(p => p.Id == id && p.Status == true);
+            return acc;
+        }
+
+        public async Task<Accounts> GetAccountByUsernameAsync(string UserName)
+        {
+            var acc = await _context.Accounts
+                .SingleOrDefaultAsync(a => a.UserName == UserName && a.Status == true);
             return acc;
         }
 
