@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using NET1705_FService.Repositories.Data;
+using NET1705_FService.Repositories.Interface;
 using NET1705_FService.Repositories.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Runtime.Serialization;
@@ -21,22 +22,25 @@ namespace FServiceAPI.Repositories
         private readonly SignInManager<Accounts> signInManager;
         private readonly IConfiguration configuration;
         private readonly RoleManager<IdentityRole> roleManager;
+        private readonly IUserRepository _userRepository;
 
         public AccountRepository(
             UserManager<Accounts> accountManager, 
             SignInManager<Accounts> signInManager, 
             IConfiguration configuration,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            IUserRepository userRepository)
         {
             this.accountManager = accountManager;
             this.signInManager = signInManager;
             this.configuration = configuration;
             this.roleManager = roleManager;
+            _userRepository = userRepository;
         }
 
         public async Task<ResponseModel> ConfirmEmail(string token, string email)
         {
-            var user = await accountManager.FindByEmailAsync(email);
+            var user = await _userRepository.GetAccountByUsernameAsync(email);
             if (user != null) 
             {
                 var result = await accountManager.ConfirmEmailAsync(user, token);
@@ -45,13 +49,13 @@ namespace FServiceAPI.Repositories
                     return new ResponseModel
                     {
                         Status = "Success",
-                        Message = "Email Verify Successfully!"
+                        Message = "Email Verification Successfully!"
                     };
                 }
                 return new ResponseModel
                 {
                     Status = "Error",
-                    Message = "Something went wrong, please try again!"
+                    Message = "Email Verification Failed, please try again!"
                 };
             }
             return new ResponseModel
@@ -167,36 +171,37 @@ namespace FServiceAPI.Repositories
         public async Task<ResponseModel> SignUpAsync(SignUpModel model)
         {
             var userExist = await accountManager.FindByNameAsync(model.Email);
-            if (userExist != null)
+            if (userExist == null)
             {
-                return new ResponseModel { Status = "Error", Message = "Username is already exist" };
-            }
-
-            var user = new Accounts
-            {
-                Name = model.Name,
-                PhoneNumber = model.PhoneNumber,
-                Address = model.Address,
-                DateOfBirth = model.DateOfBirth,
-                Email = model.Email,
-                UserName = model.Email,
-                Status = true
-            };
-
-            var result = await accountManager.CreateAsync(user, model.Password);
-
-            if (result.Succeeded)
-            {
-                if (!await roleManager.RoleExistsAsync(RoleModel.ADMIN.ToString()))
+                var user = new Accounts
                 {
-                    await roleManager.CreateAsync(new IdentityRole(RoleModel.ADMIN.ToString()));
-                }
-                if (await roleManager.RoleExistsAsync(RoleModel.ADMIN.ToString()))
+                    Name = model.Name,
+                    PhoneNumber = model.PhoneNumber,
+                    Address = model.Address,
+                    DateOfBirth = model.DateOfBirth,
+                    Email = model.Email,
+                    UserName = model.Email,
+                    Status = true
+                };
+
+                var result = await accountManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
                 {
-                    await accountManager.AddToRoleAsync(user, RoleModel.ADMIN.ToString());
+                    if (!await roleManager.RoleExistsAsync(RoleModel.ADMIN.ToString()))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole(RoleModel.ADMIN.ToString()));
+                    }
+                    if (await roleManager.RoleExistsAsync(RoleModel.ADMIN.ToString()))
+                    {
+                        await accountManager.AddToRoleAsync(user, RoleModel.ADMIN.ToString());
+                    }
+                    var token = accountManager.GenerateEmailConfirmationTokenAsync(user);
+                    return new ResponseModel { Status = "Success", Message = "Register Successfully! Please check your email to confirm your account!", ConfirmEmailToken = token };
                 }
+                return new ResponseModel { Status = "Error", Message = "Cannot create account in database!" };
             }
-            return new ResponseModel { Status = "Success", Message = "Register Admin Successfully!" };
+            return new ResponseModel { Status = "Error", Message = "Username is already exist" };
+
         }
 
         public async Task<ResponseModel> SignUpStaffAsync(SignUpModel model)
@@ -229,7 +234,7 @@ namespace FServiceAPI.Repositories
                 }
             }
 
-            return new ResponseModel { Status = "Sucess", Message = "Register successfully!" };
+            return new ResponseModel { Status = "Sucess", Message = "Register Staff successfully!" };
         }
     }
 }

@@ -32,6 +32,11 @@ builder.Services.AddControllers().AddJsonOptions(x =>
 //Add Mail setting
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
+//Add Email Confirm
+builder.Services.Configure<IdentityOptions>(
+    opt => opt.SignIn.RequireConfirmedEmail = true
+    );
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

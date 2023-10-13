@@ -15,5 +15,6 @@ namespace NET1715_FService.Service.Inteface
         public Task<AuthenticationResponseModel> SignInAsync(SignInModel model);
         public Task<ResponseModel> SignUpStaffAsync(SignUpModel model);
         public Task<ResponseModel> SignUpAdminAsync(SignUpModel model);
+        public Task<ResponseModel> ConfirmEmail(string token, string email);
     }
 }

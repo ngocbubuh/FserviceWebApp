@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NET1705_FService.Repositories.Data;
+using NET1705_FService.Repositories.Helper;
 using NET1705_FService.Repositories.Models;
+using NET1705_FService.Services.Interface;
 using NET1715_FService.Service.Inteface;
 using NET1715_FService.Service.Services;
 
@@ -15,11 +17,13 @@ namespace NET1715_FService.API.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService accountService;
-        private readonly UserManager<Accounts> accountManager;
+        private readonly IMailService mailService;
 
-        public AccountController(IAccountService repo)
+        public AccountController(IAccountService repo, IMailService mailService)
         {
             accountService = repo;
+            this.mailService = mailService;
+
         }
 
         [HttpPost("SignUp")]
@@ -28,8 +32,20 @@ namespace NET1715_FService.API.Controllers
             try
             {
                 var result = await accountService.SignUpAsync(model);
-                if (result != null)
+                if (result.Status.Equals("Success"))
                 {
+                    //Config mail
+                    var token = result.ConfirmEmailToken;
+                    var confirmationEmail = Url.Action(nameof(ConfirmEmail), "Account", new { token = token.Result, email = model.Email }, Request.Scheme);
+                    var messageRequest = new MailRequest
+                    {
+                        ToEmail = model.Email,
+                        Subject = "Confirmation Email",
+                        Body = confirmationEmail!
+                    };
+                    //Send Mail
+                    await mailService.SendEmailAsync(messageRequest);
+                    result.ConfirmEmailToken = null;
                     return Ok(result);
                 }
                 return Unauthorized(result);
@@ -87,17 +103,22 @@ namespace NET1715_FService.API.Controllers
             }
         }
 
-        //[HttpPost("ConfirmEmail")]
-        //public async Task<IActionResult> ConfirmEmail(string token, string email)
-        //{
-        //    try
-        //    {
-
-        //    }
-        //    catch
-        //    {
-
-        //    }
-        //}
+        [HttpGet("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail(string token, string email)
+        {
+            try
+            {
+                var result = await accountService.ConfirmEmail(token, email);
+                if (result.Status.Equals(false))
+                {
+                    return Unauthorized(result);
+                }
+                return Ok(result);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

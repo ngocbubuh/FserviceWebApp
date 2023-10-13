@@ -20,12 +20,8 @@ namespace NET1705_FService.API.Controllers
         {
             try
             {
-                var result = await mailService.SendEmailAsync(request);
-                if (result.Status.Equals("Success")) 
-                {
-                    return Ok(result);
-                }
-                return UnprocessableEntity(result);
+                await mailService.SendEmailAsync(request);
+                return Ok();
             }
             catch 
             {
