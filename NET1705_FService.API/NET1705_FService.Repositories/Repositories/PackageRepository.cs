@@ -104,14 +104,14 @@ namespace NET1715_FService.API.Repository.Repositories
                 var package = await _context.Packages
                 .Include(p => p.PackageDetails)
                 .Include(p => p.PackagePrices)
-                .FirstOrDefaultAsync(p => p.Status == true);
+                .FirstOrDefaultAsync(p => p.Id == id && p.Status == true);
                 return package;
             } else
             {
                 var package = await _context.Packages
                 .Include(p => p.PackageDetails.Where(pd => pd.TypeId == typeId))
                 .Include(p => p.PackagePrices.Where(pr => pr.TypeId == typeId))
-                .FirstOrDefaultAsync(p => p.Status == true);
+                .FirstOrDefaultAsync(p => p.Id == id && p.Status == true);
                 return package;
             } 
         }
