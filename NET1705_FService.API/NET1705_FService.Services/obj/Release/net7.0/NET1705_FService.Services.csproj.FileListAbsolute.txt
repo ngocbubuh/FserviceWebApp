@@ -43,3 +43,5 @@ D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FServi
 D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Services\obj\Release\net7.0\refint\NET1705_FService.Services.dll
 D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Services\obj\Release\net7.0\NET1705_FService.Services.pdb
 D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Services\obj\Release\net7.0\ref\NET1705_FService.Services.dll
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Services\bin\Release\net7.0\NET1705_FService.Library.dll
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Services\bin\Release\net7.0\NET1705_FService.Library.pdb
