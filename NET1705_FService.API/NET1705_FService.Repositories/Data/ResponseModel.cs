@@ -11,6 +11,8 @@ namespace NET1705_FService.Repositories.Data
         public string Status { get; set; }
         public string Message { get; set; }
 
+        public System.Threading.Tasks.Task<String>? ConfirmEmailToken { get; set; }
+
         public string? PaymentUrl { get; set; }
     }
 }

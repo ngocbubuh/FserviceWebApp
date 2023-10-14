@@ -7,10 +7,12 @@ namespace FServiceAPI.Repositories
     public interface IAccountRepository
     {
         public Task<ResponseModel> SignUpAsync(SignUpModel model);
-        public Task<string> SignInAsync(SignInModel model);
+        public Task<AuthenticationResponseModel> SignInAsync(SignInModel model);
         public Task<ResponseModel> SignUpStaffAsync(SignUpModel model);
         public Task<ResponseModel> SignUpAdminAsync(SignUpModel model);
+        public Task<ResponseModel> ConfirmEmail(string token, string email);
 
+        //Báo quá báo
         public Task<List<Accounts>> GetAllStaffsAsync();
 
         public Task<Accounts> GetAccountByUserName(string userName);
