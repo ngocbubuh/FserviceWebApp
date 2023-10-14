@@ -49,7 +49,7 @@ namespace NET1705_FService.Services.Services
             pay.AddRequestData("vnp_Amount", ((int)model.TotalPrice * 100).ToString());
             pay.AddRequestData("vnp_CreateDate", timeNow.ToString("yyyyMMddHHmmss"));
             pay.AddRequestData("vnp_CurrCode", _configuration["Vnpay:CurrCode"]);
-            pay.AddRequestData("vnp_IpAddr", "127.0.0.1");
+            pay.AddRequestData("vnp_IpAddr", Utils.GetIpAddress(context));
             pay.AddRequestData("vnp_Locale", _configuration["Vnpay:Locale"]);
             pay.AddRequestData("vnp_OrderInfo", $"Thanh toan hoa don cho {vnp_OrderInfo}");
             pay.AddRequestData("vnp_OrderType", "250000");
