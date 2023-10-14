@@ -87,7 +87,7 @@ namespace NET1715_FService.API.Controllers
 
         [HttpPost("SignUp-Internal")]
         [Authorize(Roles = "ADMIN")]
-        public async Task<IActionResult> SignUpStaff(SignUpModel model, RoleModel role)
+        public async Task<IActionResult> SignUpInternal(SignUpModel model, RoleModel role)
         {
             try
             {
