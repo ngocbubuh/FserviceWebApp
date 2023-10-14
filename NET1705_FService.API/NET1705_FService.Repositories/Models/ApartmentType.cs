@@ -17,6 +17,6 @@ public partial class ApartmentType
 
     public virtual ICollection<PackageDetail> PackageDetails { get; } = new List<PackageDetail>();
 
-    public virtual ICollection<Package> Packages { get; } = new List<Package>();
+    //public virtual ICollection<Package> Packages { get; } = new List<Package>();
     public virtual ICollection<PackagePrice> PackagePrices { get; } = new List<PackagePrice>();
 }

@@ -19,7 +19,7 @@ public partial class Package
 
     public string Image { get; set; }
 
-    public int? TypeId { get; set; }
+    //public int? TypeId { get; set; }
 
     public int? DisplayIndex { get; set; }
 
@@ -31,5 +31,5 @@ public partial class Package
 
     public virtual ICollection<PackagePrice> PackagePrices { get; set; } = new List<PackagePrice>();
 
-    public virtual ApartmentType? Type { get; set; }
+    //public virtual ApartmentType? Type { get; set; }
 }
