@@ -24,15 +24,31 @@ namespace NET1715_FService.Service.Services
             _userRepository = userRepository;
         }
 
-        public async Task<string> SignInAsync(SignInModel model)
+        public async Task<ResponseModel> ConfirmEmail(string token, string email)
+        {
+            var result = await _repo.ConfirmEmail(token, email);
+            if (result == null)
+            {
+                return new ResponseModel { Status = "Error", Message = "Oops! Our server is unable to fulfill this request at the moment! Please stand by!" };
+            }
+            return result;
+        }
+
+        public async Task<AuthenticationResponseModel> SignInAsync(SignInModel model)
         {
             var result = await _userRepository.GetAccountByUsernameAsync(model.Email);
             if (result != null)
             {
-                var token = await _repo.SignInAsync(model);
-                return token;
+                var response = await _repo.SignInAsync(model);
+                return response;
             }
-            return "UserName does not exist!";
+            return new AuthenticationResponseModel
+            {
+                Status = false,
+                Message = "Username does not existed!",
+                JwtToken = null,
+                Expired = null
+            };
         }
 
         public async Task<ResponseModel> SignUpAdminAsync(SignUpModel model)

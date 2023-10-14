@@ -14,19 +14,19 @@ namespace NET1705_FService.API.Controllers
         {
             this.mailService = mailService;
         }
+
         [HttpPost("send")]
         public async Task<IActionResult> SendMail([FromForm] MailRequest request)
         {
             try
             {
-                var result = await mailService.SendEmailAsync(request);
-                return Ok(result);
+                await mailService.SendEmailAsync(request);
+                return Ok();
             }
             catch 
             {
                 return BadRequest();
             }
-
         }
     }
 }

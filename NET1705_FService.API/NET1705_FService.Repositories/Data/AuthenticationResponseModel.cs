@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace NET1705_FService.Repositories.Data
 {
-    public class ResponseModel
+    public class AuthenticationResponseModel
     {
-        public string Status { get; set; }
+        public bool Status { get; set; }
         public string Message { get; set; }
-
-        public System.Threading.Tasks.Task<String>? ConfirmEmailToken { get; set; }
-
-        public string? PaymentUrl { get; set; }
+        public string JwtToken { get; set; }
+        public DateTime? Expired { get; set; }
     }
 }

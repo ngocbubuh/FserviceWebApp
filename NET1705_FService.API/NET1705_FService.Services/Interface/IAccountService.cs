@@ -12,8 +12,9 @@ namespace NET1715_FService.Service.Inteface
     public interface IAccountService
     {
         public Task<ResponseModel> SignUpAsync(SignUpModel model);
-        public Task<string> SignInAsync(SignInModel model);
+        public Task<AuthenticationResponseModel> SignInAsync(SignInModel model);
         public Task<ResponseModel> SignUpStaffAsync(SignUpModel model);
         public Task<ResponseModel> SignUpAdminAsync(SignUpModel model);
+        public Task<ResponseModel> ConfirmEmail(string token, string email);
     }
 }

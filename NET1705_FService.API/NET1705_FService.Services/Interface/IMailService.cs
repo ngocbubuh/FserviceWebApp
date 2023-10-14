@@ -11,6 +11,6 @@ namespace NET1705_FService.Services.Interface
 {
     public interface IMailService
     {
-        public Task<ResponseModel> SendEmailAsync(MailRequest mailRequest);
+        public Task SendEmailAsync(MailRequest mailRequest);
     }
 }
