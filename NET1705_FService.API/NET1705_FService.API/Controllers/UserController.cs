@@ -46,17 +46,17 @@ namespace NET1705_FService.API.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        [Authorize]
-        public async Task<IActionResult> GetAccount(string id)
-        {
-            try
-            {
-                var account = await accountService.GetAccountAsync(id);
-                return account == null ? NotFound() : Ok(account);
-            }
-            catch { return BadRequest(); }
-        }
+        //[HttpGet("{id}")]
+        //[Authorize]
+        //public async Task<IActionResult> GetAccount(string id)
+        //{
+        //    try
+        //    {
+        //        var account = await accountService.GetAccountAsync(id);
+        //        return account == null ? NotFound() : Ok(account);
+        //    }
+        //    catch { return BadRequest(); }
+        //}
 
         [HttpGet("{name}")]
         [Authorize]
