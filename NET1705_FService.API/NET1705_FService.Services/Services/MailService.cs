@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using AutoMapper.Internal;
 
 namespace NET1705_FService.Services.Services
 {
@@ -25,11 +26,14 @@ namespace NET1705_FService.Services.Services
         }
         public async Task SendEmailAsync(MailRequest mailRequest)
         {
+            //Setup mail
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
             email.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));
             email.Subject = mailRequest.Subject;
             var builder = new BodyBuilder();
+
+            //Attachment
             if (mailRequest.Attachments != null)
             {
                 byte[] fileBytes;
@@ -46,7 +50,35 @@ namespace NET1705_FService.Services.Services
                     }
                 }
             }
+
+            //Body
             builder.HtmlBody = mailRequest.Body;
+            email.Body = builder.ToMessageBody();
+            using var smtp = new SmtpClient();
+            smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
+            smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
+            await smtp.SendAsync(email);
+            smtp.Disconnect(true);
+        }
+
+        public async Task SendConfirmationEmailAsync(MailRequest request)
+        {
+            //Html Mail
+            string FilePath = Directory.GetCurrentDirectory() + "\\Templates\\WelcomeTemplate.html";
+            StreamReader str = new StreamReader(FilePath);
+            string MailText = str.ReadToEnd();
+            str.Close();
+            MailText = MailText.Replace("[ConfirmLink]", request.Body);
+
+            //Setup email
+            var email = new MimeMessage();
+            email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
+            email.To.Add(MailboxAddress.Parse(request.ToEmail));
+            email.Subject = request.Subject;
+            var builder = new BodyBuilder();
+
+            //Body contain the confirm link
+            builder.HtmlBody = MailText; //Using Html file edited instead of request.body
             email.Body = builder.ToMessageBody();
             using var smtp = new SmtpClient();
             smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);

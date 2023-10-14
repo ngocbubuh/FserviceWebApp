@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using NET1705_FService.Repositories.Data;
 using NET1705_FService.Repositories.Interface;
 using NET1705_FService.Repositories.Models;
+using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
 using System.Runtime.Serialization;
 using System.Security.Claims;
@@ -22,7 +23,6 @@ namespace FServiceAPI.Repositories
         private readonly SignInManager<Accounts> signInManager;
         private readonly IConfiguration configuration;
         private readonly RoleManager<IdentityRole> roleManager;
-        private readonly IUserRepository _userRepository;
 
         public AccountRepository(
             UserManager<Accounts> accountManager, 
@@ -35,12 +35,11 @@ namespace FServiceAPI.Repositories
             this.signInManager = signInManager;
             this.configuration = configuration;
             this.roleManager = roleManager;
-            _userRepository = userRepository;
         }
 
         public async Task<ResponseModel> ConfirmEmail(string token, string email)
         {
-            var user = await _userRepository.GetAccountByUsernameAsync(email);
+            var user = await accountManager.FindByNameAsync(email);
             if (user != null) 
             {
                 var result = await accountManager.ConfirmEmailAsync(user, token);
@@ -122,51 +121,68 @@ namespace FServiceAPI.Repositories
                     JwtToken = new JwtSecurityTokenHandler().WriteToken(token),
                     Expired = token.ValidTo
                 };
-            }
-            return new AuthenticationResponseModel
+            } else if (result.IsNotAllowed)
             {
-                Status = false,
-                Message = "Login failed! Incorrect username or password!",
-                JwtToken = null,
-                Expired = null
-            };
+                return new AuthenticationResponseModel
+                {
+                    Status = false,
+                    Message = "Please confirm your email before login!",
+                    JwtToken = null,
+                    Expired = null
+                };
+            } else
+            {
+                return new AuthenticationResponseModel
+                {
+                    Status = false,
+                    Message = "Login failed! Incorrect username or password!",
+                    JwtToken = null,
+                    Expired = null
+                };
+            }
         }
 
-        public async Task<ResponseModel> SignUpAdminAsync(SignUpModel model)
-        {
-            var userExist = await accountManager.FindByNameAsync(model.Email);
-            if (userExist != null)
-            {
-                return new ResponseModel { Status = "Error", Message = "Username is already exist" };
-            }
+        //public async Task<ResponseModel> SignUpAdminAsync(SignUpModel model)
+        //{
+        //    var userExist = await accountManager.FindByNameAsync(model.Email);
+        //    if (userExist == null)
+        //    {
+        //        var user = new Accounts
+        //        {
+        //            Name = model.Name,
+        //            PhoneNumber = model.PhoneNumber,
+        //            Address = model.Address,
+        //            DateOfBirth = model.DateOfBirth,
+        //            Email = model.Email,
+        //            UserName = model.Email,
+        //            Status = true
+        //        };
 
-            var user = new Accounts
-            {
-                Name = model.Name,
-                PhoneNumber = model.PhoneNumber,
-                Address = model.Address,
-                DateOfBirth = model.DateOfBirth,
-                Email = model.Email,
-                UserName = model.Email,
-                Status = true
-            };
+        //        var result = await accountManager.CreateAsync(user, model.Password);
 
-            var result = await accountManager.CreateAsync(user, model.Password);
-
-            if (result.Succeeded)
-            {
-                if (!await roleManager.RoleExistsAsync(RoleModel.ADMIN.ToString()))
-                {
-                    await roleManager.CreateAsync(new IdentityRole(RoleModel.ADMIN.ToString()));
-                }
-                if (await roleManager.RoleExistsAsync(RoleModel.ADMIN.ToString()))
-                {
-                    await accountManager.AddToRoleAsync(user, RoleModel.ADMIN.ToString());
-                }
-            }
-            return new ResponseModel { Status = "Success", Message = "Register Admin Successfully!" };
-
-        }
+        //        if (result.Succeeded)
+        //        {
+        //            if (!await roleManager.RoleExistsAsync(RoleModel.ADMIN.ToString()))
+        //            {
+        //                await roleManager.CreateAsync(new IdentityRole(RoleModel.ADMIN.ToString()));
+        //            }
+        //            if (await roleManager.RoleExistsAsync(RoleModel.ADMIN.ToString()))
+        //            {
+        //                await accountManager.AddToRoleAsync(user, RoleModel.ADMIN.ToString());
+        //            }
+        //            //Tạo TK Admin tự động xác thực email
+        //            var token = accountManager.GenerateEmailConfirmationTokenAsync(user);
+        //            var confirm = await accountManager.ConfirmEmailAsync(user, token.Result);
+        //            if(confirm.Succeeded)
+        //            {
+        //                return new ResponseModel { Status = "Success", Message = "Register Admin Successfully!" };
+        //            }
+        //            return new ResponseModel { Status = "Error", Message = "Cannot authentication Admin Account!" };
+        //        }
+        //        return new ResponseModel { Status = "Error", Message = "Cannot create account in database!" };
+        //    }
+        //    return new ResponseModel { Status = "Error", Message = "Username is already exist" };
+        //}
 
         public async Task<ResponseModel> SignUpAsync(SignUpModel model)
         {
@@ -187,13 +203,13 @@ namespace FServiceAPI.Repositories
                 var result = await accountManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    if (!await roleManager.RoleExistsAsync(RoleModel.ADMIN.ToString()))
+                    if (!await roleManager.RoleExistsAsync(RoleModel.USER.ToString()))
                     {
-                        await roleManager.CreateAsync(new IdentityRole(RoleModel.ADMIN.ToString()));
+                        await roleManager.CreateAsync(new IdentityRole(RoleModel.USER.ToString()));
                     }
-                    if (await roleManager.RoleExistsAsync(RoleModel.ADMIN.ToString()))
+                    if (await roleManager.RoleExistsAsync(RoleModel.USER.ToString()))
                     {
-                        await accountManager.AddToRoleAsync(user, RoleModel.ADMIN.ToString());
+                        await accountManager.AddToRoleAsync(user, RoleModel.USER.ToString());
                     }
                     var token = accountManager.GenerateEmailConfirmationTokenAsync(user);
                     return new ResponseModel { Status = "Success", Message = "Register Successfully! Please check your email to confirm your account!", ConfirmEmailToken = token };
@@ -204,37 +220,80 @@ namespace FServiceAPI.Repositories
 
         }
 
-        public async Task<ResponseModel> SignUpStaffAsync(SignUpModel model)
+        public async Task<ResponseModel> SignUpInternalAsync(SignUpModel model, RoleModel role)
         {
             var userExist = await accountManager.FindByNameAsync(model.Email);
-            if (userExist != null)
+            if (userExist == null)
             {
-                return new ResponseModel { Status = "Error", Message = "Username is already exist!" };
-            }
-            var user = new Accounts
-            {
-                Name = model.Name,
-                PhoneNumber = model.PhoneNumber,
-                Address = model.Address,
-                DateOfBirth = model.DateOfBirth,
-                Email = model.Email,
-                UserName = model.Email,
-                Status = true
-            };
-            var result = await accountManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
-            {
-                if (!await roleManager.RoleExistsAsync(RoleModel.STAFF.ToString()))
+                var user = new Accounts
                 {
-                    await roleManager.CreateAsync(new IdentityRole(RoleModel.STAFF.ToString()));
-                }
-                if (await roleManager.RoleExistsAsync(RoleModel.STAFF.ToString()))
-                {
-                    await accountManager.AddToRoleAsync(user, RoleModel.STAFF.ToString());
-                }
-            }
+                    Name = model.Name,
+                    PhoneNumber = model.PhoneNumber,
+                    Address = model.Address,
+                    DateOfBirth = model.DateOfBirth,
+                    Email = model.Email,
+                    UserName = model.Email,
+                    Status = true
+                };
 
-            return new ResponseModel { Status = "Sucess", Message = "Register Staff successfully!" };
+
+                if (role.Equals(RoleModel.ADMIN) || role.Equals(RoleModel.STAFF) || role.Equals(RoleModel.USER))
+                {
+                    await accountManager.CreateAsync(user, model.Password);
+
+                    if (!await roleManager.RoleExistsAsync(role.ToString()))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole(role.ToString()));
+                    }
+                    if (await roleManager.RoleExistsAsync(role.ToString()))
+                    {
+                        await accountManager.AddToRoleAsync(user, role.ToString());
+                    }
+                    //Tạo TK Admin tự động xác thực email
+                    var token = accountManager.GenerateEmailConfirmationTokenAsync(user);
+                    var confirm = await accountManager.ConfirmEmailAsync(user, token.Result);
+                    if (confirm.Succeeded)
+                    {
+                        return new ResponseModel { Status = "Success", Message = $"Register {role} Successfully!" };
+                    }
+                    return new ResponseModel { Status = "Error", Message = $"Cannot authentication {role} Account!" };
+                }
+                return new ResponseModel { Status = "Error", Message = $"Cannot create account in database! Role {role} not support or you have missing a typo!" };
+            }
+            return new ResponseModel { Status = "Error", Message = "Username is already exist" };
         }
+
+        //public async Task<ResponseModel> SignUpStaffAsync(SignUpModel model)
+        //{
+        //    var userExist = await accountManager.FindByNameAsync(model.Email);
+        //    if (userExist != null)
+        //    {
+        //        return new ResponseModel { Status = "Error", Message = "Username is already exist!" };
+        //    }
+        //    var user = new Accounts
+        //    {
+        //        Name = model.Name,
+        //        PhoneNumber = model.PhoneNumber,
+        //        Address = model.Address,
+        //        DateOfBirth = model.DateOfBirth,
+        //        Email = model.Email,
+        //        UserName = model.Email,
+        //        Status = true
+        //    };
+        //    var result = await accountManager.CreateAsync(user, model.Password);
+        //    if (result.Succeeded)
+        //    {
+        //        if (!await roleManager.RoleExistsAsync(RoleModel.STAFF.ToString()))
+        //        {
+        //            await roleManager.CreateAsync(new IdentityRole(RoleModel.STAFF.ToString()));
+        //        }
+        //        if (await roleManager.RoleExistsAsync(RoleModel.STAFF.ToString()))
+        //        {
+        //            await accountManager.AddToRoleAsync(user, RoleModel.STAFF.ToString());
+        //        }
+        //    }
+
+        //    return new ResponseModel { Status = "Sucess", Message = "Register Staff successfully!" };
+        //}
     }
 }

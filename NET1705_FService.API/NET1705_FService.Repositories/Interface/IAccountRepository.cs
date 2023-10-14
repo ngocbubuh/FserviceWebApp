@@ -8,8 +8,9 @@ namespace FServiceAPI.Repositories
     {
         public Task<ResponseModel> SignUpAsync(SignUpModel model);
         public Task<AuthenticationResponseModel> SignInAsync(SignInModel model);
-        public Task<ResponseModel> SignUpStaffAsync(SignUpModel model);
-        public Task<ResponseModel> SignUpAdminAsync(SignUpModel model);
+        //public Task<ResponseModel> SignUpStaffAsync(SignUpModel model);
+        //public Task<ResponseModel> SignUpAdminAsync(SignUpModel model);
+        public Task<ResponseModel> SignUpInternalAsync(SignUpModel model, RoleModel role);
         public Task<ResponseModel> ConfirmEmail(string token, string email);
 
         //Báo quá báo

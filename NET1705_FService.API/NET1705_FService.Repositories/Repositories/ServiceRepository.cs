@@ -25,7 +25,7 @@ namespace FServiceAPI.Repositories
 
         public async Task<int> DeleteServiceAsync(int id)
         {
-            var deleteService = _context.Services!.SingleOrDefault(x => x.Id == id);
+            var deleteService = _context.Services!.SingleOrDefault(x => x.Id == id && x.PackageDetails == null);
             if (deleteService != null)
             {
                 //Delete mềm, ko xóa khỏi database

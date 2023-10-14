@@ -46,7 +46,7 @@ namespace NET1705_FService.API.Controllers
             }
         }
 
-        [HttpPost("{id}")]
+        [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> GetAccount(string id)
         {
@@ -58,7 +58,7 @@ namespace NET1705_FService.API.Controllers
             catch { return BadRequest(); }
         }
 
-        [HttpPost("{name}")]
+        [HttpGet("{name}")]
         [Authorize]
         public async Task<IActionResult> GetAccountByUsername(string name)
         {
