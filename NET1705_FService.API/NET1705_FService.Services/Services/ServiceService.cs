@@ -41,7 +41,7 @@ namespace NET1715_FService.Service.Services
                 {
                     return new ResponseModel { Status = "Success", Message = $"Delete successfully Service {deleteService.Name}!" };
                 }
-                return new ResponseModel { Status = "Error", Message = $"Cannot delete Service {deleteService.Name}, something went wrong!" };
+                return new ResponseModel { Status = "Error", Message = $"Cannot delete Service {deleteService.Name}!" };
             }
             return new ResponseModel { Status = "Error", Message = $"Not found Service Id {id}!" };
         }

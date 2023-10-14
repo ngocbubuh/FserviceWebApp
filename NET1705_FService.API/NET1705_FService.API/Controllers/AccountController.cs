@@ -40,7 +40,7 @@ namespace NET1715_FService.API.Controllers
                     var messageRequest = new MailRequest
                     {
                         ToEmail = model.Email,
-                        Subject = "Confirmation Email",
+                        Subject = "FServices Confirmation Email",
                         Body = confirmationEmail!
                     };
                     //Send Mail
@@ -53,29 +53,45 @@ namespace NET1715_FService.API.Controllers
             catch { return BadRequest(); }
         }
 
-        [HttpPost("SignUp-Admin")]
-        [Authorize(Roles = "ADMIN")]
-        public async Task<IActionResult> SignUpAdmin(SignUpModel model)
-        {
-            try
-            {
-                var result = await accountService.SignUpAdminAsync(model);
-                if (result.Status.Equals("Success"))
-                {
-                    return Ok(result);
-                }
-                return Unauthorized(result);
-            }
-            catch { return BadRequest(); }
-        }
+        //[HttpPost("SignUp-Admin")]
+        //[Authorize(Roles = "ADMIN")]
+        //public async Task<IActionResult> SignUpAdmin(SignUpModel model)
+        //{
+        //    try
+        //    {
+        //        var result = await accountService.SignUpAdminAsync(model);
+        //        if (result.Status.Equals("Success"))
+        //        {
+        //            return Ok(result);
+        //        }
+        //        return Unauthorized(result);
+        //    }
+        //    catch { return BadRequest(); }
+        //}
 
-        [HttpPost("SignUp-Staff")]
+        //[HttpPost("SignUp-Staff")]
+        //[Authorize(Roles = "ADMIN")]
+        //public async Task<IActionResult> SignUpStaff(SignUpModel model)
+        //{
+        //    try
+        //    {
+        //        var result = await accountService.SignUpStaffAsync(model);
+        //        if (result.Status.Equals("Success"))
+        //        {
+        //            return Ok(result);
+        //        }
+        //        return Unauthorized(result);
+        //    }
+        //    catch { return BadRequest(); }
+        //}
+
+        [HttpPost("SignUp-Internal")]
         [Authorize(Roles = "ADMIN")]
-        public async Task<IActionResult> SignUpStaff(SignUpModel model)
+        public async Task<IActionResult> SignUpStaff(SignUpModel model, RoleModel role)
         {
             try
             {
-                var result = await accountService.SignUpStaffAsync(model);
+                var result = await accountService.SignUpInternalAsync(model, role);
                 if (result.Status.Equals("Success"))
                 {
                     return Ok(result);

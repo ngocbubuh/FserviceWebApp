@@ -51,15 +51,15 @@ namespace NET1715_FService.Service.Services
             };
         }
 
-        public async Task<ResponseModel> SignUpAdminAsync(SignUpModel model)
-        {
-            var result = await _repo.SignUpAdminAsync(model);
-            if (result == null)
-            {
-                return new ResponseModel { Status="Error", Message= "Oops! Our server is unable to fulfill this request at the moment! Please stand by!" };
-            }
-            return result;
-        }
+        //public async Task<ResponseModel> SignUpAdminAsync(SignUpModel model)
+        //{
+        //    var result = await _repo.SignUpAdminAsync(model);
+        //    if (result == null)
+        //    {
+        //        return new ResponseModel { Status="Error", Message= "Oops! Our server is unable to fulfill this request at the moment! Please stand by!" };
+        //    }
+        //    return result;
+        //}
 
         public async Task<ResponseModel> SignUpAsync(SignUpModel model)
         {
@@ -71,14 +71,24 @@ namespace NET1715_FService.Service.Services
             return result;
         }
 
-        public async Task<ResponseModel> SignUpStaffAsync(SignUpModel model)
+        public async Task<ResponseModel> SignUpInternalAsync(SignUpModel model, RoleModel role)
         {
-            var result = await _repo.SignUpStaffAsync(model);
+            var result = await _repo.SignUpInternalAsync(model, role);
             if (result == null)
             {
                 return new ResponseModel { Status = "Error", Message = "Oops! Our server is unable to fulfill this request at the moment! Please stand by!" };
             }
             return result;
         }
+
+        //public async Task<ResponseModel> SignUpStaffAsync(SignUpModel model)
+        //{
+        //    var result = await _repo.SignUpStaffAsync(model);
+        //    if (result == null)
+        //    {
+        //        return new ResponseModel { Status = "Error", Message = "Oops! Our server is unable to fulfill this request at the moment! Please stand by!" };
+        //    }
+        //    return result;
+        //}
     }
 }
