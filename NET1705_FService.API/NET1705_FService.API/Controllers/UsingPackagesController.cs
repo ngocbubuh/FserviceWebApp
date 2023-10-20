@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NET1705_FService.API.Helper;
 using NET1705_FService.Repositories.Data;
 using NET1705_FService.Services.Interface;
 
@@ -12,7 +13,7 @@ namespace NET1705_FService.API.Controllers
     {
         private readonly IOrderDetailsService _orderDetailsService;
 
-        public UsingPackagesController(IOrderDetailsService orderDetailsService) 
+        public UsingPackagesController(IOrderDetailsService orderDetailsService)
         {
             _orderDetailsService = orderDetailsService;
         }
@@ -23,6 +24,26 @@ namespace NET1705_FService.API.Controllers
         {
             try
             {
+                if (!Validation.CheckPhoneNumber(usingPackage.CustomerPhone))
+                {
+                    return BadRequest(
+                        new ResponseModel
+                        {
+                            Status = "Error",
+                            Message = "Phone number is invalid."
+                        }
+                        );
+                }
+                if (!Validation.CheckName(usingPackage.CustomerName))
+                {
+                    return BadRequest(
+                        new ResponseModel
+                        {
+                            Status = "Error",
+                            Message = "Name is short."
+                        }
+                        );
+                }
                 var result = await _orderDetailsService.AddOrderDetails(usingPackage);
                 if (result.Status.Equals("Error"))
                 {

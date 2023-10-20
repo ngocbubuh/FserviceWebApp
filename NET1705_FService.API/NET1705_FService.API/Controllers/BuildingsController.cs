@@ -60,7 +60,7 @@ namespace NET1715_FService.API.Controllers
         {
             try
             {
-                if (ValidationBuilding.GetBuildingName(building.Name) == false)
+                if (Validation.GetBuildingName(building.Name) == false)
                 {
                     ResponseModel resp = new ResponseModel { Status = "Error", Message = "Building name must be in the form Sxxx" };
                     return BadRequest(building.Name);
@@ -85,7 +85,7 @@ namespace NET1715_FService.API.Controllers
         {
             try
             {
-                if (ValidationBuilding.GetBuildingName(building.Name) == false)
+                if (Validation.GetBuildingName(building.Name) == false)
                 {
                     ResponseModel resp = new ResponseModel { Status = "Error", Message = "Building name must be in the form Sxxx" };
                     return BadRequest(resp);

@@ -69,26 +69,26 @@ builder.Services.AddSwaggerGen(c =>
 
 // db local
 
-builder.Services.AddDbContext<FserviceApiDatabaseContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("FServiceLocal"));
-});
+//builder.Services.AddDbContext<FserviceApiDatabaseContext>(options =>
+//{
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("FServiceLocal"));
+//});
 
 // db azure
 
-//var connection = String.Empty;
-//if (builder.Environment.IsDevelopment())
-//{
-//    builder.Configuration.AddEnvironmentVariables().AddJsonFile("appsettings.Development.json");
-//    connection = builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
-//}
-//else
-//{
-//    connection = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
-//}
+var connection = String.Empty;
+if (builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddEnvironmentVariables().AddJsonFile("appsettings.Development.json");
+    connection = builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
+}
+else
+{
+    connection = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
+}
 
-//builder.Services.AddDbContext<FserviceApiDatabaseContext>(options =>
-//    options.UseSqlServer(connection));
+builder.Services.AddDbContext<FserviceApiDatabaseContext>(options =>
+    options.UseSqlServer(connection));
 
 builder.Services.AddCors(options =>
 {

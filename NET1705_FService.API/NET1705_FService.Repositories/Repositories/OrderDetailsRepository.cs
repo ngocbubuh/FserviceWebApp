@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using FServiceAPI.Repositories;
 using Microsoft.EntityFrameworkCore;
 using NET1705_FService.Repositories.Data;
+using NET1705_FService.Repositories.Helper;
 using NET1705_FService.Repositories.Interface;
 using NET1705_FService.Repositories.Models;
 using NET1715_FService.API.Repository.Inteface;
@@ -25,8 +27,8 @@ namespace NET1705_FService.Repositories.Repositories
 
         public OrderDetailsRepository(FserviceApiDatabaseContext context, IApartmentPackageRepository apartmentPackageRepo,
             IApartPackageServiceRepository apmPackageServiceRepo, IPackageRepository packageRepo,
-            IAccountRepository accountRepo, IMapper mapper) 
-        { 
+            IAccountRepository accountRepo, IMapper mapper)
+        {
             _context = context;
             _apartmentPackageRepo = apartmentPackageRepo;
             _apmPackageServiceRepo = apmPackageServiceRepo;
@@ -65,6 +67,8 @@ namespace NET1705_FService.Repositories.Repositories
                     orderDetailExtra.CreatedDate = DateTime.Now;
                     orderDetailExtra.Amount = priceService;
                     orderDetailExtra.StaffId = staffWorkExtra.Id;
+                    orderDetailExtra.ShiftTime = GetShiftTimeAsString(usingPackage.ShiftTime);
+                    orderDetailExtra.Status = "Pending";
 
                     //OrderDetail orderDetailExtra = new OrderDetail()
                     //{
@@ -106,7 +110,9 @@ namespace NET1705_FService.Repositories.Repositories
             orderDetail.CreatedDate = DateTime.Now;
             orderDetail.Amount = 0;
             orderDetail.StaffId = staffWork.Id;
-            
+            orderDetail.ShiftTime = GetShiftTimeAsString(usingPackage.ShiftTime);
+            orderDetail.Status = "Pending";
+
             //OrderDetail orderDetail = new OrderDetail()
             //{
             //    OrderId = apartmentPackage.OrderId,
@@ -138,6 +144,48 @@ namespace NET1705_FService.Repositories.Repositories
             };
         }
 
+        public async Task<PagedList<OrderDetailsViewModel>> GetAllTaskForStaff(PaginationParameter paginationParameter, string staffId)
+        {
+            var orderDetails = await _context.OrderDetails
+                .Where(o => o.StaffId == staffId)
+                .Include(o => o.Service)
+                .OrderByDescending(o => o.CreatedDate)
+                .ProjectTo<OrderDetailsViewModel>(_mapper.ConfigurationProvider) // Use ProjectTo to map to ViewModel
+                .ToListAsync();
+
+
+            //var tasks = _mapper.Map<OrderDetailsViewModel>(orderDetails);
+
+            return PagedList<OrderDetailsViewModel>.ToPagedList(orderDetails,
+                paginationParameter.PageNumber,
+                paginationParameter.PageSize);
+        }
+
+        public async Task<int> UpdateTaskAsync(int id, OrderDetailModel orderDetailModel)
+        {
+            if (id == orderDetailModel.Id)
+            {
+                var updateOrder = _context.OrderDetails.FirstOrDefault(o => o.Id == id);
+                if (updateOrder != null)
+                {
+                    if (updateOrder.Status.Trim().Equals("Pending"))
+                    {
+                        updateOrder.Status = orderDetailModel.Status.ToString();
+                    }
+                    if (updateOrder.Status.Trim().Equals("Working"))
+                    {
+                        updateOrder.Status = orderDetailModel.Status.ToString();
+                        updateOrder.CompleteDate = DateTime.Now;
+                    }
+                    _context.OrderDetails!.Update(updateOrder);
+                    await _context.SaveChangesAsync();
+                }
+                return updateOrder.Id;
+            }
+            return 0;
+        }
+
+        //tools
         private async Task<Accounts> AssignStaff()
         {
             var staffs = await _accountRepo.GetAllStaffsAsync();
@@ -176,5 +224,24 @@ namespace NET1705_FService.Repositories.Repositories
             }
             return workStaff;
         }
+
+        public string GetShiftTimeAsString(ShiftTimeModel shiftTime)
+        {
+            switch (shiftTime)
+            {
+                case ShiftTimeModel.SevenToNineAM:
+                    return "7:00AM - 9:00AM";
+                case ShiftTimeModel.NineToElevenAM:
+                    return "9:00AM - 11:00AM";
+                case ShiftTimeModel.OneToThreePM:
+                    return "1:00PM - 3:00PM";
+                case ShiftTimeModel.ThreeToFivePM:
+                    return "3:00PM - 5:00PM";
+                default:
+                    return "Unknown";
+            }
+        }
+
+
     }
 }
