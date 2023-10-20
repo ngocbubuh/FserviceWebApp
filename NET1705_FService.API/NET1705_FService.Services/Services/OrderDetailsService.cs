@@ -1,4 +1,5 @@
 ﻿using NET1705_FService.Repositories.Data;
+using NET1705_FService.Repositories.Helper;
 using NET1705_FService.Repositories.Interface;
 using NET1705_FService.Repositories.Models;
 using NET1705_FService.Services.Interface;
@@ -57,10 +58,22 @@ namespace NET1705_FService.Services.Services
             return result;
         }
 
+        public Task<PagedList<OrderDetailsViewModel>> GetAllTaskForStaffAsync(PaginationParameter paginationParameter, string staffId)
+        {
+            var tasks = _repo.GetAllTaskForStaff(paginationParameter, staffId);
+            return tasks;
+        }
+
         public async Task<OrderDetailsViewModel> GetOrderDetailsByIdAsync(int id)
         {
             var orderDetails = await _repo.GetOrderDetailByIdAsync(id);
             return orderDetails;
+        }
+
+        public async Task<int> UpdateTaskAsync(int id, OrderDetailModel orderDetailModel)
+        {
+            var result = await _repo.UpdateTaskAsync(id, orderDetailModel);
+            return result;
         }
     }
 }

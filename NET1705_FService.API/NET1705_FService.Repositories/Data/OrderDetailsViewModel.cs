@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NET1705_FService.Repositories.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,7 +27,11 @@ namespace NET1705_FService.Repositories.Data
 
         public string? Note { get; set; }
 
+        public string? ShiftTime { get; set; }
+
         public string StaffId { get; set; }
+
+        public string Status { get; set; }
 
         public DateTime? CompleteDate { get; set; }
 
@@ -35,5 +40,7 @@ namespace NET1705_FService.Repositories.Data
         public string? Feedback { get; set; }
 
         public double? Amount { get; set; }
+
+        public Service? Service { get; set; }
     }
 }
