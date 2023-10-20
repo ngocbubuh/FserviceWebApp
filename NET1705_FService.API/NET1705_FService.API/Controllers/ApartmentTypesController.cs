@@ -15,7 +15,7 @@ namespace NET1715_FService.API.Controllers
             _apartmentTypeService = apartmentTypeService;
         }
         [HttpGet]
-        public async Task<IActionResult> GetApartmentTypes(int buildingId)
+        public async Task<IActionResult> GetApartmentTypes(int? buildingId)
         {
             try
             {

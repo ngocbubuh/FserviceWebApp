@@ -20,3 +20,14 @@ public partial class ApartmentType
     //public virtual ICollection<Package> Packages { get; } = new List<Package>();
     public virtual ICollection<PackagePrice> PackagePrices { get; } = new List<PackagePrice>();
 }
+
+public class ApartmentTypeModel
+{
+    public int Id { get; set; }
+
+    public int? BuildingId { get; set; }
+
+    public string Type { get; set; }
+
+    public virtual Building Building { get; set; }
+}
