@@ -150,7 +150,7 @@ namespace NET1705_FService.Repositories.Repositories
                 .Where(o => o.StaffId == staffId)
                 .Include(o => o.Service)
                 .OrderByDescending(o => o.CreatedDate)
-                .ProjectTo<OrderDetailsViewModel>(_mapper.ConfigurationProvider) // Use ProjectTo to map to ViewModel
+                .ProjectTo<OrderDetailsViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
 

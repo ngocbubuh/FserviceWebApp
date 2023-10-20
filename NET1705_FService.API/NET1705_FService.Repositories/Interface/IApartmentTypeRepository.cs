@@ -9,6 +9,6 @@ namespace NET1715_FService.API.Repository.Inteface
 {
     public interface IApartmentTypeRepository
     {
-        public Task<List<ApartmentType>> GetApartmentTypesAsync(int buildingId);
+        public Task<List<ApartmentTypeModel>> GetApartmentTypesAsync(int? buildingId);
     }
 }

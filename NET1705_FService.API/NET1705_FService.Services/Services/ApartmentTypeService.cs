@@ -18,7 +18,7 @@ namespace NET1715_FService.Service.Services
             _repo = repo;
         }
 
-        public Task<List<ApartmentType>> GetAllApartmentTypesAsync(int buildingId)
+        public Task<List<ApartmentTypeModel>> GetAllApartmentTypesAsync(int? buildingId)
         {
             var apartmentTypes = _repo.GetApartmentTypesAsync(buildingId);
             return apartmentTypes;

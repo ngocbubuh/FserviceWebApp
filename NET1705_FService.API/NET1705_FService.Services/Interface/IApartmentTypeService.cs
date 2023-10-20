@@ -9,6 +9,6 @@ namespace NET1715_FService.Service.Inteface
 {
     public interface IApartmentTypeService
     {
-        public Task<List<ApartmentType>> GetAllApartmentTypesAsync(int buildingId);
+        public Task<List<ApartmentTypeModel>> GetAllApartmentTypesAsync(int? buildingId);
     }
 }
