@@ -96,7 +96,7 @@ namespace FServiceAPI.Repositories
 
                 var authClaims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Email, model.Email),
+                    new Claim(ClaimTypes.Name, model.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
 
