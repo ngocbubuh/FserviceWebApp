@@ -12,6 +12,7 @@ using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
 using System.Runtime.Serialization;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace FServiceAPI.Repositories
@@ -104,22 +105,36 @@ namespace FServiceAPI.Repositories
                     authClaims.Add(new Claim(ClaimTypes.Role, role));
                 }
 
-                var authKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:SecretKey"]));
+                //var authKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:SecretKey"]));
+                //_ = int.TryParse(configuration["JWT:TokenValidityInMinutes"], out int tokenValidityInMinutes);
+                //var token = new JwtSecurityToken(
+                //    issuer: configuration["JWT:ValidIssuer"],
+                //    audience: configuration["JWT:ValidAudience"],
+                //    expires: DateTime.Now.AddMinutes(tokenValidityInMinutes),
+                //    claims: authClaims,
+                //    signingCredentials: new SigningCredentials(authKey, SecurityAlgorithms.HmacSha512Signature)
+                //    );
 
-                var token = new JwtSecurityToken(
-                    issuer: configuration["JWT:ValidIssuer"],
-                    audience: configuration["JWT:ValidAudience"],
-                    expires: DateTime.Now.AddMinutes(30),
-                    claims: authClaims,
-                    signingCredentials: new SigningCredentials(authKey, SecurityAlgorithms.HmacSha512Signature)
-                    );
+                //Tạo token
+                var token = CreateToken(authClaims);
+
+                //Tạo refresh token
+                var refreshToken = GenerateRefreshToken();
+
+                _ = int.TryParse(configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
+
+                account.RefreshToken = refreshToken;
+                account.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshTokenValidityInDays);
+
+                await accountManager.UpdateAsync(account);
 
                 return new AuthenticationResponseModel 
                 { 
                     Status = true,
                     Message = "Login successfully!",
                     JwtToken = new JwtSecurityTokenHandler().WriteToken(token),
-                    Expired = token.ValidTo
+                    Expired = token.ValidTo,
+                    JwtRefreshToken = refreshToken,
                 };
             } else if (result.IsNotAllowed)
             {
@@ -127,8 +142,6 @@ namespace FServiceAPI.Repositories
                 {
                     Status = false,
                     Message = "Please confirm your email before login!",
-                    JwtToken = null,
-                    Expired = null
                 };
             } else
             {
@@ -136,10 +149,103 @@ namespace FServiceAPI.Repositories
                 {
                     Status = false,
                     Message = "Login failed! Incorrect username or password!",
-                    JwtToken = null,
-                    Expired = null
                 };
             }
+        }
+
+        private JwtSecurityToken CreateToken(List<Claim> authClaims)
+        {
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:SecretKey"]));
+            _ = int.TryParse(configuration["JWT:TokenValidityInMinutes"], out int tokenValidityInMinutes);
+
+            var token = new JwtSecurityToken(
+                issuer: configuration["JWT:ValidIssuer"],
+                audience: configuration["JWT:ValidAudience"],
+                expires: DateTime.Now.AddMinutes(tokenValidityInMinutes),
+                claims: authClaims,
+                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                );
+
+            return token;
+        }
+
+        private string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[64];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
+        }
+
+        private ClaimsPrincipal GetPrincipalFromExpiredToken(string? token)
+        {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false, //you might want to validate the audience and issuer depending on your use case
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:SecretKey"])),
+                ValidateLifetime = false //here we are saying that we don't care about the token's expiration date
+            };
+            var tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken securityToken;
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                throw new SecurityTokenException("Invalid token");
+            return principal;
+        }
+        public async Task<AuthenticationResponseModel> RefreshToken(TokenModel tokenModel)
+        {
+            if (tokenModel is null)
+            {
+                return new AuthenticationResponseModel
+                {
+                    Status = false,
+                    Message = "Invalid request!"
+                };
+            }
+
+            string? accessToken = tokenModel.AccessToken;
+            string? refreshToken = tokenModel.RefreshToken;
+
+            var principal = GetPrincipalFromExpiredToken(accessToken);
+            if (principal == null)
+            {
+                return new AuthenticationResponseModel
+                {
+                    Status = false,
+                    Message = "Invalid access token or refresh token"
+                };
+            }
+
+            string username = principal.Identity.Name;
+
+            var user = await accountManager.FindByNameAsync(username);
+
+            if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+            {
+                return new AuthenticationResponseModel
+                {
+                    Status = false,
+                    Message = "Invalid access token or refresh token"
+                };
+            }
+
+            var newAccessToken = CreateToken(principal.Claims.ToList());
+            var newRefreshToken = GenerateRefreshToken();
+
+            user.RefreshToken = newRefreshToken;
+            await accountManager.UpdateAsync(user);
+
+            return new AuthenticationResponseModel
+            {
+                Status = true,
+                Message = "Refresh Token successfully!",
+                JwtToken = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
+                Expired = newAccessToken.ValidTo,
+                JwtRefreshToken = newRefreshToken
+            };
         }
 
         //public async Task<ResponseModel> SignUpAdminAsync(SignUpModel model)
@@ -262,6 +368,7 @@ namespace FServiceAPI.Repositories
             }
             return new ResponseModel { Status = "Error", Message = "Username is already exist" };
         }
+
 
         //public async Task<ResponseModel> SignUpStaffAsync(SignUpModel model)
         //{

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using NET1705_FService.Repositories.Data;
 using NET1705_FService.Repositories.Helper;
 using NET1705_FService.Repositories.Interface;
 using NET1705_FService.Repositories.Models;
@@ -14,10 +16,12 @@ namespace NET1705_FService.Repositories.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly FserviceApiDatabaseContext _context;
+        private readonly IMapper _mapper;
 
-        public UserRepository(FserviceApiDatabaseContext context)
+        public UserRepository(FserviceApiDatabaseContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<string> DeleteAccountAsync(string id)
@@ -51,11 +55,12 @@ namespace NET1705_FService.Repositories.Repositories
             return acc;
         }
 
-        public async Task<Accounts> GetAccountByUsernameAsync(string UserName)
+        public async Task<AccountsModel> GetAccountByUsernameAsync(string UserName)
         {
             var acc = await _context.Accounts
                 .SingleOrDefaultAsync(a => a.UserName == UserName && a.Status == true);
-            return acc;
+            var showAcc = _mapper.Map<AccountsModel>(acc);
+            return showAcc;
         }
 
         public async Task<PagedList<Accounts>> GetAllAccountAsync(PaginationParameter paginationParameter)

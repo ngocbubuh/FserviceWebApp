@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NET1705_FService.Repositories.Data;
 using NET1705_FService.Repositories.Helper;
 using NET1705_FService.Repositories.Models;
 using NET1705_FService.Services.Interface;
@@ -72,14 +73,14 @@ namespace NET1705_FService.API.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> UpdateAccount(string id, Accounts model)
+        public async Task<IActionResult> UpdateAccount(string id, AccountsModel model)
         {
             try
             {
                 var result = await accountService.UpdateAccountAsync(id, model);
                 if (result.Status.Equals("Success"))
                 {
-                    var account = await accountService.GetAccountAsync(result.Message);
+                    var account = await accountService.GetAccountByUsernameAsync(result.Message);
                     return Ok(account);
                 }
                 return NotFound(result);

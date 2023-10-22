@@ -147,6 +147,9 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
             entity.Property(e => e.Email).HasMaxLength(50);
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.PhoneNumber).HasMaxLength(10);
+            entity.Property(e => e.DateOfBirth).HasColumnType("date");
+            entity.Property(e => e.RefreshToken).IsRequired(false);
+            entity.Property(e => e.RefreshTokenExpiryTime).IsRequired(false);
         });
 
         modelBuilder.Entity<Banner>(entity =>

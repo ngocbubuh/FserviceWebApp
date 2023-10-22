@@ -37,6 +37,7 @@ namespace NET1715_FService.API.Controllers
                     //Config mail
                     var token = result.ConfirmEmailToken;
                     var confirmationEmail = Url.Action(nameof(ConfirmEmail), "Account", new { token = token.Result, email = model.Email }, Request.Scheme);
+                    result.ConfirmEmailToken = null;
                     var messageRequest = new MailRequest
                     {
                         ToEmail = model.Email,
@@ -45,7 +46,6 @@ namespace NET1715_FService.API.Controllers
                     };
                     //Send Mail
                     await mailService.SendEmailAsync(messageRequest);
-                    result.ConfirmEmailToken = null;
                     return Ok(result);
                 }
                 return Unauthorized(result);
@@ -114,6 +114,23 @@ namespace NET1715_FService.API.Controllers
                 return Ok(result);
             }
             catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("Refresh-token")]
+        public async Task<IActionResult> RefreshToken(TokenModel model)
+        {
+            try
+            {
+                var result = await accountService.RefreshToken(model);
+                if (result.Status.Equals(false))
+                {
+                    return Unauthorized(result);
+                }
+                return Ok(result);
+            } catch 
             {
                 return BadRequest();
             }
