@@ -12,5 +12,6 @@ namespace NET1705_FService.Repositories.Data
         public string Message { get; set; }
         public string JwtToken { get; set; }
         public DateTime? Expired { get; set; }
+        public string JwtRefreshToken { get; set; }
     }
 }

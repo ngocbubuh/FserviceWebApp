@@ -40,7 +40,7 @@ namespace NET1705_FService.Services.Services
             return account;
         }
 
-        public async Task<Accounts> GetAccountByUsernameAsync(string name)
+        public async Task<AccountsModel> GetAccountByUsernameAsync(string name)
         {
             var account = await _repo.GetAccountByUsernameAsync(name);
             return account;
@@ -52,14 +52,22 @@ namespace NET1705_FService.Services.Services
             return accounts;
         }
 
-        public async Task<ResponseModel> UpdateAccountAsync(string id, Accounts account)
+        public async Task<ResponseModel> UpdateAccountAsync(string id, AccountsModel accountUpdate)
         {
+            var account = await _repo.GetAccountAsync(id);
             if (id == account.Id)
             {
+                {
+                    account.Name = accountUpdate.Name;
+                    account.PhoneNumber = accountUpdate.PhoneNumber;
+                    account.Address = accountUpdate.Address;
+                    account.DateOfBirth = accountUpdate.DateOfBirth;
+                    account.Avatar = accountUpdate.Avatar;
+                }
                 var result = await _repo.UpdateAccountAsync(id, account);
                 if (result != null)
                 {
-                    return new ResponseModel { Status = "Success", Message = result.ToString() };
+                    return new ResponseModel { Status = "Success", Message = account.Email };
                 }
                 return new ResponseModel { Status = "Error", Message = "Update error!" };
             }

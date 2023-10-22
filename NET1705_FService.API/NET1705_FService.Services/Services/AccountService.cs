@@ -34,6 +34,12 @@ namespace NET1715_FService.Service.Services
             return result;
         }
 
+        public async Task<AuthenticationResponseModel> RefreshToken(TokenModel tokenModel)
+        {
+            var result = await _repo.RefreshToken(tokenModel);
+            return result;
+        }
+
         public async Task<AuthenticationResponseModel> SignInAsync(SignInModel model)
         {
             var result = await _userRepository.GetAccountByUsernameAsync(model.Email);
@@ -63,6 +69,10 @@ namespace NET1715_FService.Service.Services
 
         public async Task<ResponseModel> SignUpAsync(SignUpModel model)
         {
+            if (!model.Password.Equals(model.ConfirmPassword))
+            {
+                return new ResponseModel { Status = "Error", Message = "Password and Confirm password not match!" };
+            }
             var result = await _repo.SignUpAsync(model);
             if (result == null)
             {
