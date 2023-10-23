@@ -23,3 +23,18 @@ public partial class Apartment
 
     public virtual ApartmentType Type { get; set; }
 }
+
+public class ApartmentModel
+{
+    public int Id { get; set; }
+
+    public int? FloorId { get; set; }
+
+    public string RoomNo { get; set; }
+
+    public int TypeId { get; set; }
+
+    public string? AccountId { get; set; }
+
+    public virtual ApartmentType Type { get; set; }
+}

@@ -1,15 +1,3 @@
-D:\FPT_University\Fall_2023\SWP391\ProjectCode\FService_WebApp_Ducdpg\NET1705_FService.API\Library\bin\Debug\net7.0\NET1705_FService.Library.deps.json
-D:\FPT_University\Fall_2023\SWP391\ProjectCode\FService_WebApp_Ducdpg\NET1705_FService.API\Library\bin\Debug\net7.0\NET1705_FService.Library.dll
-D:\FPT_University\Fall_2023\SWP391\ProjectCode\FService_WebApp_Ducdpg\NET1705_FService.API\Library\bin\Debug\net7.0\NET1705_FService.Library.pdb
-D:\FPT_University\Fall_2023\SWP391\ProjectCode\FService_WebApp_Ducdpg\NET1705_FService.API\Library\obj\Debug\net7.0\NET1705_FService.Library.csproj.AssemblyReference.cache
-D:\FPT_University\Fall_2023\SWP391\ProjectCode\FService_WebApp_Ducdpg\NET1705_FService.API\Library\obj\Debug\net7.0\NET1705_FService.Library.GeneratedMSBuildEditorConfig.editorconfig
-D:\FPT_University\Fall_2023\SWP391\ProjectCode\FService_WebApp_Ducdpg\NET1705_FService.API\Library\obj\Debug\net7.0\NET1705_FService.Library.AssemblyInfoInputs.cache
-D:\FPT_University\Fall_2023\SWP391\ProjectCode\FService_WebApp_Ducdpg\NET1705_FService.API\Library\obj\Debug\net7.0\NET1705_FService.Library.AssemblyInfo.cs
-D:\FPT_University\Fall_2023\SWP391\ProjectCode\FService_WebApp_Ducdpg\NET1705_FService.API\Library\obj\Debug\net7.0\NET1705_FService.Library.csproj.CoreCompileInputs.cache
-D:\FPT_University\Fall_2023\SWP391\ProjectCode\FService_WebApp_Ducdpg\NET1705_FService.API\Library\obj\Debug\net7.0\NET1705_FService.Library.dll
-D:\FPT_University\Fall_2023\SWP391\ProjectCode\FService_WebApp_Ducdpg\NET1705_FService.API\Library\obj\Debug\net7.0\refint\NET1705_FService.Library.dll
-D:\FPT_University\Fall_2023\SWP391\ProjectCode\FService_WebApp_Ducdpg\NET1705_FService.API\Library\obj\Debug\net7.0\NET1705_FService.Library.pdb
-D:\FPT_University\Fall_2023\SWP391\ProjectCode\FService_WebApp_Ducdpg\NET1705_FService.API\Library\obj\Debug\net7.0\ref\NET1705_FService.Library.dll
 D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\Library\bin\Debug\net7.0\NET1705_FService.Library.deps.json
 D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\Library\bin\Debug\net7.0\NET1705_FService.Library.dll
 D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\Library\bin\Debug\net7.0\NET1705_FService.Library.pdb

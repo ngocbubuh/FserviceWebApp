@@ -30,9 +30,15 @@ namespace NET1715_FService.Service.Services
             return apartment;
         }
 
-        public async Task<List<Apartment>> GetApartmentOnFloorAsync(int floorId, int typeId)
+        public async Task<List<ApartmentModel>> GetApartmentsAsync(int? floorId, int? typeId, string? username)
         {
-            var apartments = await _repo.GetApartmentsOnFloorAsync(floorId, typeId);
+            var apartments = await _repo.GetApartmentsAsync(floorId, typeId, username);
+            return apartments;
+        }
+
+        public async Task<List<ApartmentModel>> GetApartmentsByUserNameAsync(string userName)
+        {
+            var apartments = await _repo.GetApartmentsByUserNameAsync(userName);
             return apartments;
         }
 

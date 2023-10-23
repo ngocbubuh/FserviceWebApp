@@ -9,9 +9,11 @@ namespace NET1715_FService.API.Repository.Inteface
 {
     public interface IApartmentRepository
     {
-        public Task<List<Apartment>> GetApartmentsOnFloorAsync(int floorId, int typeId);
+        public Task<List<ApartmentModel>> GetApartmentsAsync(int? floorId, int? typeId, string? username);
         public Task<Apartment> GetApartmentByIdAsync(int id);
 
         public Task<int> RegisApartmentAsync(int id, string accountId);
+
+        public Task<List<ApartmentModel>> GetApartmentsByUserNameAsync(string userName);
     }
 }

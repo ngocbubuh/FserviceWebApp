@@ -17,12 +17,12 @@ namespace NET1715_FService.API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetApartmentsOnFloor(int floorId, int typeId)
+        //[Authorize]
+        public async Task<IActionResult> GetApartmentsOnFloor(int? floorId, int? typeId, string? username)
         {
             try
             {
-                var apartments = await _apartmentService.GetApartmentOnFloorAsync(floorId, typeId);
+                var apartments = await _apartmentService.GetApartmentsAsync(floorId, typeId, username);
                 if (!apartments.Any())
                 {
                     return NotFound();
@@ -53,6 +53,25 @@ namespace NET1715_FService.API.Controllers
                 return BadRequest();
             }
         }
+
+        //[HttpGet("{username}")]
+        //public async Task<IActionResult> GetApartmentByUserName(string username)
+        //{
+        //    try
+        //    {
+        //        var apartment = await _apartmentService.GetApartmentsByUserNameAsync(username);
+        //        if (apartment == null)
+        //        {
+        //            return NotFound();
+        //        }
+        //        return Ok(apartment);
+        //    }
+        //    catch
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
+
         [HttpPut("{id}")]
         [Authorize(Roles = "USER")]
         public async Task<IActionResult> RegisApartment(int id, string userName)
