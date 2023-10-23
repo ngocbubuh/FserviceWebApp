@@ -9,6 +9,7 @@ using NET1705_FService.Repositories.Models;
 using NET1705_FService.Services.Interface;
 using NET1715_FService.Service.Inteface;
 using NET1715_FService.Service.Services;
+using System.Security.Claims;
 
 namespace NET1715_FService.API.Controllers
 {
@@ -18,12 +19,13 @@ namespace NET1715_FService.API.Controllers
     {
         private readonly IAccountService accountService;
         private readonly IMailService mailService;
+        private readonly IUserService _userService;
 
-        public AccountController(IAccountService repo, IMailService mailService)
+        public AccountController(IAccountService repo, IMailService mailService, IUserService userService)
         {
             accountService = repo;
             this.mailService = mailService;
-
+            _userService = userService;
         }
 
         [HttpPost("SignUp")]
@@ -152,6 +154,39 @@ namespace NET1715_FService.API.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        // verify by token and get data in body token
+        [Authorize]
+        [HttpGet("Launch")]
+        public async Task<ActionResult<AccountsModel>> Launch()
+        {
+            var extractedEmail = GetCurrentEmail();
+
+            if (extractedEmail == null) return NotFound("Token is expired.");
+
+            var result = await _userService.GetAccountByUsernameAsync(extractedEmail);
+
+            return Ok(result);
+        }
+
+        //tools
+        private string GetCurrentEmail()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (identity != null)
+            {
+                var userClaims = identity.Claims;
+                Console.Write(userClaims.Count());
+
+                foreach (var claim in userClaims)
+                {
+                    Console.WriteLine(claim.ToString());
+                }
+
+                return userClaims.FirstOrDefault(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value;
+            }
+            return null;
         }
     }
 }
