@@ -22,15 +22,3 @@ D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FServi
 D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\Library\obj\Debug\net7.0\refint\NET1705_FService.Library.dll
 D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\Library\obj\Debug\net7.0\NET1705_FService.Library.pdb
 D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\Library\obj\Debug\net7.0\ref\NET1705_FService.Library.dll
-D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\Library\bin\Debug\net7.0\NET1705_FService.Library.deps.json
-D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\Library\bin\Debug\net7.0\NET1705_FService.Library.dll
-D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\Library\bin\Debug\net7.0\NET1705_FService.Library.pdb
-D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\Library\obj\Debug\net7.0\NET1705_FService.Library.csproj.AssemblyReference.cache
-D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\Library\obj\Debug\net7.0\NET1705_FService.Library.GeneratedMSBuildEditorConfig.editorconfig
-D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\Library\obj\Debug\net7.0\NET1705_FService.Library.AssemblyInfoInputs.cache
-D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\Library\obj\Debug\net7.0\NET1705_FService.Library.AssemblyInfo.cs
-D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\Library\obj\Debug\net7.0\NET1705_FService.Library.csproj.CoreCompileInputs.cache
-D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\Library\obj\Debug\net7.0\NET1705_FService.Library.dll
-D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\Library\obj\Debug\net7.0\refint\NET1705_FService.Library.dll
-D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\Library\obj\Debug\net7.0\NET1705_FService.Library.pdb
-D:\Đại học FPT\Semester 5_Fa23\SWP391\Project SWP Final\NET1705_FService.API\Library\obj\Debug\net7.0\ref\NET1705_FService.Library.dll

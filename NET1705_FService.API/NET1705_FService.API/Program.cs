@@ -19,6 +19,7 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Identity.Web;
 using Microsoft.Extensions.Configuration;
+using NET1705_FService.Repositories.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

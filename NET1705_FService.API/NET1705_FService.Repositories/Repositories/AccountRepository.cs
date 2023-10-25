@@ -369,6 +369,25 @@ namespace FServiceAPI.Repositories
             return new ResponseModel { Status = "Error", Message = "Username is already exist" };
         }
 
+        public async Task<ResponseModel> ChangePassword(ChangePasswordModel model)
+        {
+            var account = await accountManager.FindByNameAsync(model.Email);
+            if(account == null)
+            {
+                return new ResponseModel
+                {
+                    Status = "Error",
+                    Message = "Account not found!"
+                };
+            }
+            var result = await accountManager.ChangePasswordAsync(account, model.CurrentPassword, model.NewPassword);
+            if (!result.Succeeded)
+            {
+                return new ResponseModel { Status = "Error", Message = "Wrong current password!" };
+            }
+            return new ResponseModel { Status = "Success", Message = "Change Password Successfully!" };
+        }
+
 
         //public async Task<ResponseModel> SignUpStaffAsync(SignUpModel model)
         //{
