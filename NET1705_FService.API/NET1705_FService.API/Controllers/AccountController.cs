@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NET1705_FService.API.Helper;
 using NET1705_FService.Repositories.Data;
 using NET1705_FService.Repositories.Helper;
 using NET1705_FService.Repositories.Models;
@@ -44,7 +45,7 @@ namespace NET1715_FService.API.Controllers
                     {
                         ToEmail = model.Email,
                         Subject = "FServices Confirmation Email",
-                        Body = confirmationEmail!
+                        Body = SendConfirmEmail.EnailContent(model.Email, confirmationEmail)
                     };
                     //Send Mail
                     await mailService.SendEmailAsync(messageRequest);
