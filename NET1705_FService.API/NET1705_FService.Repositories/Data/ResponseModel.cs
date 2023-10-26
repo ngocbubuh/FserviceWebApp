@@ -17,9 +17,6 @@ namespace NET1705_FService.Repositories.Data
         [IgnoreDataMember]
         [JsonIgnore]
         public System.Threading.Tasks.Task<String>? ConfirmEmailToken { get; set; }
-
-        [IgnoreDataMember]
-        [JsonIgnore]
         public string? PaymentUrl { get; set; }
     }
 }

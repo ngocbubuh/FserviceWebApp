@@ -77,13 +77,16 @@ namespace NET1705_FService.API.Controllers
         {
             try
             {
-                var result = await accountService.UpdateAccountAsync(id, model);
-                if (result.Status.Equals("Success"))
+                if(ModelState.IsValid)
                 {
-                    var account = await accountService.GetAccountByUsernameAsync(result.Message);
-                    return Ok(account);
-                }
-                return NotFound(result);
+                    var result = await accountService.UpdateAccountAsync(id, model);
+                    if (result.Status.Equals("Success"))
+                    {
+                        var account = await accountService.GetAccountByUsernameAsync(result.Message);
+                        return Ok(account);
+                    }
+                    return NotFound(result);
+                } return ValidationProblem(ModelState);
             }
             catch
             {

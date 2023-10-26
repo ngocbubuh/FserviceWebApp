@@ -62,13 +62,16 @@ namespace NET1715_FService.API.Controllers
         {
             try
             {
-                var result = await _serviceService.AddServiceAsync(newService);
-                if (result.Status.Equals("Success"))
+                if (ModelState.IsValid)
                 {
-                    var service = await _serviceService.GetServiceAsync(int.Parse(result.Message));
-                    return Ok(service);
-                }
-                return BadRequest(result);
+                    var result = await _serviceService.AddServiceAsync(newService);
+                    if (result.Status.Equals("Success"))
+                    {
+                        var service = await _serviceService.GetServiceAsync(int.Parse(result.Message));
+                        return Ok(service);
+                    }
+                    return BadRequest(result);
+                } return ValidationProblem(ModelState);
             }
             catch
             {
@@ -82,13 +85,16 @@ namespace NET1715_FService.API.Controllers
         {
             try
             {
-                var result = await _serviceService.UpdateServiceAsync(id, updateService);
-                if (result.Status.Equals("Success"))
+                if (ModelState.IsValid)
                 {
-                    var service = await _serviceService.GetServiceAsync(int.Parse(result.Message));
-                    return Ok(service);
-                }
-                return NotFound(result);
+                    var result = await _serviceService.UpdateServiceAsync(id, updateService);
+                    if (result.Status.Equals("Success"))
+                    {
+                        var service = await _serviceService.GetServiceAsync(int.Parse(result.Message));
+                        return Ok(service);
+                    }
+                    return BadRequest(result);
+                } return ValidationProblem(ModelState);
             }
             catch
             {

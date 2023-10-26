@@ -10,25 +10,26 @@ namespace NET1705_FService.Repositories.Data
 {
     public class ChangePasswordModel
     {
-        [Required]
+        [Required(ErrorMessage = "Username is required!")]
         [EmailAddress(ErrorMessage = "Must be email formated!")]
+        [Display(Name = "Username")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Current Password is required!")]
         [PasswordPropertyText]
         [DataType(DataType.Password)]
         [StringLength(12, MinimumLength = 7, ErrorMessage = "Password must be 7-12 Character")]
         [Display(Name = "Current Password")]
         public string CurrentPassword { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "New Password is required!")]
         [PasswordPropertyText]
         [DataType(DataType.Password)]
         [StringLength(12, MinimumLength = 7, ErrorMessage = "Password must be 7-12 Character")]
         [Display(Name = "New Password")]
         public string NewPassword { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Confirm new Password is required!")]
         [PasswordPropertyText]
         [DataType(DataType.Password)]
         [StringLength(12, MinimumLength = 7, ErrorMessage = "Password must be 7-12 Character")]
