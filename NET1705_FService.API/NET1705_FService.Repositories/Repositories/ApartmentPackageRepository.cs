@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NET1705_FService.Repositories.Helper;
 using NET1705_FService.Repositories.Interface;
 using NET1705_FService.Repositories.Models;
 using System;
@@ -13,8 +14,8 @@ namespace NET1705_FService.Repositories.Repositories
     {
         private readonly FserviceApiDatabaseContext _context;
 
-        public ApartmentPackageRepository(FserviceApiDatabaseContext context) 
-        { 
+        public ApartmentPackageRepository(FserviceApiDatabaseContext context)
+        {
             _context = context;
         }
         public async Task<int> AddApartmentPackageAsync(ApartmentPackage apartmentPackage)
@@ -28,19 +29,22 @@ namespace NET1705_FService.Repositories.Repositories
             return apartmentPackage.Id;
         }
 
-        public async Task<List<ApartmentPackage>> GetAllApartmentPackagesAsync()
+        public async Task<PagedList<ApartmentPackage>> GetAllApartmentPackagesAsync(PaginationParameter paginationParameter)
         {
-            var apartmentPackages = await _context.ApartmentPackages.Where(a => a.PackageStatus.Equals("Active")).ToListAsync();
+            //var apartmentPackages = await _context.ApartmentPackages.Where(a => a.PackageStatus.Equals("Active")).ToListAsync();
+            var apartmentPackages = await _context.ApartmentPackages.ToListAsync();
             foreach (var apartmentPackage in apartmentPackages)
             {
-                if (apartmentPackage.EndDate < DateTime.Now.Date)
+                if (apartmentPackage.PackageStatus == "Active" && apartmentPackage.EndDate < DateTime.Now.Date)
                 {
                     apartmentPackage.PackageStatus = "Expired";
                     _context.Update(apartmentPackage);
                     await _context.SaveChangesAsync();
                 }
             }
-            return apartmentPackages;
+            return PagedList<ApartmentPackage>.ToPagedList(apartmentPackages,
+                paginationParameter.PageNumber,
+                paginationParameter.PageSize);
         }
 
         public async Task<ApartmentPackage> GetApartmentPackageByIdAsync(int id)
@@ -61,6 +65,27 @@ namespace NET1705_FService.Repositories.Repositories
             }
 
             return apartmentPackage;
+        }
+
+        public async Task<PagedList<ApartmentPackage>> GetApartmentPackagesByApartmentId(PaginationParameter paginationParameter, int apartmentId)
+        {
+            var apartmentPackages = await _context.ApartmentPackages
+                .Where(a => a.ApartmentId == apartmentId)
+                .Include(a => a.ApartmentPackageServices)
+                .ToListAsync();
+            foreach (var apartmentPackage in apartmentPackages)
+            {
+                if (apartmentPackage.PackageStatus == "Active"
+                    && apartmentPackage.EndDate < DateTime.Now.Date)
+                {
+                    apartmentPackage.PackageStatus = "Expired";
+                    _context.Update(apartmentPackage);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            return PagedList<ApartmentPackage>.ToPagedList(apartmentPackages,
+                paginationParameter.PageNumber,
+                paginationParameter.PageSize);
         }
 
         public async Task<int> UpdateApartmentPackageAsync(int id, ApartmentPackage apartmentPackage)

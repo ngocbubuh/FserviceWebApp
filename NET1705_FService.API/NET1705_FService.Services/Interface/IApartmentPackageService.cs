@@ -1,4 +1,5 @@
-﻿using NET1705_FService.Repositories.Models;
+﻿using NET1705_FService.Repositories.Helper;
+using NET1705_FService.Repositories.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,10 @@ namespace NET1705_FService.Services.Interface
 
         public Task<ApartmentPackage> GetApartmentPackageByIdAsync(int id);
 
-        public Task<List<ApartmentPackage>> GetAllApartmentPackagesAsync();
+        public Task<PagedList<ApartmentPackage>> GetAllApartmentPackagesAsync(PaginationParameter paginationParameter);
 
         //public Task<int> UpdateApartmentPackageAsync(int id, ApartmentPackage apartmentPackage);
+
+        public Task<PagedList<ApartmentPackage>> GetApartmentPackagesByApartmentId(PaginationParameter paginationParameter, int apartmentId);
     }
 }
