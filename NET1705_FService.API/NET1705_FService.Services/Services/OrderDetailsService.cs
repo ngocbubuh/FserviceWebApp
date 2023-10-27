@@ -64,6 +64,12 @@ namespace NET1705_FService.Services.Services
             return tasks;
         }
 
+        public async Task<PagedList<OrderDetailsViewModel>> GetOrderDetailByApartmentPackageId(PaginationParameter paginationParameter, int apartmentPackageId)
+        {
+            var orderDetails = await _repo.GetOrderDetailByApartmentPackageId(paginationParameter ,apartmentPackageId);
+            return orderDetails;
+        }
+
         public async Task<OrderDetailsViewModel> GetOrderDetailsByIdAsync(int id)
         {
             var orderDetails = await _repo.GetOrderDetailByIdAsync(id);
