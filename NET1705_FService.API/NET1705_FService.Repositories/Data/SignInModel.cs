@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace NET1705_FService.Repositories.Data
 {
@@ -7,6 +8,8 @@ namespace NET1705_FService.Repositories.Data
         [Required(ErrorMessage = "Username is required!"), EmailAddress(ErrorMessage = "Must be email address format!")]
         public required string Email { get; set; }
         [Required(ErrorMessage = "Password is required!")]
+        [DataType(DataType.Password)]
+        [PasswordPropertyText]
         public required string Password { get; set; }
     }
 }

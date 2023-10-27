@@ -19,6 +19,7 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Identity.Web;
 using Microsoft.Extensions.Configuration;
+using NET1705_FService.Repositories.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -103,7 +104,7 @@ builder.Services.AddCors(options =>
 });
 
 //Add Authentication - Ngoc Buh
-builder.Services.AddIdentity<Accounts, IdentityRole>()
+builder.Services.AddIdentity<Accounts, IdentityRole>().AddErrorDescriber<LocalizedIdentityErrorDescriber>()
         .AddEntityFrameworkStores<FserviceApiDatabaseContext>().AddDefaultTokenProviders();
 //
 builder.Services.AddAuthentication(options =>
@@ -162,6 +163,10 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddTransient<IMailService, MailService>();
+builder.Services.AddScoped<IdentityErrorDescriber, LocalizedIdentityErrorDescriber>();
+
+//builder.Services.AddLocalization(opt => opt.ResourcesPath = "NET1705_FService.Repositories.Helper.LocalizedIdentityErrorDescriber");
+//builder.Services.AddMvc();
 
 var app = builder.Build();
 

@@ -34,26 +34,49 @@ namespace NET1715_FService.API.Controllers
         {
             try
             {
-                var result = await accountService.SignUpAsync(model);
-                if (result.Status.Equals("Success"))
+                if (ModelState.IsValid)
                 {
-                    //Config mail
-                    var token = result.ConfirmEmailToken;
-                    var confirmationEmail = Url.Action(nameof(ConfirmEmail), "Account", new { token = token.Result, email = model.Email }, Request.Scheme);
-                    result.ConfirmEmailToken = null;
-                    var messageRequest = new MailRequest
+                    var result = await accountService.SignUpAsync(model);
+                    if (result.Status.Equals("Success"))
                     {
-                        ToEmail = model.Email,
-                        Subject = "FServices Confirmation Email",
-                        Body = SendConfirmEmail.EnailContent(model.Email, confirmationEmail)
-                    };
-                    //Send Mail
-                    await mailService.SendEmailAsync(messageRequest);
-                    return Ok(result);
+                        //Config mail
+                        var token = result.ConfirmEmailToken;
+                        var confirmationEmail = Url.Action(nameof(ConfirmEmail), "Account", new { token = token.Result, email = model.Email }, Request.Scheme);
+                        result.ConfirmEmailToken = null;
+                        var messageRequest = new MailRequest
+                        {
+                            ToEmail = model.Email,
+                            Subject = "FServices Confirmation Email",
+                            Body = SendConfirmEmail.EnailContent(model.Email, confirmationEmail)
+                        };
+                        //Send Mail
+                        await mailService.SendEmailAsync(messageRequest);
+                        return Ok(result);
+                    }
+                    return BadRequest(result);
                 }
-                return Unauthorized(result);
+                return ValidationProblem(ModelState);
             }
             catch { return BadRequest(); }
+        }
+
+        [HttpPost("ChangePassword")]
+        [Authorize]
+        public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await accountService.ChangePassword(model);
+                    if (result.Status.Equals("Success"))
+                    {
+                        return Ok(result);
+                    }
+                    return BadRequest(result);
+                }
+                return ValidationProblem(ModelState);
+            } catch { return BadRequest(); }
         }
 
         //[HttpPost("SignUp-Admin")]
@@ -94,12 +117,15 @@ namespace NET1715_FService.API.Controllers
         {
             try
             {
-                var result = await accountService.SignUpInternalAsync(model, role);
-                if (result.Status.Equals("Success"))
+                if(ModelState.IsValid)
                 {
-                    return Ok(result);
-                }
-                return Unauthorized(result);
+                    var result = await accountService.SignUpInternalAsync(model, role);
+                    if (result.Status.Equals("Success"))
+                    {
+                        return Ok(result);
+                    }
+                    return Unauthorized(result);
+                } return ValidationProblem(ModelState);
             }
             catch { return BadRequest(); }
         }
@@ -109,12 +135,15 @@ namespace NET1715_FService.API.Controllers
         {
             try
             {
-                var result = await accountService.SignInAsync(model);
-                if (result.Status.Equals(false))
+                if (ModelState.IsValid)
                 {
-                    return Unauthorized(result);
-                }
-                return Ok(result);
+                    var result = await accountService.SignInAsync(model);
+                    if (result.Status.Equals(false))
+                    {
+                        return Unauthorized(result);
+                    }
+                    return Ok(result);
+                } return ValidationProblem(ModelState);
             }
             catch
             {

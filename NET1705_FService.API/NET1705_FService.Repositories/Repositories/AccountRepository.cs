@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using NET1705_FService.Repositories.Data;
+using NET1705_FService.Repositories.Helper;
 using NET1705_FService.Repositories.Interface;
 using NET1705_FService.Repositories.Models;
 using Newtonsoft.Json.Linq;
@@ -307,6 +308,7 @@ namespace FServiceAPI.Repositories
                 };
 
                 var result = await accountManager.CreateAsync(user, model.Password);
+                string errorMessage = null;
                 if (result.Succeeded)
                 {
                     if (!await roleManager.RoleExistsAsync(RoleModel.USER.ToString()))
@@ -320,7 +322,12 @@ namespace FServiceAPI.Repositories
                     var token = accountManager.GenerateEmailConfirmationTokenAsync(user);
                     return new ResponseModel { Status = "Success", Message = "Register Successfully! Please check your email to confirm your account!", ConfirmEmailToken = token };
                 }
-                return new ResponseModel { Status = "Error", Message = "Cannot create account in database!" };
+                //If failed
+                foreach (var error in result.Errors)
+                {
+                    errorMessage = error.Description;
+                }
+                return new ResponseModel { Status = "Error", Message = errorMessage };
             }
             return new ResponseModel { Status = "Error", Message = "Username is already exist" };
 
@@ -329,6 +336,7 @@ namespace FServiceAPI.Repositories
         public async Task<ResponseModel> SignUpInternalAsync(SignUpModel model, RoleModel role)
         {
             var userExist = await accountManager.FindByNameAsync(model.Email);
+            string errorMessage = null;
             if (userExist == null)
             {
                 var user = new Accounts
@@ -362,11 +370,46 @@ namespace FServiceAPI.Repositories
                     {
                         return new ResponseModel { Status = "Success", Message = $"Register {role} Successfully!" };
                     }
-                    return new ResponseModel { Status = "Error", Message = $"Cannot authentication {role} Account!" };
+
+                    foreach (var error in confirm.Errors)
+                    {
+                        errorMessage = error.Description;
+                    }
+                    return new ResponseModel { Status = "Error", Message = errorMessage };
                 }
                 return new ResponseModel { Status = "Error", Message = $"Cannot create account in database! Role {role} not support or you have missing a typo!" };
             }
             return new ResponseModel { Status = "Error", Message = "Username is already exist" };
+        }
+
+        public async Task<ResponseModel> ChangePassword(ChangePasswordModel model)
+        {
+            var account = await accountManager.FindByNameAsync(model.Email);
+            if(account == null)
+            {
+                return new ResponseModel
+                {
+                    Status = "Error",
+                    Message = "Account not found!"
+                };
+            }
+            var result = await accountManager.ChangePasswordAsync(account, model.CurrentPassword, model.NewPassword);
+
+            string errorMessage = null;
+            if (!result.Succeeded)
+            {
+                foreach(var error in result.Errors)
+                {
+                    errorMessage = error.Description;
+                }
+
+                return new ResponseModel
+                {
+                    Status = "Success",
+                    Message = errorMessage
+                };
+            }
+            return new ResponseModel { Status = "Success", Message = "Change Password Successfully!" };
         }
 
 

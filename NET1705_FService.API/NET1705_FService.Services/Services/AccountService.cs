@@ -24,13 +24,15 @@ namespace NET1715_FService.Service.Services
             _userRepository = userRepository;
         }
 
+        public async Task<ResponseModel> ChangePassword(ChangePasswordModel model)
+        {
+            var result = await _repo.ChangePassword(model);
+            return result;
+        }
+
         public async Task<ResponseModel> ConfirmEmail(string token, string email)
         {
             var result = await _repo.ConfirmEmail(token, email);
-            if (result == null)
-            {
-                return new ResponseModel { Status = "Error", Message = "Oops! Our server is unable to fulfill this request at the moment! Please stand by!" };
-            }
             return result;
         }
 
@@ -69,25 +71,17 @@ namespace NET1715_FService.Service.Services
 
         public async Task<ResponseModel> SignUpAsync(SignUpModel model)
         {
-            if (!model.Password.Equals(model.ConfirmPassword))
-            {
-                return new ResponseModel { Status = "Error", Message = "Password and Confirm password not match!" };
-            }
+            //if (!model.Password.Equals(model.ConfirmPassword))
+            //{
+            //    return new ResponseModel { Status = "Error", Message = "Password and Confirm password not match!" };
+            //}
             var result = await _repo.SignUpAsync(model);
-            if (result == null)
-            {
-                return new ResponseModel { Status = "Error", Message = "Oops! Our server is unable to fulfill this request at the moment! Please stand by!" };
-            }
             return result;
         }
 
         public async Task<ResponseModel> SignUpInternalAsync(SignUpModel model, RoleModel role)
         {
             var result = await _repo.SignUpInternalAsync(model, role);
-            if (result == null)
-            {
-                return new ResponseModel { Status = "Error", Message = "Oops! Our server is unable to fulfill this request at the moment! Please stand by!" };
-            }
             return result;
         }
 
