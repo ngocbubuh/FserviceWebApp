@@ -185,6 +185,24 @@ namespace NET1705_FService.Repositories.Repositories
             return 0;
         }
 
+        public async Task<PagedList<OrderDetailsViewModel>> GetOrderDetailByApartmentPackageId(PaginationParameter paginationParameter, 
+            int apartmentPackageId)
+        {
+            var orderDetails = await _context.OrderDetails
+                .Where(o => o.ApartmentPackageId == apartmentPackageId)
+                .Include(o => o.Service)
+                .OrderByDescending(o => o.CreatedDate)
+                .ProjectTo<OrderDetailsViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+
+            //var tasks = _mapper.Map<OrderDetailsViewModel>(orderDetails);
+
+            return PagedList<OrderDetailsViewModel>.ToPagedList(orderDetails,
+                paginationParameter.PageNumber,
+                paginationParameter.PageSize);
+        }
+
         //tools
         private async Task<Accounts> AssignStaff()
         {
@@ -242,6 +260,6 @@ namespace NET1705_FService.Repositories.Repositories
             }
         }
 
-
+        
     }
 }

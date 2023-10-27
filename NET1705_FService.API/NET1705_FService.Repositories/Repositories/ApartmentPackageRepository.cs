@@ -52,6 +52,7 @@ namespace NET1705_FService.Repositories.Repositories
             var apartmentPackage = await _context.ApartmentPackages
                 .Include(a => a.ApartmentPackageServices)
                 .Include(a => a.Apartment)
+                .Include(a => a.Package)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             if (apartmentPackage != null)
@@ -71,7 +72,8 @@ namespace NET1705_FService.Repositories.Repositories
         {
             var apartmentPackages = await _context.ApartmentPackages
                 .Where(a => a.ApartmentId == apartmentId)
-                .Include(a => a.ApartmentPackageServices)
+                //.Include(a => a.ApartmentPackageServices)
+                .Include(a => a.Package)
                 .ToListAsync();
             foreach (var apartmentPackage in apartmentPackages)
             {
