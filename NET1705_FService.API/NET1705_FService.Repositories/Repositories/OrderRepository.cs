@@ -44,6 +44,7 @@ namespace NET1705_FService.Repositories.Repositories
             newOrder.ApartmentPackageId = null;
             newOrder.IsExtraOrder = false;
             newOrder.ServiceId = null;
+            newOrder.PaymentDate = null;
 
             var apartment = await _apartmentRepo.GetApartmentByIdAsync(orderModel.ApartmentId);
             var typeId = apartment.TypeId;
@@ -106,6 +107,7 @@ namespace NET1705_FService.Repositories.Repositories
             extraOrder.OrderDate = DateTime.Now;
             extraOrder.TotalPrice = buyService.ExtraPrice;
             extraOrder.IsExtraOrder = true;
+            extraOrder.PaymentDate = null;
 
             _context.Add(extraOrder);
             await _context.SaveChangesAsync();

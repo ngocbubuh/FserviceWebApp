@@ -52,7 +52,7 @@ namespace NET1705_FService.Services.Services
                 return new ResponseModel { Status = "Error", Message = "Somethings was error. Try again." };
             }
             // payment
-            var paymentURL = _vnpayService.CreatePaymentUrl(result, httpContext, package.UnsignName);
+            var paymentURL = _vnpayService.CreatePaymentUrl(result, httpContext, package.UnsignName, orderModel.CallBackUrl);
 
             return new ResponseModel { Status = "Success", Message = "Create order successfully", PaymentUrl = paymentURL};
         }
@@ -83,7 +83,7 @@ namespace NET1705_FService.Services.Services
             }
             // payment
             var service = await _serviceRepo.GetServiceAsync(extraModel.ServiceId);
-            var paymentURL = _vnpayService.CreatePaymentUrl(result, httpContext, service.UnsignName);
+            var paymentURL = _vnpayService.CreatePaymentUrl(result, httpContext, service.UnsignName, extraModel.CallBackUrl);
             return new ResponseModel { Status = "Success", Message = "Create order successfully", PaymentUrl = paymentURL };
         }
 

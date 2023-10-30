@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace NET1705_FService.Repositories.Models;
 
@@ -31,6 +32,8 @@ public partial class Order
 
     public int? ServiceId { get; set; }
 
+    public string? TransactionNo { get; set; }
+
     //public virtual ApartmentPackage ApartmentPackage { get; set; }
 
     public virtual ICollection<ApartmentPackage> ApartmentPackages { get; } = new List<ApartmentPackage>();
@@ -44,12 +47,15 @@ public class OrderModel
 
     public int ApartmentPackageId { get; set; }
 
+    [EmailAddress]
     public string? UserName { get; set; }
 
     public string PaymentMethod { get; set; }
 
     public string CustomerName { get; set; }
 
+    [Phone]
+    [StringLength(10)]
     public string Phone { get; set; }
 
     public DateTime? PaymentDate { get; set; }
@@ -61,5 +67,8 @@ public class OrderModel
     public int ServiceId { get; set; }
 
     public string Type { get; set; }
+
+    [Url]
+    public string CallBackUrl { get; set; }
 
 }
