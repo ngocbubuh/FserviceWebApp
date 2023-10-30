@@ -25,7 +25,8 @@ namespace NET1715_FService.API.Repository.Repositories
         public async Task<Apartment> GetApartmentByIdAsync(int id)
         {
             var apartment = await _context.Apartments
-                .Include(a => a.Floor)
+                .Include(a => a.Type.Building)
+                //.Include(a => a.Floor.Building)
                 .Include(a => a.ApartmentPackages)
                 .SingleOrDefaultAsync(a => a.Id == id);
             return apartment;

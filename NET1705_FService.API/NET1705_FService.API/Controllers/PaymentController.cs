@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NET1705_FService.Repositories.Data;
 using NET1705_FService.Services.Interface;
@@ -17,6 +18,7 @@ namespace NET1705_FService.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CallBackVnpayUrl(VnpayModel vnpayModel)
         {
             var status = await _vnpayService.PaymentExecute(vnpayModel);
@@ -24,7 +26,7 @@ namespace NET1705_FService.API.Controllers
             {
                 return Ok(new ResponseModel { Status = "Success", Message = "Payment successfully" });
             }
-            ResponseModel reps = new ResponseModel { Status = "Error", Message = "Error..." };
+            ResponseModel reps = new ResponseModel { Status = "Error", Message = "Invalid information." };
             return BadRequest(reps);
         }
     }

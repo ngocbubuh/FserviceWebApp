@@ -11,7 +11,7 @@ namespace NET1705_FService.Services.Interface
 {
     public interface IVnpayService
     {
-        string CreatePaymentUrl(Order model, HttpContext context, string vnp_OrderInfo);
+        string CreatePaymentUrl(Order model, HttpContext context, string vnp_OrderInfo, string callBackUrl);
         Task<bool> PaymentExecute(VnpayModel vnpayModel);
     }
 }

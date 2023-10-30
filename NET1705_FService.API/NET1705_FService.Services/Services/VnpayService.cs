@@ -28,7 +28,7 @@ namespace NET1705_FService.Services.Services
             _apartmentPackageRepo = apartmentPackageRepo;
             _apartPackageServiceRepo = apartPackageServiceRepo;
         }
-        public string CreatePaymentUrl(Order model, HttpContext context, string vnp_OrderInfo)
+        public string CreatePaymentUrl(Order model, HttpContext context, string vnp_OrderInfo, string callBackUrl)
         {
             IConfiguration _configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -40,8 +40,25 @@ namespace NET1705_FService.Services.Services
             DateTime timeNow = DateTime.Now;
             //var tick = DateTime.Now.Ticks.ToString();
             var orderId = model.Id.ToString();
+            // check payment call back
+            //var acceptedUrls = _configuration["AcceptPaymentUrl:Url"];
+            //string[] urls = acceptedUrls.Split(',');
+            //string vnpReturnUrl = null;
+
+            //foreach (string url in urls)
+            //{
+            //    if (callBackUrl == url)
+            //    {
+            //        vnpReturnUrl = url;
+            //    }
+            //}
+            //if (string.IsNullOrEmpty(vnpReturnUrl))
+            //{
+            //    return "Invalid return url";
+            //}
+
             var pay = new VnPayLibrary();
-            var urlCallBack = _configuration["PaymentCallBack:ReturnUrl"];
+            //var urlCallBack = _configuration["PaymentCallBack:ReturnUrl"];
 
             pay.AddRequestData("vnp_Version", _configuration["Vnpay:Version"]);
             pay.AddRequestData("vnp_Command", _configuration["Vnpay:Command"]);
@@ -53,7 +70,7 @@ namespace NET1705_FService.Services.Services
             pay.AddRequestData("vnp_Locale", _configuration["Vnpay:Locale"]);
             pay.AddRequestData("vnp_OrderInfo", $"Thanh toan hoa don cho {vnp_OrderInfo}");
             pay.AddRequestData("vnp_OrderType", "250000");
-            pay.AddRequestData("vnp_ReturnUrl", urlCallBack);
+            pay.AddRequestData("vnp_ReturnUrl", callBackUrl);
             pay.AddRequestData("vnp_TxnRef", orderId);
 
             var paymentUrl =
@@ -69,8 +86,13 @@ namespace NET1705_FService.Services.Services
                 return false;
             }
             var order = await _orderRepository.GetOrderByIdAsync(int.Parse(vnpayModel.vnp_TxnRef));
+            if (order == null)
+            {
+                return false;
+            }
             DateTime payDate = DateTime.ParseExact(vnpayModel.vnp_PayDate, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
             order.PaymentDate = payDate;
+            order.TransactionNo = vnpayModel.vnp_TransactionNo;
             int orderId = await _orderRepository.UpdateOrderAsync(int.Parse(vnpayModel.vnp_TxnRef), order);
             if (order.IsExtraOrder == false)
             {

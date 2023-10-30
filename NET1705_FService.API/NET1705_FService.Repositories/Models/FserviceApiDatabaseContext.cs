@@ -188,6 +188,7 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
                 .HasMaxLength(10)
                 .IsFixedLength();
             entity.Property(e => e.StartDate).HasColumnType("datetime");
+            entity.Property(e => e.TransactionNo).HasMaxLength(15);
 
             //entity.HasOne(d => d.ApartmentPackage).WithMany(p => p.Orders)
             //    .HasForeignKey(d => d.ApartmentPackageId)

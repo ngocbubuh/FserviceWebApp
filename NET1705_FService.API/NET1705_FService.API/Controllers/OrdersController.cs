@@ -26,6 +26,25 @@ namespace NET1705_FService.API.Controllers
         {
             try
             {
+                IConfiguration _configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+                var acceptedUrls = _configuration["AcceptPaymentUrl:Url"];
+                string[] urls = acceptedUrls.Split(',');
+                string vnpReturnUrl = null;
+
+                foreach (string url in urls)
+                {
+                    if (order.CallBackUrl == url)
+                    {
+                        vnpReturnUrl = url;
+                    }
+                }
+                if (string.IsNullOrEmpty(vnpReturnUrl))
+                {
+                    return BadRequest(new ResponseModel { Status = "Error", Message = "Return url invalid"});
+                }
                 if (order.Type != "extra")
                 {
                     var result = await _orderService.AddOrderAsync(order, HttpContext);
