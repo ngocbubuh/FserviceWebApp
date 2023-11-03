@@ -58,7 +58,7 @@ namespace NET1705_FService.Services.Services
             //}
 
             var pay = new VnPayLibrary();
-            //var urlCallBack = _configuration["PaymentCallBack:ReturnUrl"];
+            var urlCallBack = _configuration["PaymentCallBack:ReturnUrl"];
 
             pay.AddRequestData("vnp_Version", _configuration["Vnpay:Version"]);
             pay.AddRequestData("vnp_Command", _configuration["Vnpay:Command"]);
@@ -70,7 +70,8 @@ namespace NET1705_FService.Services.Services
             pay.AddRequestData("vnp_Locale", _configuration["Vnpay:Locale"]);
             pay.AddRequestData("vnp_OrderInfo", $"Thanh toan hoa don cho {vnp_OrderInfo}");
             pay.AddRequestData("vnp_OrderType", "250000");
-            pay.AddRequestData("vnp_ReturnUrl", callBackUrl);
+            //pay.AddRequestData("vnp_ReturnUrl", callBackUrl);
+            pay.AddRequestData("vnp_ReturnUrl", urlCallBack);
             pay.AddRequestData("vnp_TxnRef", orderId);
 
             var paymentUrl =
