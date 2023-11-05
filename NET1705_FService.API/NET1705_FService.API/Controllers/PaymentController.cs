@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using NET1705_FService.Repositories.Data;
 using NET1705_FService.Services.Interface;
 using System.Net.WebSockets;
+using System.Text.Json;
 
 namespace NET1705_FService.API.Controllers
 {
@@ -24,18 +25,34 @@ namespace NET1705_FService.API.Controllers
         {
             try
             {
+                var uri = HttpContext.Request.Host.ToString();
                 if (response != null)
                 {
                     var status = await _vnpayService.PaymentExecute(response);
+                    string urlParameters = response.ToUrlParameters();
                     if (status)
                     {
-                        return Ok(response);
+                        if (uri.Contains("localhost"))
+                        {
+                            return Redirect("http://localhost:3000/payment/success?" + urlParameters);
+                        } 
+                        else
+                        {
+                            return Redirect("https://fservices.vercel.app/payment/success?" + urlParameters);
+                        }
                     }
-                    return NotFound(response);
+                    if (uri.Contains("localhost"))
+                    {
+                        return Redirect("http://localhost:3000/payment/error?" + urlParameters);
+                    }
+                    else
+                    {
+                        return Redirect("https://fservices.vercel.app/payment/error?" + urlParameters);
+                    }
                 }
-                return Ok(response);
+                return NotFound();
             }
-            catch (Exception ex)
+            catch
             {
                 return BadRequest();
             }

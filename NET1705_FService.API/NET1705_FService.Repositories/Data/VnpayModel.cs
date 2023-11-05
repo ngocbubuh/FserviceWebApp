@@ -2,21 +2,15 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace NET1705_FService.Repositories.Data
 {
     public class VnpayModel
     {
-        //public int vnp_Amount {  get; set; }
-        //public string vnp_PayDate { get; set; }
-        //public string vnp_ResponseCode { get; set; }
-        //public string vnp_TxnRef { get; set; }
-        //[MaxLength(15)]
-        //public string vnp_TransactionNo { get; set; }
-        //public string vnp_TransactionStatus { get; set; }
-        //public string vnp_SecureHash { get; set; }
         public string vnp_TmnCode { get; set; } = string.Empty;
         public string vnp_BankCode { get; set; } = string.Empty;
         public string vnp_BankTranNo { get; set; } = string.Empty;
@@ -30,5 +24,22 @@ namespace NET1705_FService.Repositories.Data
         public int? vnp_Amount { get; set; }
         public string? vnp_ResponseCode { get; set; }
         public string vnp_PayDate { get; set; } = string.Empty;
+
+        public string ToUrlParameters()
+        {
+            var properties = GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            var queryString = new List<string>();
+
+            foreach (var property in properties)
+            {
+                var value = property.GetValue(this);
+                if (value != null)
+                {
+                    queryString.Add($"{property.Name}={HttpUtility.UrlEncode(value.ToString())}");
+                }
+            }
+
+            return string.Join("&", queryString);
+        }
     }
 }
