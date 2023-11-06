@@ -30,6 +30,7 @@ namespace NET1705_FService.API.Controllers
                 {
                     var status = await _vnpayService.PaymentExecute(response);
                     string urlParameters = response.ToUrlParameters();
+                    Console.WriteLine("Check host: " + uri);
                     if (status)
                     {
                         if (uri.Contains("localhost"))
