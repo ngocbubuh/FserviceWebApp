@@ -58,9 +58,9 @@ namespace NET1705_FService.Services.Services
             return result;
         }
 
-        public Task<PagedList<OrderDetailsViewModel>> GetAllTaskForStaffAsync(PaginationParameter paginationParameter, string staffId)
+        public Task<PagedList<OrderDetailsViewModel>> GetAllTaskForStaffAsync(PaginationParameter paginationParameter, string username)
         {
-            var tasks = _repo.GetAllTaskForStaff(paginationParameter, staffId);
+            var tasks = _repo.GetAllTaskForStaff(paginationParameter, username);
             return tasks;
         }
 

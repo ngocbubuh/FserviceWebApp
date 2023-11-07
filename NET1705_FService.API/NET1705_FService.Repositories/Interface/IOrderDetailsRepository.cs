@@ -14,7 +14,7 @@ namespace NET1705_FService.Repositories.Interface
         public Task<OrderDetailsViewModel> GetOrderDetailByIdAsync(int id);
         public Task<ResponseModel> AddOrderDetailsAsync(UsingPackageModel usingPackage);
 
-        public Task<PagedList<OrderDetailsViewModel>> GetAllTaskForStaff(PaginationParameter paginationParameter, string staffId);
+        public Task<PagedList<OrderDetailsViewModel>> GetAllTaskForStaff(PaginationParameter paginationParameter, string username);
 
         public Task<int> UpdateTaskAsync(int id, OrderDetailModel orderDetailModel);
 

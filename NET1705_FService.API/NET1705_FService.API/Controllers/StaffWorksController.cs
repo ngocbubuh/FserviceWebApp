@@ -20,13 +20,13 @@ namespace NET1705_FService.API.Controllers
             _orderDetailsService = orderDetailsService;
         }
 
-        [HttpGet("{staffId}")]
+        [HttpGet("{username}")]
         [Authorize(Roles = "STAFF")]
-        public async Task<IActionResult> GetAllTaskForStaff([FromQuery] PaginationParameter paginationParameter, string staffId)
+        public async Task<IActionResult> GetAllTaskForStaff([FromQuery] PaginationParameter paginationParameter, string username)
         {
             try
             {
-                var tasks = await _orderDetailsService.GetAllTaskForStaffAsync(paginationParameter, staffId);
+                var tasks = await _orderDetailsService.GetAllTaskForStaffAsync(paginationParameter, username);
                 var metadata = new
                 {
                     tasks.TotalCount,
