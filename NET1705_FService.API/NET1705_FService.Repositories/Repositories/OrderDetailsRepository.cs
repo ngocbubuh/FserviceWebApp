@@ -154,6 +154,7 @@ namespace NET1705_FService.Repositories.Repositories
             var orderDetails = await _context.OrderDetails
                 .Where(o => o.StaffId == staff.Id)
                 .Include(o => o.Service)
+                .Include(a => a.ApartmentPackage)
                 .OrderByDescending(o => o.CreatedDate)
                 .ProjectTo<OrderDetailsViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();

@@ -42,5 +42,7 @@ namespace NET1705_FService.Repositories.Data
         public double? Amount { get; set; }
 
         public Service? Service { get; set; }
+
+        public ApartmentPackage? ApartmentPackage { get; set; }
     }
 }

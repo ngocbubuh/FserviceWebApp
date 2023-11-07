@@ -27,7 +27,7 @@ namespace NET1715_FService.API.Repository.Repositories
             var apartment = await _context.Apartments
                 .Include(a => a.Type.Building)
                 //.Include(a => a.Floor.Building)
-                .Include(a => a.ApartmentPackages)
+                //.Include(a => a.ApartmentPackages)
                 .SingleOrDefaultAsync(a => a.Id == id);
             return apartment;
         }
