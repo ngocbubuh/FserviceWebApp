@@ -26,3 +26,17 @@ D:\FPT_University\Fall_2023\SWP391\ProjectCode\FService_WebApp_Ducdpg\NET1705_FS
 D:\FPT_University\Fall_2023\SWP391\ProjectCode\FService_WebApp_Ducdpg\NET1705_FService.API\NET1705_FService.Repositories\obj\Debug\net7.0\NET1705_FService.Repositories.pdb
 D:\FPT_University\Fall_2023\SWP391\ProjectCode\FService_WebApp_Ducdpg\NET1705_FService.API\NET1705_FService.Repositories\obj\Debug\net7.0\NET1705_FService.Repositories.genruntimeconfig.cache
 D:\FPT_University\Fall_2023\SWP391\ProjectCode\FService_WebApp_Ducdpg\NET1705_FService.API\NET1705_FService.Repositories\obj\Debug\net7.0\ref\NET1705_FService.Repositories.dll
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Repositories\bin\Debug\net7.0\NET1705_FService.Repositories.deps.json
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Repositories\bin\Debug\net7.0\NET1705_FService.Repositories.runtimeconfig.json
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Repositories\bin\Debug\net7.0\NET1705_FService.Repositories.dll
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Repositories\bin\Debug\net7.0\NET1705_FService.Repositories.pdb
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Repositories\obj\Debug\net7.0\NET1705_FService.Repositories.csproj.AssemblyReference.cache
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Repositories\obj\Debug\net7.0\NET1705_FService.Repositories.GeneratedMSBuildEditorConfig.editorconfig
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Repositories\obj\Debug\net7.0\NET1705_FService.Repositories.AssemblyInfoInputs.cache
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Repositories\obj\Debug\net7.0\NET1705_FService.Repositories.AssemblyInfo.cs
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Repositories\obj\Debug\net7.0\NET1705_FService.Repositories.csproj.CoreCompileInputs.cache
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Repositories\obj\Debug\net7.0\NET1705_FService.Repositories.dll
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Repositories\obj\Debug\net7.0\refint\NET1705_FService.Repositories.dll
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Repositories\obj\Debug\net7.0\NET1705_FService.Repositories.pdb
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Repositories\obj\Debug\net7.0\NET1705_FService.Repositories.genruntimeconfig.cache
+D:\FPT_University\Fall_2023\SWP391\ProjectCode\FServiceWebApp_Git\NET1705_FService.API\NET1705_FService.Repositories\obj\Debug\net7.0\ref\NET1705_FService.Repositories.dll

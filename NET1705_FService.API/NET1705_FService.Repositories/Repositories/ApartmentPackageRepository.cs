@@ -50,7 +50,7 @@ namespace NET1705_FService.Repositories.Repositories
         public async Task<ApartmentPackage> GetApartmentPackageByIdAsync(int id)
         {
             var apartmentPackage = await _context.ApartmentPackages
-                .Include(a => a.ApartmentPackageServices)
+                .Include(a => a.ApartmentPackageServices).ThenInclude(ad => ad.Service)
                 .Include(a => a.Apartment)
                 .Include(a => a.Package)
                 .FirstOrDefaultAsync(a => a.Id == id);
