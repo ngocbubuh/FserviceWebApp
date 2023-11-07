@@ -68,6 +68,30 @@ namespace NET1705_FService.Repositories.Repositories
             return apartmentPackage;
         }
 
+        // check before buy new package
+        public async Task<bool> CheckApartmentPackagesByApartmentAndPackage(int apartmentId, int packageId)
+        {
+            var apartmentPackages = await _context.ApartmentPackages
+                .Where(a => a.ApartmentId == apartmentId)
+                .ToListAsync();
+            foreach (var apartmentPackage in apartmentPackages)
+            {
+                if (apartmentPackage.PackageStatus == "Active"
+                    && apartmentPackage.EndDate < DateTime.Now.Date)
+                {
+                    apartmentPackage.PackageStatus = "Expired";
+                    _context.Update(apartmentPackage);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            var activePackages = apartmentPackages.Where(a => a.PackageId == packageId && a.PackageStatus == "Active");
+            if (activePackages.Any())
+            {
+                return false;
+            }
+            return true;
+        }
+
         public async Task<PagedList<ApartmentPackage>> GetApartmentPackagesByApartmentId(PaginationParameter paginationParameter, int apartmentId)
         {
             var apartmentPackages = await _context.ApartmentPackages
@@ -101,5 +125,18 @@ namespace NET1705_FService.Repositories.Repositories
             return 0;
         }
 
+        public async Task<bool> DeleteApartmentPackage(int orderId)
+        {
+            var apartmentPackage = _context.ApartmentPackages
+                .Include(a => a.ApartmentPackageServices)
+                .FirstOrDefault(a => a.OrderId == orderId && a.PackageStatus == "Disable");
+            if (apartmentPackage != null)
+            {
+                _context.ApartmentPackages.Remove(apartmentPackage);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
     }
 }

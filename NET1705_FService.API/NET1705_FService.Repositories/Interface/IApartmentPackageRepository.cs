@@ -19,5 +19,9 @@ namespace NET1705_FService.Repositories.Interface
         public Task<int> UpdateApartmentPackageAsync(int id, ApartmentPackage apartmentPackage);
 
         public Task<PagedList<ApartmentPackage>> GetApartmentPackagesByApartmentId(PaginationParameter paginationParameter, int apartmentId);
+
+        public Task<bool> CheckApartmentPackagesByApartmentAndPackage(int apartmentId, int packageId);
+
+        public Task<bool> DeleteApartmentPackage(int orderId);
     }
 }

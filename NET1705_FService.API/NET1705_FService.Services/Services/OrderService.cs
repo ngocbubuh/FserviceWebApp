@@ -46,6 +46,10 @@ namespace NET1705_FService.Services.Services
             {
                 return new ResponseModel { Status="Error", Message="Package was Not found."};
             }
+            if (!await _apartmentPackageRepo.CheckApartmentPackagesByApartmentAndPackage(orderModel.ApartmentId, orderModel.PackageId))
+            {
+                return new ResponseModel { Status = "Error", Message = "Package is using." };
+            }
             var result = await _repo.AddOrderAsync(orderModel);
             if (result == null)
             {

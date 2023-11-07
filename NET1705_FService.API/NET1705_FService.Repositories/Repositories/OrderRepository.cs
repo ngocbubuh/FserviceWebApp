@@ -76,22 +76,45 @@ namespace NET1705_FService.Repositories.Repositories
                 EndDate = endDate,
                 PackageStatus = "Disable",
             };
-            int apmPackageId = await _apartmentPackageRepo.AddApartmentPackageAsync(apartmentPackage);
+
             // add apartment package service
+            List<ApartmentPackageService> listServices = new List<ApartmentPackageService>();
             var packageDetails = package.PackageDetails;
             foreach (var service in packageDetails)
             {
                 ApartmentPackageService apmService = new ApartmentPackageService
                 {
-                    ApartmentPackageId = apmPackageId,
                     ServiceId = service.ServiceId,
                     Quantity = service.Quantity,
                     UsedQuantity = 0,
                     RemainQuantity = service.Quantity,
                 };
-                await _apartPackageServiceRepo.AddApartPackageServiceAsync(apmService);
+                listServices.Add(apmService);
+            }
+            if (listServices.Any())
+            {
+                apartmentPackage.ApartmentPackageServices = listServices;
             }
 
+            int apmPackageId = await _apartmentPackageRepo.AddApartmentPackageAsync(apartmentPackage);
+            //// add apartment package service
+            //var packageDetails = package.PackageDetails;
+            //foreach (var service in packageDetails)
+            //{
+            //    ApartmentPackageService apmService = new ApartmentPackageService
+            //    {
+            //        ApartmentPackageId = apmPackageId,
+            //        ServiceId = service.ServiceId,
+            //        Quantity = service.Quantity,
+            //        UsedQuantity = 0,
+            //        RemainQuantity = service.Quantity,
+            //    };
+            //    await _apartPackageServiceRepo.AddApartPackageServiceAsync(apmService);
+            //}
+            if (apmPackageId == 0)
+            {
+                return null;
+            }
             return newOrder;
         }
 

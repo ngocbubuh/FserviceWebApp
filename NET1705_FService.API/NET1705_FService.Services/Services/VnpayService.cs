@@ -82,13 +82,14 @@ namespace NET1705_FService.Services.Services
 
         public async Task<bool> PaymentExecute(VnpayModel vnpayModel)
         {
-            if (!vnpayModel.vnp_ResponseCode.Equals("00") && !vnpayModel.vnp_TransactionStatus.Equals("00"))
-            {
-                return false;
-            }
             var order = await _orderRepository.GetOrderByIdAsync(int.Parse(vnpayModel.vnp_TxnRef));
             if (order == null)
             {
+                return false;
+            }
+            if (!vnpayModel.vnp_ResponseCode.Equals("00") && !vnpayModel.vnp_TransactionStatus.Equals("00"))
+            {
+                bool checkDel = await _apartmentPackageRepo.DeleteApartmentPackage(order.Id);
                 return false;
             }
             DateTime payDate = DateTime.ParseExact(vnpayModel.vnp_PayDate, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);

@@ -21,7 +21,7 @@ public partial class ApartmentPackage
 
     public virtual Apartment Apartment { get; set; }
 
-    public virtual ICollection<ApartmentPackageService> ApartmentPackageServices { get; } = new List<ApartmentPackageService>();
+    public virtual ICollection<ApartmentPackageService> ApartmentPackageServices { get; set; } = new List<ApartmentPackageService>();
 
     public virtual Order Order { get; set; }
 
