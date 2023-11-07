@@ -144,15 +144,19 @@ namespace NET1705_FService.Repositories.Repositories
             };
         }
 
-        public async Task<PagedList<OrderDetailsViewModel>> GetAllTaskForStaff(PaginationParameter paginationParameter, string staffId)
+        public async Task<PagedList<OrderDetailsViewModel>> GetAllTaskForStaff(PaginationParameter paginationParameter, string username)
         {
+            var staff = await _accountRepo.GetAccountByUserName(username);
+            if (staff == null)
+            {
+                return null;
+            }
             var orderDetails = await _context.OrderDetails
-                .Where(o => o.StaffId == staffId)
+                .Where(o => o.StaffId == staff.Id)
                 .Include(o => o.Service)
                 .OrderByDescending(o => o.CreatedDate)
                 .ProjectTo<OrderDetailsViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
-
 
             //var tasks = _mapper.Map<OrderDetailsViewModel>(orderDetails);
 
