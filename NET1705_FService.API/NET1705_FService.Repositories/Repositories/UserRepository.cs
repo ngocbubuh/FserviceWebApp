@@ -61,6 +61,13 @@ namespace NET1705_FService.Repositories.Repositories
             return acc;
         }
 
+        //public async Task<AccountsModel> GetAccountAsync(string id)
+        //{
+        //    var acc = await _context.Accounts
+        //        .FirstOrDefaultAsync(p => p.Id == id && p.Status == true);
+        //    return _mapper.Map<AccountsModel>(acc);
+        //}
+
         public async Task<AccountsModel> GetAccountByUsernameAsync(string UserName)
         {
             var acc = await _context.Accounts
