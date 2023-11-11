@@ -46,6 +46,7 @@ namespace NET1705_FService.API.Controllers
         }
 
         [HttpGet("{orderDetailId}")]
+        [Authorize]
         public async Task<IActionResult> GetOrderDetailById(int orderDetailId)
         {
             try

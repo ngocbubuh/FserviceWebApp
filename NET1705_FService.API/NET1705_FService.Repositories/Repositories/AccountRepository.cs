@@ -218,7 +218,7 @@ namespace FServiceAPI.Repositories
                 return new AuthenticationResponseModel
                 {
                     Status = false,
-                    Message = "Một trong các token không hợp lệ!"
+                    Message = "Invalid access token or refresh token!"
                 };
             }
 
@@ -231,7 +231,7 @@ namespace FServiceAPI.Repositories
                 return new AuthenticationResponseModel
                 {
                     Status = false,
-                    Message = "Một trong các token không hợp lệ!"
+                    Message = "Invalid access token or refresh token!"
                 };
             }
 
@@ -244,7 +244,7 @@ namespace FServiceAPI.Repositories
             return new AuthenticationResponseModel
             {
                 Status = true,
-                Message = "Làm mới token thành công!",
+                Message = "Refresh Token successfully!",
                 JwtToken = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
                 Expired = newAccessToken.ValidTo,
                 JwtRefreshToken = newRefreshToken
