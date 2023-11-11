@@ -1,6 +1,7 @@
 ﻿using NET1705_FService.Repositories.Data;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace NET1705_FService.Repositories.Models;
 
@@ -32,9 +33,15 @@ public partial class OrderDetail
 
     public DateTime? CompleteDate { get; set; }
 
+    public string? ReportImage { get; set; }
+
     public bool? IsConfirm { get; set; }
 
+    [MaxLength(150, ErrorMessage = "Feedback is maximum 150 characters")]
     public string? Feedback { get; set; }
+
+    [Range(1, 5, ErrorMessage = "Rating must be between 1 and 5")]
+    public int? Rating { get; set; }
 
     //public bool? IsExtraOrder { get; set; }
 
@@ -53,6 +60,16 @@ public class OrderDetailModel
 {
     public int Id { get; set; }
 
+    public string? ReportImage { get; set; }
+
     public TaskStatusModel Status { get; set; }
+
+    public bool? IsConfirm { get; set; }
+
+    [MaxLength(150, ErrorMessage = "Feedback is maximum 150 characters")]
+    public string? Feedback { get; set; }
+
+    [Range(1, 5, ErrorMessage = "Rating must be between 1 and 5")]
+    public int? Rating { get; set; }
 
 }

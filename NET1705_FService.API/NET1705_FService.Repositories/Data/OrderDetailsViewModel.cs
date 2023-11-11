@@ -35,9 +35,13 @@ namespace NET1705_FService.Repositories.Data
 
         public DateTime? CompleteDate { get; set; }
 
+        public string? ReportImage { get; set;  }
+
         public bool? IsConfirm { get; set; }
 
         public string? Feedback { get; set; }
+
+        public int? Rating { get; set; }
 
         public double? Amount { get; set; }
 

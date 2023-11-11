@@ -81,5 +81,11 @@ namespace NET1705_FService.Services.Services
             var result = await _repo.UpdateTaskAsync(id, orderDetailModel);
             return result;
         }
+
+        public async Task<int> ConfirmStaffWork(int id, OrderDetailModel orderDetailModel)
+        {
+            var result = await _repo.ConfirmStaffWork(id, orderDetailModel);
+            return result;
+        }
     }
 }

@@ -39,7 +39,7 @@ namespace NET1705_FService.Repositories.Repositories
 
         public async Task<OrderDetailsViewModel> GetOrderDetailByIdAsync(int id)
         {
-            var orderDetails = _context.OrderDetails.FirstOrDefault(o => o.Id == id);
+            var orderDetails = _context.OrderDetails.Include(o => o.Service).FirstOrDefault(o => o.Id == id);
             var orderDetailsView = _mapper.Map<OrderDetailsViewModel>(orderDetails);
             return orderDetailsView;
         }
@@ -185,6 +185,39 @@ namespace NET1705_FService.Repositories.Repositories
                     {
                         updateOrder.Status = orderDetailModel.Status.ToString();
                         updateOrder.CompleteDate = DateTime.Now;
+                        // update image
+                        if (!string.IsNullOrEmpty(updateOrder.ReportImage))
+                        {
+                            updateOrder.ReportImage = orderDetailModel.ReportImage;
+                        }
+                    }
+                    _context.OrderDetails!.Update(updateOrder);
+                    await _context.SaveChangesAsync();
+                }
+                return updateOrder.Id;
+            }
+            return 0;
+        }
+
+        public async Task<int> ConfirmStaffWork(int id, OrderDetailModel orderDetailModel)
+        {
+            if (id == orderDetailModel.Id)
+            {
+                var updateOrder = _context.OrderDetails.FirstOrDefault(o => o.Id == id);
+                if (updateOrder != null)
+                {
+                    // user confirm work when staff make completed
+                    if (updateOrder.Status.Trim() == TaskStatusModel.Completed.ToString())
+                    {
+                        if (orderDetailModel.IsConfirm != null)
+                        {
+                            updateOrder.IsConfirm = orderDetailModel.IsConfirm;
+                        }
+                        if (!string.IsNullOrEmpty(updateOrder.Feedback))
+                        {
+                            updateOrder.Feedback = orderDetailModel.Feedback;
+                        }
+                        updateOrder.Rating = orderDetailModel.Rating;
                     }
                     _context.OrderDetails!.Update(updateOrder);
                     await _context.SaveChangesAsync();
@@ -260,9 +293,9 @@ namespace NET1705_FService.Repositories.Repositories
                     .Select(group => group.StaffId)
                     .FirstOrDefault();
 
-                    // Retrieve the staff member with the minimum jobs using their ID
-                    workStaff = staffs.FirstOrDefault(staff => staff.Id == staffIdWithMinRecords);
-                }
+                // Retrieve the staff member with the minimum jobs using their ID
+                workStaff = staffs.FirstOrDefault(staff => staff.Id == staffIdWithMinRecords);
+            }
             return workStaff;
         }
 

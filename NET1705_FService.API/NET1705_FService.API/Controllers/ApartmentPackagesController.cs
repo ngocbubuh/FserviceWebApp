@@ -63,13 +63,13 @@ namespace NET1705_FService.API.Controllers
             }
         }
 
-        [HttpGet("apartment{id}")]
+        [HttpGet("apartment/{apartmentId}")]
         [Authorize(Roles = "ADMIN, USER")]
-        public async Task<IActionResult> GetApartmentPackagesByApartmentId([FromQuery] PaginationParameter paginationParameter, int id)
+        public async Task<IActionResult> GetApartmentPackagesByApartmentId([FromQuery] PaginationParameter paginationParameter, int apartmentId)
         {
             try
             {
-                var apartmentPackages = await _apartmentPackageService.GetApartmentPackagesByApartmentId(paginationParameter, id);
+                var apartmentPackages = await _apartmentPackageService.GetApartmentPackagesByApartmentId(paginationParameter, apartmentId);
                 if (!apartmentPackages.Any())
                 {
                     return NotFound();

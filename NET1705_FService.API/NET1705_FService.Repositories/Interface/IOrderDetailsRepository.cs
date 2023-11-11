@@ -19,5 +19,7 @@ namespace NET1705_FService.Repositories.Interface
         public Task<int> UpdateTaskAsync(int id, OrderDetailModel orderDetailModel);
 
         public Task<PagedList<OrderDetailsViewModel>> GetOrderDetailByApartmentPackageId(PaginationParameter paginationParameter, int apartmentPackageId);
+
+        public Task<int> ConfirmStaffWork(int id, OrderDetailModel orderDetailModel);
     }
 }
