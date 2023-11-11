@@ -53,7 +53,7 @@ namespace NET1715_FService.Service.Services
             return new AuthenticationResponseModel
             {
                 Status = false,
-                Message = "Username does not existed!",
+                Message = "Tài khoản không tồn tại!",
                 JwtToken = null,
                 Expired = null
             };

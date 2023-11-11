@@ -40,6 +40,12 @@ namespace NET1705_FService.Repositories.Repositories
                 //    Avatar = deleteAcc.Avatar,
                 //    Status = false
                 //});
+                if (!deleteAcc.EmailConfirmed)
+                {
+                    _context.Accounts.Remove(deleteAcc);
+                    await _context.SaveChangesAsync();
+                    return deleteAcc.Id;
+                }
                 deleteAcc.Status = false;
                 _context.Accounts.Update(deleteAcc);
                 await _context.SaveChangesAsync();

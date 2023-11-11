@@ -56,7 +56,7 @@ namespace FServiceAPI.Repositories
                 return new ResponseModel
                 {
                     Status = "Error",
-                    Message = "Email Verification Failed, please try again!"
+                    Message = "Email Verification Failed!"
                 };
             }
             return new ResponseModel
@@ -89,10 +89,10 @@ namespace FServiceAPI.Repositories
         public async Task<AuthenticationResponseModel> SignInAsync(SignInModel model)
         {
             var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+            var account = await accountManager.FindByNameAsync(model.Email);
 
             if (result.Succeeded) 
             {
-                var account = await accountManager.FindByNameAsync(model.Email);
                 var roles = await accountManager.GetRolesAsync(account);
 
                 var authClaims = new List<Claim>
@@ -132,24 +132,26 @@ namespace FServiceAPI.Repositories
                 return new AuthenticationResponseModel 
                 { 
                     Status = true,
-                    Message = "Login successfully!",
+                    Message = "Đăng nhập thành công!",
                     JwtToken = new JwtSecurityTokenHandler().WriteToken(token),
                     Expired = token.ValidTo,
                     JwtRefreshToken = refreshToken,
                 };
             } else if (result.IsNotAllowed)
             {
+                var token = accountManager.GenerateEmailConfirmationTokenAsync(account);
                 return new AuthenticationResponseModel
                 {
                     Status = false,
-                    Message = "Please confirm your email before login!",
+                    Message = "Email xác nhận đã được gửi đến tài khoản email bạn đã đăng ký, vui lòng xác thực tài khoản để đăng nhập!",
+                    VerifyEmailToken = token
                 };
             } else
             {
                 return new AuthenticationResponseModel
                 {
                     Status = false,
-                    Message = "Login failed! Incorrect username or password!",
+                    Message = "Sai tài khoản hoặc mật khẩu!",
                 };
             }
         }
@@ -193,7 +195,7 @@ namespace FServiceAPI.Repositories
             var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
             var jwtSecurityToken = securityToken as JwtSecurityToken;
             if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-                throw new SecurityTokenException("Invalid token");
+                throw new SecurityTokenException("Token không hợp lệ!");
             return principal;
         }
         public async Task<AuthenticationResponseModel> RefreshToken(TokenModel tokenModel)
@@ -203,7 +205,7 @@ namespace FServiceAPI.Repositories
                 return new AuthenticationResponseModel
                 {
                     Status = false,
-                    Message = "Invalid request!"
+                    Message = "Yêu cầu không hợp lệ!"
                 };
             }
 
@@ -216,7 +218,7 @@ namespace FServiceAPI.Repositories
                 return new AuthenticationResponseModel
                 {
                     Status = false,
-                    Message = "Invalid access token or refresh token"
+                    Message = "Một trong các token không hợp lệ!"
                 };
             }
 
@@ -229,7 +231,7 @@ namespace FServiceAPI.Repositories
                 return new AuthenticationResponseModel
                 {
                     Status = false,
-                    Message = "Invalid access token or refresh token"
+                    Message = "Một trong các token không hợp lệ!"
                 };
             }
 
@@ -242,7 +244,7 @@ namespace FServiceAPI.Repositories
             return new AuthenticationResponseModel
             {
                 Status = true,
-                Message = "Refresh Token successfully!",
+                Message = "Làm mới token thành công!",
                 JwtToken = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
                 Expired = newAccessToken.ValidTo,
                 JwtRefreshToken = newRefreshToken
@@ -320,7 +322,7 @@ namespace FServiceAPI.Repositories
                         await accountManager.AddToRoleAsync(user, RoleModel.USER.ToString());
                     }
                     var token = accountManager.GenerateEmailConfirmationTokenAsync(user);
-                    return new ResponseModel { Status = "Success", Message = "Register Successfully! Please check your email to confirm your account!", ConfirmEmailToken = token };
+                    return new ResponseModel { Status = "Success", Message = "Đăng ký tài khoản thành công, vui lòng kiểm tra email để xác thực tài khoản!", ConfirmEmailToken = token };
                 }
                 //If failed
                 foreach (var error in result.Errors)
@@ -329,7 +331,7 @@ namespace FServiceAPI.Repositories
                 }
                 return new ResponseModel { Status = "Error", Message = errorMessage };
             }
-            return new ResponseModel { Status = "Error", Message = "Username is already exist" };
+            return new ResponseModel { Status = "Error", Message = "Tài khoản đã tồn tại!" };
 
         }
 
@@ -368,7 +370,7 @@ namespace FServiceAPI.Repositories
                     var confirm = await accountManager.ConfirmEmailAsync(user, token.Result);
                     if (confirm.Succeeded)
                     {
-                        return new ResponseModel { Status = "Success", Message = $"Register {role} Successfully!" };
+                        return new ResponseModel { Status = "Success", Message = $"Đăng ký tài khoản {role} Thành công!" };
                     }
 
                     foreach (var error in confirm.Errors)
@@ -377,9 +379,9 @@ namespace FServiceAPI.Repositories
                     }
                     return new ResponseModel { Status = "Error", Message = errorMessage };
                 }
-                return new ResponseModel { Status = "Error", Message = $"Cannot create account in database! Role {role} not support or you have missing a typo!" };
+                return new ResponseModel { Status = "Error", Message = $"Đăng ký thất bại, role {role} không hỗ trợ bởi hệ thống!" };
             }
-            return new ResponseModel { Status = "Error", Message = "Username is already exist" };
+            return new ResponseModel { Status = "Error", Message = "Tài khoản đã tồn tại!" };
         }
 
         public async Task<ResponseModel> ChangePassword(ChangePasswordModel model)
@@ -390,7 +392,7 @@ namespace FServiceAPI.Repositories
                 return new ResponseModel
                 {
                     Status = "Error",
-                    Message = "Account not found!"
+                    Message = "Không tìm thấy tài khoản!"
                 };
             }
             var result = await accountManager.ChangePasswordAsync(account, model.CurrentPassword, model.NewPassword);
@@ -409,7 +411,7 @@ namespace FServiceAPI.Repositories
                     Message = errorMessage
                 };
             }
-            return new ResponseModel { Status = "Success", Message = "Change Password Successfully!" };
+            return new ResponseModel { Status = "Success", Message = "Đổi mật khẩu thành công!" };
         }
 
 

@@ -140,6 +140,20 @@ namespace NET1715_FService.API.Controllers
                     var result = await accountService.SignInAsync(model);
                     if (result.Status.Equals(false))
                     {
+                        if(result.Message.Equals("Email xác nhận đã được gửi đến tài khoản email bạn đã đăng ký, vui lòng xác thực tài khoản để đăng nhập!"))
+                        {
+                            var token = result.VerifyEmailToken;
+                            var confirmationEmail = Url.Action(nameof(ConfirmEmail), "Account", new { token = token.Result, email = model.Email }, Request.Scheme);
+                            result.VerifyEmailToken = null;
+                            var messageRequest = new MailRequest
+                            {
+                                ToEmail = model.Email,
+                                Subject = "FServices Confirmation Email",
+                                Body = SendConfirmEmail.EnailContent(model.Email, confirmationEmail)
+                            };
+                            //Send Mail
+                            await mailService.SendEmailAsync(messageRequest);
+                        }
                         return Unauthorized(result);
                     }
                     return Ok(result);
@@ -193,7 +207,7 @@ namespace NET1715_FService.API.Controllers
         {
             var extractedEmail = GetCurrentEmail();
 
-            if (extractedEmail == null) return NotFound("Token is expired.");
+            if (extractedEmail == null) return NotFound("Token is expired!");
 
             var result = await _userService.GetAccountByUsernameAsync(extractedEmail);
 
