@@ -9,6 +9,8 @@ namespace NET1705_FService.Repositories.Data
 {
     public class AccountsModel
     {
+        public string? Id { get; set; }
+
         [Required(ErrorMessage = "Name is required!")]
         [Display(Name = "Name")]
         public string Name { get; set; }

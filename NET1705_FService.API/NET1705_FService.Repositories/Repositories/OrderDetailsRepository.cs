@@ -104,6 +104,10 @@ namespace NET1705_FService.Repositories.Repositories
             //----------------
 
             var staffWork = await AssignStaff();
+            if (staffWork == null)
+            {
+                return new ResponseModel { Status = "Error", Message = "Staffs is not avalable." };
+            }
             OrderDetail orderDetail = _mapper.Map<OrderDetail>(usingPackage);
             orderDetail.OrderId = apartmentPackage.OrderId;
             orderDetail.Quantity = 1;
@@ -173,11 +177,11 @@ namespace NET1705_FService.Repositories.Repositories
                 var updateOrder = _context.OrderDetails.FirstOrDefault(o => o.Id == id);
                 if (updateOrder != null)
                 {
-                    if (updateOrder.Status.Trim().Equals("Pending"))
+                    if (updateOrder.Status.Trim() == TaskStatusModel.Pending.ToString())
                     {
                         updateOrder.Status = orderDetailModel.Status.ToString();
                     }
-                    if (updateOrder.Status.Trim().Equals("Working"))
+                    else if (updateOrder.Status.Trim() == TaskStatusModel.Working.ToString())
                     {
                         updateOrder.Status = orderDetailModel.Status.ToString();
                         updateOrder.CompleteDate = DateTime.Now;
@@ -190,7 +194,7 @@ namespace NET1705_FService.Repositories.Repositories
             return 0;
         }
 
-        public async Task<PagedList<OrderDetailsViewModel>> GetOrderDetailByApartmentPackageId(PaginationParameter paginationParameter, 
+        public async Task<PagedList<OrderDetailsViewModel>> GetOrderDetailByApartmentPackageId(PaginationParameter paginationParameter,
             int apartmentPackageId)
         {
             var orderDetails = await _context.OrderDetails
@@ -230,21 +234,35 @@ namespace NET1705_FService.Repositories.Repositories
             // tat ca staff da co job trong ngay
             if (workStaff == null)
             {
-                var staffIdWithMinRecords = _context.OrderDetails
-                    .Where(o => o.CreatedDate.Date == DateTime.Now.Date)
-                    .GroupBy(o => o.StaffId)
-                    .Select(group => new
+                //var staffIdWithMinRecords = _context.OrderDetails
+                //    .Where(o => o.CreatedDate.Date == DateTime.Now.Date)
+                //    .GroupBy(o => o.StaffId)
+                //    .Select(group => new
+                //    {
+                //        StaffId = group.Key,
+                //        RecordCount = group.Count()
+                //    })
+                //    .OrderBy(group => group.RecordCount)
+                //    .ThenBy(group => group.StaffId)
+                //    .Select(group => group.StaffId)
+                //    .FirstOrDefault();
+
+                //workStaff = await _context.Accounts.FindAsync(staffIdWithMinRecords);
+                var staffIdWithMinRecords = staffs
+                    .Select(staff => new
                     {
-                        StaffId = group.Key,
-                        RecordCount = group.Count()
+                        StaffId = staff.Id,
+                        RecordCount = _context.OrderDetails
+                            .Count(o => o.StaffId == staff.Id && o.CreatedDate.Date == DateTime.Now.Date)
                     })
                     .OrderBy(group => group.RecordCount)
                     .ThenBy(group => group.StaffId)
                     .Select(group => group.StaffId)
                     .FirstOrDefault();
 
-                workStaff = await _context.Accounts.FindAsync(staffIdWithMinRecords);
-            }
+                    // Retrieve the staff member with the minimum jobs using their ID
+                    workStaff = staffs.FirstOrDefault(staff => staff.Id == staffIdWithMinRecords);
+                }
             return workStaff;
         }
 
@@ -265,6 +283,6 @@ namespace NET1705_FService.Repositories.Repositories
             }
         }
 
-        
+
     }
 }

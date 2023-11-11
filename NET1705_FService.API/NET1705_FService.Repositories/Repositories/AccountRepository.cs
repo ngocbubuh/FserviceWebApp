@@ -83,7 +83,7 @@ namespace FServiceAPI.Repositories
 
             var staffAccounts = await accountManager.GetUsersInRoleAsync("staff");
 
-            return staffAccounts.ToList();
+            return staffAccounts.Where(a => a.Status == true).ToList();
         }
 
         public async Task<AuthenticationResponseModel> SignInAsync(SignInModel model)
