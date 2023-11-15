@@ -165,12 +165,23 @@ namespace NET1705_FService.Repositories.Repositories
             {
                 return null;
             }
-            var orders = await _context.Orders.Where(o => o.UserName == userName)
-                .OrderByDescending(o => o.OrderDate)
+            var orders = _context.Orders.Where(o => o.UserName == userName).AsQueryable();
+            if (!string.IsNullOrEmpty(paginationParameter.Sort))
+            {
+                if (paginationParameter.Sort == "success")
+                {
+                    orders = orders.Where(o => o.PaymentDate != null);
+                } 
+                else if (paginationParameter.Sort == "error")
+                {
+                    orders = orders.Where(o => o.PaymentDate == null);
+                }
+            }
+            var allOrders = await orders.OrderByDescending(o => o.OrderDate)
                 .ProjectTo<OrderViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            return PagedList<OrderViewModel>.ToPagedList(orders,
+            return PagedList<OrderViewModel>.ToPagedList(allOrders,
                 paginationParameter.PageNumber,
                 paginationParameter.PageSize);
         }
