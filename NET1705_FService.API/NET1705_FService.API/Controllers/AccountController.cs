@@ -173,7 +173,7 @@ namespace NET1715_FService.API.Controllers
                 var result = await accountService.RefreshToken(model);
                 if (result.Status.Equals(false))
                 {
-                    return Unauthorized(result);
+                    return BadRequest(result);
                 }
                 return Ok(result);
             } catch 

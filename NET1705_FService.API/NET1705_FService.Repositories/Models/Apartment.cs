@@ -17,6 +17,8 @@ public partial class Apartment
 
     public virtual ICollection<ApartmentPackage> ApartmentPackages { get; } = new List<ApartmentPackage>();
 
+    public virtual ICollection<Order> Orders { get; } = new List<Order>();
+
     public virtual Accounts Account { get; set; }
 
     public virtual Floor Floor { get; set; }

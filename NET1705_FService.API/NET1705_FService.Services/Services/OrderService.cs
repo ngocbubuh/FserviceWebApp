@@ -91,9 +91,15 @@ namespace NET1705_FService.Services.Services
             return new ResponseModel { Status = "Success", Message = "Create order successfully", PaymentUrl = paymentURL };
         }
 
-        public async Task<PagedList<Order>> GetOrdersByUserName(PaginationParameter paginationParameter,string userName)
+        //public async Task<PagedList<Order>> GetOrdersByUserName(PaginationParameter paginationParameter,string userName)
+        //{
+        //    var orders = await _repo.GetOrderByUserNameAsync(paginationParameter ,userName);
+        //    return orders;
+        //}
+
+        public async Task<PagedList<OrderViewModel>> GetOrdersByUserName(PaginationParameter paginationParameter, string userName)
         {
-            var orders = await _repo.GetOrderByUserNameAsync(paginationParameter ,userName);
+            var orders = await _repo.GetOrderByUserNameAsync(paginationParameter, userName);
             return orders;
         }
 

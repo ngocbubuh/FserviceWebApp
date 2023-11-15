@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using NET1705_FService.Repositories.Data;
 using NET1705_FService.Repositories.Helper;
 using NET1705_FService.Repositories.Interface;
 using NET1705_FService.Repositories.Models;
@@ -138,20 +140,37 @@ namespace NET1705_FService.Repositories.Repositories
             var apartmentService = apartmentPackage.ApartmentPackageServices.SingleOrDefault(a => a.ServiceId == extraOrder.ServiceId);
             apartmentService.IsExtra = true;
             apartmentService.CountExtra = 0;
-            await _apartPackageServiceRepo.UpdateApartPackageServiceAsync(apartmentService.Id ,apartmentService);
+            await _apartPackageServiceRepo.UpdateApartPackageServiceAsync(apartmentService.Id, apartmentService);
 
             return extraOrder;
         }
 
-        public async Task<PagedList<Order>> GetOrderByUserNameAsync(PaginationParameter paginationParameter, string userName)
+        //public async Task<PagedList<Order>> GetOrderByUserNameAsync(PaginationParameter paginationParameter, string userName)
+        //{
+        //    if (_context == null)
+        //    {
+        //        return null;
+        //    }
+        //    var orders = await _context.Orders.Where(o => o.UserName == userName)
+        //        .OrderByDescending(o => o.OrderDate).ToListAsync();
+
+        //    return PagedList<Order>.ToPagedList(orders,
+        //        paginationParameter.PageNumber,
+        //        paginationParameter.PageSize);
+        //}
+
+        public async Task<PagedList<OrderViewModel>> GetOrderByUserNameAsync(PaginationParameter paginationParameter, string userName)
         {
             if (_context == null)
             {
                 return null;
             }
-            var orders = await _context.Orders.Where(o => o.UserName == userName).OrderByDescending(o => o.OrderDate).ToListAsync();
+            var orders = await _context.Orders.Where(o => o.UserName == userName)
+                .OrderByDescending(o => o.OrderDate)
+                .ProjectTo<OrderViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
 
-            return PagedList<Order>.ToPagedList(orders,
+            return PagedList<OrderViewModel>.ToPagedList(orders,
                 paginationParameter.PageNumber,
                 paginationParameter.PageSize);
         }
@@ -162,7 +181,7 @@ namespace NET1705_FService.Repositories.Repositories
             {
                 return null;
             }
-            var orders = _context.Orders.AsQueryable();
+            var orders = _context.Orders.Include(o => o.Package).AsQueryable();
             if (!string.IsNullOrEmpty(paginationParameter.Search))
             {
                 orders = orders.Where(o => o.UserName.Contains(paginationParameter.Search));

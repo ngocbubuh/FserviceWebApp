@@ -14,7 +14,8 @@ namespace NET1705_FService.Repositories.Interface
 
         public Task<Order> AddExtraOrderAsync(OrderModel extraModel);
 
-        public Task<PagedList<Order>> GetOrderByUserNameAsync(PaginationParameter paginationParameter, string userName);
+        //public Task<PagedList<Order>> GetOrderByUserNameAsync(PaginationParameter paginationParameter, string userName);
+        public Task<PagedList<OrderViewModel>> GetOrderByUserNameAsync(PaginationParameter paginationParameter, string userName);
 
         public Task<PagedList<Order>> GetAllOrdersAsync(PaginationParameter paginationParameter);
 

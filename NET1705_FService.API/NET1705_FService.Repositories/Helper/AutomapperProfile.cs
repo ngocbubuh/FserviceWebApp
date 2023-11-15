@@ -19,6 +19,7 @@ namespace NET1705_FService.Repositories.Helper
             CreateMap<ApartmentType, ApartmentTypeModel>().ReverseMap();
             CreateMap<AccountsModel, Accounts>().ReverseMap();
             CreateMap<ApartmentModel, Apartment>().ReverseMap();
+            CreateMap<Order, OrderViewModel>();
         }
     }
 }

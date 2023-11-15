@@ -31,5 +31,7 @@ public partial class Package
 
     public virtual ICollection<PackagePrice> PackagePrices { get; set; } = new List<PackagePrice>();
 
+    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+
     //public virtual ApartmentType? Type { get; set; }
 }

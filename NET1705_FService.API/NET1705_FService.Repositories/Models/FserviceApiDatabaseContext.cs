@@ -190,6 +190,14 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
             entity.Property(e => e.StartDate).HasColumnType("datetime");
             entity.Property(e => e.TransactionNo).HasMaxLength(15);
 
+            entity.HasOne(d => d.Package).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.PackageId)
+                .HasConstraintName("FK_Order_Package");
+
+            entity.HasOne(d => d.Apartment).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.ApartmentId)
+                .HasConstraintName("FK_Order_Apartment");
+
             //entity.HasOne(d => d.ApartmentPackage).WithMany(p => p.Orders)
             //    .HasForeignKey(d => d.ApartmentPackageId)
             //    .HasConstraintName("FK__Order__Apartment__60A75C0F");

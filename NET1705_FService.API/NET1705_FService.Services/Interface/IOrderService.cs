@@ -15,7 +15,8 @@ namespace NET1705_FService.Services.Interface
         public Task<ResponseModel> AddOrderAsync(OrderModel order, HttpContext httpContext);
         public Task<ResponseModel> AddExtraOrderAsync(OrderModel extraModel, HttpContext httpContext);
 
-        public Task<PagedList<Order>> GetOrdersByUserName(PaginationParameter paginationParameter, string userName);
+        //public Task<PagedList<Order>> GetOrdersByUserName(PaginationParameter paginationParameter, string userName);
+        public Task<PagedList<OrderViewModel>> GetOrdersByUserName(PaginationParameter paginationParameter, string userName);
 
         public Task<PagedList<Order>> GetAllOrdersAsync(PaginationParameter paginationParameter);
 
