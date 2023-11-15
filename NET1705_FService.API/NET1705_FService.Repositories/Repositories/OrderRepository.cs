@@ -149,7 +149,7 @@ namespace NET1705_FService.Repositories.Repositories
             {
                 return null;
             }
-            var orders = await _context.Orders.Where(o => o.UserName.Equals(userName)).ToListAsync();
+            var orders = await _context.Orders.Where(o => o.UserName == userName).OrderByDescending(o => o.OrderDate).ToListAsync();
 
             return PagedList<Order>.ToPagedList(orders,
                 paginationParameter.PageNumber,
