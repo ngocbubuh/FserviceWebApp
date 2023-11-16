@@ -213,7 +213,7 @@ namespace NET1705_FService.Repositories.Repositories
                         {
                             updateOrder.IsConfirm = orderDetailModel.IsConfirm;
                         }
-                        if (!string.IsNullOrEmpty(updateOrder.Feedback))
+                        if (!string.IsNullOrEmpty(orderDetailModel.Feedback))
                         {
                             updateOrder.Feedback = orderDetailModel.Feedback;
                         }
