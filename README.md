@@ -9,13 +9,13 @@
 #### Team members:
 
 - Đặng Phan Gia Đức - SE171092 (Leader, Back-end, Front-end Dev, UI Design)
+- Phạm Ngọc Bảo - SE171066 (Back-end dev)
 - Nguyễn Bình Phương Trâm - SE171076 (Front-end Dev)
 - Dương Tôn Bảo - SE171065 (Front-end Dev)
-- Phạm Ngọc Bảo - SE171066 (Back-end dev)
 
 #### Introduction:
 
-Fservice is a platform that allows residents of Vinhomes Grand Park (Thu Duc, HCMC) to purchase pre-designed apartment services and make online payments through the integrated VNPAY on the website. The packages come with usage periods and a quantity of services per cycle, and additional individual services can be purchased when the allocated ones are exhausted.
+FService is a platform allowing Vinhomes Grand Park residents (Thu Duc, HCMC) to purchase pre-designed apartment services and make online payments through the integrated VNPAY on the website. The packages come with usage periods and a number of services per cycle, and additional individual services can be purchased when the allocated ones are exhausted.
 
 #### Technologies:
 
@@ -31,6 +31,6 @@ Fservice is a platform that allows residents of Vinhomes Grand Park (Thu Duc, HC
 - Back-end: https://github.com/giaducdang03/FserviceWebApp
 - Figma: [FService UI](https://www.figma.com/file/CleRjdHnXB8jfVlJiRP3lh/UI_StudentMemberShipCart?type=design&node-id=764%3A647&mode=design&t=0bGqF89ZE1R0Esnb-1)
 
-##### Content me via: giaducdang@gmail.com
+##### Contact me via: 1005hanhphuc@gmail.com
 
 ##### Copyright &#169; 2023 FService
