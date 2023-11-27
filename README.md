@@ -1,6 +1,6 @@
 ## Project SWP391 - Student House Membership
 
-### Website: FService[FService](https://fservices.vercel.app)
+### Website: [FService](https://fservices.vercel.app)
 
 #### Instructor: Lâm Hữu Khánh Phương (FU-HCM)
 
@@ -27,7 +27,7 @@ Fservice is a platform that allows residents of Vinhomes Grand Park (Thu Duc, HC
 - Front-end: https://github.com/duongbao0803/FService
 - Front-end Admin: https://github.com/giaducdang03/FServiceWebAdmin
 - Back-end: https://github.com/giaducdang03/FserviceWebApp
-- Figma: FService UI[FService UI](https://www.figma.com/file/CleRjdHnXB8jfVlJiRP3lh/UI_StudentMemberShipCart?type=design&node-id=764%3A647&mode=design&t=0bGqF89ZE1R0Esnb-1)
+- Figma: [FService UI](https://www.figma.com/file/CleRjdHnXB8jfVlJiRP3lh/UI_StudentMemberShipCart?type=design&node-id=764%3A647&mode=design&t=0bGqF89ZE1R0Esnb-1)
 
 ##### Content me via: giaducdang@gmail.com
 
