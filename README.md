@@ -1,3 +1,5 @@
+[![FServices Applying CI](https://github.com/giaducdang03/FserviceWebApp/actions/workflows/CI-CD.yml/badge.svg?branch=main)](https://github.com/giaducdang03/FserviceWebApp/actions/workflows/CI-CD.yml)
+
 ## Project SWP391 - Student House Membership
 
 ### Website: [FService](https://fservices.vercel.app)
