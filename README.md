@@ -24,6 +24,10 @@ FService is a platform allowing Vinhomes Grand Park residents (Thu Duc, HCMC) to
 - Deployment: Azure App Service (Back-end), Vercel (Front-end).
 - Other: GitHub, Jira, Figma, Swaager, JWT Token.
 
+#### Deployment:
+- Back-end: https://fservices.azurewebsites.net/swagger/index.html
+- Front-end: https://fservices.vercel.app/
+
 #### References:
 
 - Front-end: https://github.com/duongbao0803/FService
