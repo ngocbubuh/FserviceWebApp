@@ -4,12 +4,16 @@
       "type": "mssql",
       "connectionId": "AZURE_SQL_CONNECTIONSTRING"
     },
-    "apis1": {
-      "type": "apis"
-    },
     "mssql2": {
       "type": "mssql",
       "connectionId": "FSERVICES"
+    },
+    "apis1": {
+      "type": "apis"
+    },
+    "mssql3": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:AZURE_SQL_CONNECTIONSTRING"
     }
   }
 }
