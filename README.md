@@ -22,7 +22,7 @@ Fservice is a platform that allows residents of Vinhomes Grand Park (Thu Duc, HC
 - Front-end: ReactJS, ViteJS.
 - Back-end: ASP.NET Core Web API, MS SQL, Azure SQL.
 - Deployment: Azure App Service (Back-end), Vercel (Front-end).
-- Other: GitHub, Jira, Figma, Swaager, JWT Token.
+- Other: GitHub, Jira, Figma, Swagger, JWT Token.
 
 #### Deployment:
 - Back-end: https://fservices.azurewebsites.net/swagger/index.html
