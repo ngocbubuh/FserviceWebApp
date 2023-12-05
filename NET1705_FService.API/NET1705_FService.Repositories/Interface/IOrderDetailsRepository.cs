@@ -21,5 +21,7 @@ namespace NET1705_FService.Repositories.Interface
         public Task<PagedList<OrderDetailsViewModel>> GetOrderDetailByApartmentPackageId(PaginationParameter paginationParameter, int apartmentPackageId);
 
         public Task<int> ConfirmStaffWork(int id, OrderDetailModel orderDetailModel);
+
+        public Task<int> CancelWork(int id, OrderDetailModel orderDetailModel);
     }
 }

@@ -179,6 +179,7 @@ namespace NET1705_FService.Repositories.Repositories
                 {
                     if (updateOrder.Status.Trim() == TaskStatusModel.Pending.ToString())
                     {
+                        updateOrder.WorkingDate = DateTime.Now;
                         updateOrder.Status = orderDetailModel.Status.ToString();
                     }
                     else if (updateOrder.Status.Trim() == TaskStatusModel.Working.ToString())
@@ -243,6 +244,42 @@ namespace NET1705_FService.Repositories.Repositories
             return PagedList<OrderDetailsViewModel>.ToPagedList(orderDetails,
                 paginationParameter.PageNumber,
                 paginationParameter.PageSize);
+        }
+
+        public async Task<int> CancelWork(int id, OrderDetailModel orderDetailModel)
+        {
+            if (id == orderDetailModel.Id)
+            {
+                var work = _context.OrderDetails.SingleOrDefault(o => o.Id == id);
+                if (work != null && work.Status == TaskStatusModel.Pending.ToString())
+                {
+                    var apartmentPackage = await _apartmentPackageRepo.GetApartmentPackageByIdAsync(work.ApartmentPackageId.Value);
+                    if (apartmentPackage != null)
+                    {
+                        foreach (var item in apartmentPackage.ApartmentPackageServices)
+                        {
+                            if (item.ServiceId == work.ServiceId)
+                            {
+                                item.UsedQuantity -= 1;
+                                item.RemainQuantity += 1;
+                                break;
+                            }
+                        }
+                        int updateQuantity = await _apartmentPackageRepo.UpdateApartmentPackageAsync(apartmentPackage.Id, apartmentPackage);
+                        
+                        work.Status = orderDetailModel.Status.ToString();
+                        _context.OrderDetails!.Update(work);
+                        await _context.SaveChangesAsync();
+
+                        if (updateQuantity != 0) 
+                        {
+                            return work.Id;
+                        }
+                    }
+                }
+
+            }
+            return 0;
         }
 
         //tools
@@ -316,6 +353,6 @@ namespace NET1705_FService.Repositories.Repositories
             }
         }
 
-
+        
     }
 }

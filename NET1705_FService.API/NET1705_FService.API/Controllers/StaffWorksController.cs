@@ -64,5 +64,25 @@ namespace NET1705_FService.API.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpPut("cancel/{id}")]
+        [Authorize(Roles = "STAFF")]
+        public async Task<IActionResult> CancelTaskAsync(int id, OrderDetailModel model)
+        {
+            try
+            {
+                var updateId = await _orderDetailsService.CancelTaskAsync(id, model);
+                if (updateId == 0)
+                {
+                    return BadRequest("Cannot cancel task");
+                }
+                var task = await _orderDetailsService.GetOrderDetailsByIdAsync(updateId);
+                return Ok(task);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

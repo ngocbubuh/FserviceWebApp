@@ -33,6 +33,8 @@ namespace NET1705_FService.Repositories.Data
 
         public string Status { get; set; }
 
+        public DateTime? WorkingDate { get; set; }
+
         public DateTime? CompleteDate { get; set; }
 
         public string? ReportImage { get; set;  }
