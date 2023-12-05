@@ -87,5 +87,10 @@ namespace NET1705_FService.Services.Services
             var result = await _repo.ConfirmStaffWork(id, orderDetailModel);
             return result;
         }
+
+        public async Task<int> CancelTaskAsync(int id, OrderDetailModel orderDetailModel)
+        {
+            return await _repo.CancelWork(id, orderDetailModel);
+        }
     }
 }

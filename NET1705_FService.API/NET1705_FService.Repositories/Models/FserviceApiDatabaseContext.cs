@@ -150,6 +150,7 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
             entity.Property(e => e.DateOfBirth).HasColumnType("date");
             entity.Property(e => e.RefreshToken).IsRequired(false);
             entity.Property(e => e.RefreshTokenExpiryTime).IsRequired(false);
+            entity.Property(e => e.CreateDate).HasColumnType("date");
         });
 
         modelBuilder.Entity<Banner>(entity =>
@@ -221,6 +222,7 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
             entity.Property(e => e.CompleteDate).HasColumnType("datetime");
             entity.Property(e => e.CreatedDate).HasColumnType("datetime");
             entity.Property(e => e.Feedback).HasMaxLength(150);
+            entity.Property(e => e.WorkingDate).HasColumnType("datetime");
 
             entity.HasOne(d => d.ApartmentPackage).WithMany(p => p.OrderDetails)
                 .HasForeignKey(d => d.ApartmentPackageId)

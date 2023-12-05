@@ -18,5 +18,7 @@ namespace NET1705_FService.Repositories.Interface
         public Task<AccountsModel> GetAccountByUsernameAsync(string UserName);
         public Task<string> UpdateAccountAsync(string id, Accounts account);
         public Task<string> DeleteAccountAsync(string id);
+
+        public Task<PagedList<Accounts>> GetAccountsByRole(PaginationParameter paginationParameter, RoleModel role);
     }
 }

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using NET1705_FService.Repositories.Data;
 using NET1705_FService.Repositories.Helper;
 using NET1705_FService.Repositories.Interface;
@@ -17,11 +19,18 @@ namespace NET1705_FService.Repositories.Repositories
     {
         private readonly FserviceApiDatabaseContext _context;
         private readonly IMapper _mapper;
+        private readonly UserManager<Accounts> _accountManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UserRepository(FserviceApiDatabaseContext context, IMapper mapper)
+        public UserRepository(FserviceApiDatabaseContext context,
+            IMapper mapper,
+            UserManager<Accounts> accountManager,
+            RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _mapper = mapper;
+            _accountManager = accountManager;
+            _roleManager = roleManager;
         }
 
         public async Task<string> DeleteAccountAsync(string id)
@@ -76,6 +85,49 @@ namespace NET1705_FService.Repositories.Repositories
             return showAcc;
         }
 
+        public async Task<PagedList<Accounts>> GetAccountsByRole(PaginationParameter paginationParameter, RoleModel role)
+        {
+            IList<Accounts> findAccounts = null;
+
+            // filter
+            if (role.ToString() == "ADMIN")
+            {
+                bool roleExists = await _roleManager.RoleExistsAsync("ADMIN");
+                if (roleExists)
+                {
+                    findAccounts = await _accountManager.GetUsersInRoleAsync("ADMIN");
+                }
+
+            } 
+            else if (role.ToString() == "STAFF")
+            {
+                bool roleExists = await _roleManager.RoleExistsAsync("STAFF");
+                if (roleExists)
+                {
+                    findAccounts = await _accountManager.GetUsersInRoleAsync("STAFF");
+                }
+            } 
+            else
+            {
+                bool roleExists = await _roleManager.RoleExistsAsync("USER");
+                if (roleExists)
+                {
+                    findAccounts = await _accountManager.GetUsersInRoleAsync("USER");
+                }
+            }
+
+            if (findAccounts == null)
+            {
+                return null;
+            }
+
+            var acc = findAccounts.Where(a => a.Status == true).ToList();
+
+            return PagedList<Accounts>.ToPagedList(acc,
+                paginationParameter.PageNumber,
+                paginationParameter.PageSize);
+        }
+
         public async Task<PagedList<Accounts>> GetAllAccountAsync(PaginationParameter paginationParameter)
         {
             var allAccounts = _context.Accounts.Where(y => y.Status == true).AsQueryable();
@@ -107,7 +159,7 @@ namespace NET1705_FService.Repositories.Repositories
             var acc = await allAccounts.ToListAsync();
             return PagedList<Accounts>.ToPagedList(acc,
                 paginationParameter.PageNumber,
-                paginationParameter.PageSize); ;
+                paginationParameter.PageSize);
         }
 
         public async Task<string> UpdateAccountAsync(string id, Accounts account)

@@ -22,5 +22,7 @@ namespace NET1705_FService.Services.Interface
 
         public Task<PagedList<OrderDetailsViewModel>> GetOrderDetailByApartmentPackageId(PaginationParameter paginationParameter, int apartmentPackageId);
 
+        public Task<int> CancelTaskAsync(int id, OrderDetailModel orderDetailModel);
+
     }
 }

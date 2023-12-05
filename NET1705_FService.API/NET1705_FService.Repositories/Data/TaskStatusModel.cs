@@ -10,6 +10,7 @@ namespace NET1705_FService.Repositories.Data
     {
         Pending,
         Working,
-        Completed
+        Completed,
+        Cancel
     }
 }
