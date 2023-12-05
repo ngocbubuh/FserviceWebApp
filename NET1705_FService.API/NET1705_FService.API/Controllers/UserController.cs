@@ -71,6 +71,35 @@ namespace NET1705_FService.API.Controllers
             catch { return BadRequest(); }
         }
 
+        [HttpGet("/account-by-role")]
+        [Authorize]
+        public async Task<IActionResult> GetAccountByRole([FromQuery] PaginationParameter pagination, RoleModel role)
+        {
+            try
+            {
+                var accounts = await accountService.GetAccountsByRole(pagination, role);
+                if (!accounts.Any())
+                {
+                    return NotFound();
+                }
+                var metadata = new
+                {
+                    accounts.TotalCount,
+                    accounts.PageSize,
+                    accounts.CurrentPage,
+                    accounts.TotalPages,
+                    accounts.HasNext,
+                    accounts.HasPrevious
+                };
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+                return Ok(accounts);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
         [HttpPut("{id}")]
         [Authorize]
         public async Task<IActionResult> UpdateAccount(string id, AccountsModel model)

@@ -46,6 +46,12 @@ namespace NET1705_FService.Services.Services
             return account;
         }
 
+        public async Task<PagedList<Accounts>> GetAccountsByRole(PaginationParameter paginationParameter, RoleModel role)
+        {
+            var accounts = await _repo.GetAccountsByRole(paginationParameter, role);
+            return accounts;
+        }
+
         public async Task<PagedList<Accounts>> GetAllAccountAsync(PaginationParameter paginationParameter)
         {
             var accounts = await _repo.GetAllAccountAsync(paginationParameter);

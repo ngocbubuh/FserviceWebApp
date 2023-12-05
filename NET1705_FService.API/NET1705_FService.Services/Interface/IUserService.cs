@@ -16,5 +16,6 @@ namespace NET1705_FService.Services.Interface
         public Task<PagedList<Accounts>> GetAllAccountAsync(PaginationParameter paginationParameter);
         public Task<ResponseModel> UpdateAccountAsync(string id, AccountsModel account);
         public Task<ResponseModel> DeleteAccountAsync(string id);
+        public Task<PagedList<Accounts>> GetAccountsByRole(PaginationParameter paginationParameter, RoleModel role);
     }
 }

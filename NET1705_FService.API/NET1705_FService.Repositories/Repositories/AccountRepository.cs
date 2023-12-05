@@ -306,7 +306,8 @@ namespace FServiceAPI.Repositories
                     DateOfBirth = model.DateOfBirth,
                     Email = model.Email,
                     UserName = model.Email,
-                    Status = true
+                    Status = true,
+                    CreateDate = DateTime.Now,
                 };
 
                 var result = await accountManager.CreateAsync(user, model.Password);

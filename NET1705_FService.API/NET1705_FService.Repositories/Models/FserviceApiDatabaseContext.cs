@@ -150,6 +150,7 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
             entity.Property(e => e.DateOfBirth).HasColumnType("date");
             entity.Property(e => e.RefreshToken).IsRequired(false);
             entity.Property(e => e.RefreshTokenExpiryTime).IsRequired(false);
+            entity.Property(e => e.CreateDate).HasColumnType("date");
         });
 
         modelBuilder.Entity<Banner>(entity =>
