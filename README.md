@@ -10,7 +10,7 @@
 
 - [Đặng Phan Gia Đức](https://github.com/giaducdang03) (Leader, Back-end, Front-end Dev, UI Design)
 - [Nguyễn Bình Phương Trâm](https://github.com/phwtram) (Front-end Dev)
-- [Dương Tôn Bảo](https://github.com/duongbao0803)(Front-end Dev)
+- [Dương Tôn Bảo](https://github.com/duongbao0803) (Front-end Dev)
 - [Phạm Ngọc Bảo](https://github.com/ngocbubuh) (Back-end dev)
 
 #### Introduction:
