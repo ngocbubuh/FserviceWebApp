@@ -8,10 +8,10 @@
 
 #### Team members:
 
-- Đặng Phan Gia Đức - SE171092 (Leader, Back-end, Front-end Dev, UI Design)
-- Nguyễn Bình Phương Trâm - SE171076 (Front-end Dev)
-- Dương Tôn Bảo - SE171065 (Front-end Dev)
-- Phạm Ngọc Bảo - SE171066 (Back-end dev)
+- [Đặng Phan Gia Đức](https://github.com/giaducdang03) (Leader, Back-end, Front-end Dev, UI Design)
+- [Nguyễn Bình Phương Trâm](https://github.com/phwtram) (Front-end Dev)
+- [Dương Tôn Bảo](https://github.com/duongbao0803)(Front-end Dev)
+- [Phạm Ngọc Bảo](https://github.com/ngocbubuh) (Back-end dev)
 
 #### Introduction:
 
