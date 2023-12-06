@@ -2,7 +2,7 @@
 
 ## Project SWP391 - Student House Membership
 
-### Website: [FService](https://fservices.vercel.app)
+### Website: [FService](https://fservices.vercel.app) - Platform that provides apartment service for residents at [Vinhomes Grand Park](https://vinhome.com.vn/vinhomes-grand-park/) (Thu Duc City, HCMC)
 
 #### Instructor: Lâm Hữu Khánh Phương (FU-HCM)
 
@@ -17,12 +17,18 @@
 
 Fservice is a platform that allows residents of Vinhomes Grand Park (Thu Duc, HCMC) to purchase pre-designed apartment services and make online payments through the integrated VNPAY on the website. The packages come with usage periods and a quantity of services per cycle, and additional individual services can be purchased when the allocated ones are exhausted.
 
+- Admin can manage services, service packages, user, staff,...
+- Staff performs work and updates results of task.
+- Customer orders and tracks used services (Customer must regis apartment before order the package).
+- Prices of services and service packages are calculated according to room type at Vinhomes Grand Park.
+
 #### Technologies:
 
 - Front-end: ReactJS, ViteJS.
-- Back-end: ASP.NET Core Web API, MS SQL, Azure SQL.
+- Back-end: ASP.NET Core Web API, MS SQL Server, Azure SQL Database.
 - Deployment: Azure App Service (Back-end), Vercel (Front-end).
-- Other: GitHub, Jira, Figma, Swagger, JWT Token.
+- Payment: VNPAY
+- Other: GitHub, GitHub Actions, CI/CD, Jira, Figma, Swagger, JWT Token.
 
 #### Deployment:
 - Back-end: https://fservices.azurewebsites.net/swagger/index.html
