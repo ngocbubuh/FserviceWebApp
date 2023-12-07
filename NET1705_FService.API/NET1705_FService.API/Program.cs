@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Identity.Web;
 using Microsoft.Extensions.Configuration;
 using NET1705_FService.Repositories.Data;
+using NET1705_FService.API.Helper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -151,6 +152,8 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderDetailsRepository, OrderDetailsRepository>();
 builder.Services.AddScoped<IOrderDetailsService, OrderDetailsService>();
 builder.Services.AddScoped<IVnpayService, VnpayService>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 //NgocBuh
 builder.Services.AddScoped<IBannerRepository, BannerRepository>();
@@ -164,9 +167,6 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddTransient<IMailService, MailService>();
 builder.Services.AddScoped<IdentityErrorDescriber, LocalizedIdentityErrorDescriber>();
-
-//builder.Services.AddLocalization(opt => opt.ResourcesPath = "NET1705_FService.Repositories.Helper.LocalizedIdentityErrorDescriber");
-//builder.Services.AddMvc();
 
 var app = builder.Build();
 

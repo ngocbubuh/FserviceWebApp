@@ -21,12 +21,17 @@ namespace NET1715_FService.API.Controllers
         private readonly IAccountService accountService;
         private readonly IMailService mailService;
         private readonly IUserService _userService;
+        private readonly INotificationService _notiService;
 
-        public AccountController(IAccountService repo, IMailService mailService, IUserService userService)
+        public AccountController(IAccountService repo, 
+            IMailService mailService, 
+            IUserService userService, 
+            INotificationService notiService)
         {
             accountService = repo;
             this.mailService = mailService;
             _userService = userService;
+            _notiService = notiService;
         }
 
         [HttpPost("SignUp")]
@@ -192,6 +197,19 @@ namespace NET1715_FService.API.Controllers
                 {
                     return Unauthorized(result);
                 }
+                var account = await _userService.GetAccountByUsernameAsync(email);
+                if (account != null)
+                {
+                    Notification notification = new Notification 
+                    { 
+                        AccountId = account.Id,
+                        CreateDate = DateTime.Now,
+                        Type = "System",
+                        Title = "Chào mừng bạn đến với FService",
+                        Message = "Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi. Hãy cùng nhau khám phá các tính năng nhé!"
+                    };
+                    await _notiService.AddNotificationByAccountId(account.Id, notification);
+                }
                 return Ok(result);
             }
             catch
@@ -205,32 +223,15 @@ namespace NET1715_FService.API.Controllers
         [HttpGet("Launch")]
         public async Task<ActionResult<AccountsModel>> Launch()
         {
-            var extractedEmail = GetCurrentEmail();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+
+            var extractedEmail = AuthenTools.GetCurrentEmail(identity);
 
             if (extractedEmail == null) return NotFound("Token is expired!");
 
             var result = await _userService.GetAccountByUsernameAsync(extractedEmail);
 
             return Ok(result);
-        }
-
-        //tools
-        private string GetCurrentEmail()
-        {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            if (identity != null)
-            {
-                var userClaims = identity.Claims;
-                Console.Write(userClaims.Count());
-
-                foreach (var claim in userClaims)
-                {
-                    Console.WriteLine(claim.ToString());
-                }
-
-                return userClaims.FirstOrDefault(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value;
-            }
-            return null;
         }
     }
 }

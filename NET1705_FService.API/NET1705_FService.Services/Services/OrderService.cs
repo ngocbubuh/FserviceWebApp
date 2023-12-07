@@ -7,6 +7,7 @@ using NET1705_FService.Repositories.Models;
 using NET1705_FService.Services.Interface;
 using NET1715_FService.API.Repository.Inteface;
 using NET1715_FService.Service.Inteface;
+using NET1715_FService.Service.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,10 +25,13 @@ namespace NET1705_FService.Services.Services
         private readonly IApartmentService _apartmentService;
         private readonly IServiceRepository _serviceRepo;
         private readonly IVnpayService _vnpayService;
+        private readonly INotificationService _notificationService;
+        private readonly IUserService _userService;
 
         public OrderService(IOrderRepository repo, IPackageRepository packageRepo,
             IApartmentPackageRepository apartmentPackageRepo, IVnpayService vnpayService,
-            IApartmentService apartmentService, IServiceRepository serviceRepo) 
+            IApartmentService apartmentService, IServiceRepository serviceRepo,
+            INotificationService notificationService, IUserService userService) 
         { 
             _repo = repo;
             _packageRepo = packageRepo;
@@ -35,6 +39,8 @@ namespace NET1705_FService.Services.Services
             _apartmentService = apartmentService;
             _serviceRepo = serviceRepo;
             _vnpayService = vnpayService;
+            _notificationService = notificationService;
+            _userService = userService;
         }
 
         public async Task<ResponseModel> AddOrderAsync(OrderModel orderModel, HttpContext httpContext)
@@ -57,6 +63,23 @@ namespace NET1705_FService.Services.Services
             }
             // payment
             var paymentURL = _vnpayService.CreatePaymentUrl(result, httpContext, package.UnsignName, orderModel.CallBackUrl);
+
+            // send noti to user
+            var account = await _userService.GetAccountByUsernameAsync(orderModel.UserName);
+            if (account != null) 
+            {
+                Notification notification = new Notification
+                {
+                    AccountId = account.Id,
+                    CreateDate = DateTime.Now,
+                    Type = NotificationType.Order.ToString(),
+                    Title = "Đặt hàng",
+                    Action = "Đang chờ thanh toán",
+                    Message = $"Đơn hàng #{result.Id} - {package.Name} đã được tạo thành công. Bạn vui lòng thanh toán nhé.",
+                    ModelId = result.Id
+                };
+                await _notificationService.AddNotificationByAccountId(account.Id, notification);
+            }
 
             return new ResponseModel { Status = "Success", Message = "Create order successfully", PaymentUrl = paymentURL};
         }
@@ -88,6 +111,23 @@ namespace NET1705_FService.Services.Services
             // payment
             var service = await _serviceRepo.GetServiceAsync(extraModel.ServiceId);
             var paymentURL = _vnpayService.CreatePaymentUrl(result, httpContext, service.UnsignName, extraModel.CallBackUrl);
+
+            // send noti to user
+            var account = await _userService.GetAccountByUsernameAsync(extraModel.UserName);
+            if (account != null)
+            {
+                Notification notification = new Notification
+                {
+                    AccountId = account.Id,
+                    CreateDate = DateTime.Now,
+                    Type = NotificationType.Order.ToString(),
+                    Title = "Đặt hàng",
+                    Action = "Đang chờ thanh toán",
+                    Message = $"Đơn hàng #{result.Id} - Dịch vụ {service.Name} đã được tạo thành công. Bạn vui lòng thanh toán nhé.",
+                    ModelId = result.Id
+                };
+                await _notificationService.AddNotificationByAccountId(account.Id, notification);
+            }
             return new ResponseModel { Status = "Success", Message = "Create order successfully", PaymentUrl = paymentURL };
         }
 

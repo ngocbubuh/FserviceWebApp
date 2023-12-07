@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FServiceAPI.Repositories;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using NET1705_FService.Repositories.Data;
 using NET1705_FService.Repositories.Helper;
@@ -23,17 +24,27 @@ namespace NET1705_FService.Repositories.Repositories
         private readonly IApartPackageServiceRepository _apmPackageServiceRepo;
         private readonly IPackageRepository _packageRepo;
         private readonly IAccountRepository _accountRepo;
+        private readonly INotificationRepository _notificationRepo;
+        private readonly IOrderRepository _orderRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IServiceRepository _serviceRepo;
         private readonly IMapper _mapper;
 
         public OrderDetailsRepository(FserviceApiDatabaseContext context, IApartmentPackageRepository apartmentPackageRepo,
             IApartPackageServiceRepository apmPackageServiceRepo, IPackageRepository packageRepo,
-            IAccountRepository accountRepo, IMapper mapper)
+            IAccountRepository accountRepo, IMapper mapper, INotificationRepository notificationRepo,
+            IOrderRepository orderRepository, IUserRepository userRepository,
+            IServiceRepository serviceRepo)
         {
             _context = context;
             _apartmentPackageRepo = apartmentPackageRepo;
             _apmPackageServiceRepo = apmPackageServiceRepo;
             _packageRepo = packageRepo;
             _accountRepo = accountRepo;
+            _notificationRepo = notificationRepo;
+            _orderRepository = orderRepository;
+            _userRepository = userRepository;
+            _serviceRepo = serviceRepo;
             _mapper = mapper;
         }
 
@@ -141,6 +152,44 @@ namespace NET1705_FService.Repositories.Repositories
             {
                 return new ResponseModel { Status = "Error", Message = "It is issue when update quantity service" };
             }
+            // send noti
+
+            var order = await _orderRepository.GetOrderByIdAsync(orderDetail.OrderId.Value);
+            if (order != null)
+            {
+                var customer = await _userRepository.GetAccountByUsernameAsync(order.UserName);
+                var usingService = await _serviceRepo.GetServiceAsync(usingPackage.ServiceId);
+
+                // send noti to customer
+                if (customer != null && usingService != null)
+                {
+                    Notification notification = new Notification
+                    {
+                        AccountId = customer.Id,
+                        CreateDate = DateTime.Now,
+                        Type = NotificationType.Service.ToString(),
+                        Title = usingService.Name,
+                        Action = "Đã có nhân viên",
+                        Message = $"Nhân viên {staffWork.Name} sẽ sớm liên hệ với bạn. Hãy nhớ chú ý điện thoại!",
+                        ModelId = apartmentPackage.Id
+                    };
+                    await _notificationRepo.AddNotificationByAccountId(customer.Id, notification);
+                }
+
+                // send noti to staff
+                Notification notificationStaff = new Notification
+                {
+                    AccountId = staffWork.Id,
+                    CreateDate = DateTime.Now,
+                    Type = NotificationType.Service.ToString(),
+                    Title = usingService.Name,
+                    Action = "Công việc mới",
+                    Message = $"Công việc mới của bạn đã được lên lịch làm việc, hãy kiểm tra bảng công việc của mình.",
+                    ModelId = orderDetail.Id
+                };
+                await _notificationRepo.AddNotificationByAccountId(customer.Id, notificationStaff);
+            }
+
             return new ResponseModel
             {
                 Status = "Success",
@@ -174,28 +223,104 @@ namespace NET1705_FService.Repositories.Repositories
         {
             if (id == orderDetailModel.Id)
             {
-                var updateOrder = _context.OrderDetails.FirstOrDefault(o => o.Id == id);
-                if (updateOrder != null)
+                var updateOrderDetail = _context.OrderDetails.FirstOrDefault(o => o.Id == id);
+                if (updateOrderDetail != null)
                 {
-                    if (updateOrder.Status.Trim() == TaskStatusModel.Pending.ToString())
+                    var usingService = await _serviceRepo.GetServiceAsync(updateOrderDetail.ServiceId.Value);
+                    var order = await _orderRepository.GetOrderByIdAsync(updateOrderDetail.OrderId.Value);
+                    if (updateOrderDetail.Status.Trim() == TaskStatusModel.Pending.ToString())
                     {
-                        updateOrder.WorkingDate = DateTime.Now;
-                        updateOrder.Status = orderDetailModel.Status.ToString();
-                    }
-                    else if (updateOrder.Status.Trim() == TaskStatusModel.Working.ToString())
-                    {
-                        updateOrder.Status = orderDetailModel.Status.ToString();
-                        updateOrder.CompleteDate = DateTime.Now;
-                        // update image
-                        if (!string.IsNullOrEmpty(updateOrder.ReportImage))
+                        updateOrderDetail.WorkingDate = DateTime.Now;
+                        updateOrderDetail.Status = orderDetailModel.Status.ToString();
+
+                        // send noti to staff
+                        if (usingService != null)
                         {
-                            updateOrder.ReportImage = orderDetailModel.ReportImage;
+                            Notification notification = new Notification
+                            {
+                                AccountId = updateOrderDetail.StaffId,
+                                CreateDate = DateTime.Now,
+                                Type = NotificationType.Service.ToString(),
+                                Title = usingService.Name,
+                                Action = "Trạng thái",
+                                Message = $"Chuẩn bị đến nhà khách hàng làm việc trong khoảng {updateOrderDetail.ShiftTime}",
+                                ModelId = updateOrderDetail.Id
+                            };
+                            await _notificationRepo.AddNotificationByAccountId(updateOrderDetail.StaffId, notification);
+                        }
+
+                        // send noti to customer
+                        if (order != null)
+                        {
+                            var customer = await _userRepository.GetAccountByUsernameAsync(order.UserName);
+                            if (customer != null && usingService != null)
+                            {
+                                Notification notification = new Notification
+                                {
+                                    AccountId = customer.Id,
+                                    CreateDate = DateTime.Now,
+                                    Type = NotificationType.Service.ToString(),
+                                    Title = usingService.Name,
+                                    Action = "Trạng thái",
+                                    Message = $"Nhân viên đang sắp đến.",
+                                    ModelId = updateOrderDetail.ApartmentPackageId
+                                };
+                                await _notificationRepo.AddNotificationByAccountId(customer.Id, notification);
+                            }
+                        }
+
+                    }
+                    else if (updateOrderDetail.Status.Trim() == TaskStatusModel.Working.ToString())
+                    {
+                        updateOrderDetail.Status = orderDetailModel.Status.ToString();
+                        updateOrderDetail.CompleteDate = DateTime.Now;
+                        // update image
+                        if (!string.IsNullOrEmpty(updateOrderDetail.ReportImage))
+                        {
+                            updateOrderDetail.ReportImage = orderDetailModel.ReportImage;
+                        }
+                        // send noti to staff
+                        if (usingService != null)
+                        {
+                            Notification notification = new Notification
+                            {
+                                AccountId = updateOrderDetail.StaffId,
+                                CreateDate = DateTime.Now,
+                                Type = NotificationType.Service.ToString(),
+                                Title = usingService.Name,
+                                Action = "Hoàn thành",
+                                Message = $"Bạn đã hoàn thành công việc của mình. Hãy chờ khách hàng đánh giá!",
+                                ModelId = updateOrderDetail.Id
+                            };
+                            await _notificationRepo.AddNotificationByAccountId(updateOrderDetail.StaffId, notification);
+                        }
+
+                        // send noti to customer
+                        if (order != null)
+                        {
+                            var customer = await _userRepository.GetAccountByUsernameAsync(order.UserName);
+                            if (customer != null && usingService != null)
+                            {
+                                Notification notification = new Notification
+                                {
+                                    AccountId = customer.Id,
+                                    CreateDate = DateTime.Now,
+                                    Type = NotificationType.Service.ToString(),
+                                    Title = usingService.Name,
+                                    Action = "Trạng thái",
+                                    Message = $"Nhân viên đã hoàn thành công việc. Đánh giá ngay!",
+                                    ModelId = updateOrderDetail.ApartmentPackageId
+                                };
+                                await _notificationRepo.AddNotificationByAccountId(customer.Id, notification);
+                            }
                         }
                     }
-                    _context.OrderDetails!.Update(updateOrder);
+                    _context.OrderDetails!.Update(updateOrderDetail);
                     await _context.SaveChangesAsync();
+
+                    
                 }
-                return updateOrder.Id;
+                return updateOrderDetail.Id;
             }
             return 0;
         }
@@ -250,34 +375,103 @@ namespace NET1705_FService.Repositories.Repositories
         {
             if (id == orderDetailModel.Id)
             {
-                var work = _context.OrderDetails.SingleOrDefault(o => o.Id == id);
+                var work = await _context.OrderDetails.FirstOrDefaultAsync(o => o.Id == id);
                 if (work != null && work.Status == TaskStatusModel.Pending.ToString())
                 {
+                    // re-assign anothers staff
+                    var workStaff = await ReAssignStaff(work.StaffId);
                     var apartmentPackage = await _apartmentPackageRepo.GetApartmentPackageByIdAsync(work.ApartmentPackageId.Value);
-                    if (apartmentPackage != null)
+                    if (workStaff == null)
                     {
-                        foreach (var item in apartmentPackage.ApartmentPackageServices)
+                        // refund number of remain quantity service for customer
+                        
+                        if (apartmentPackage != null)
                         {
-                            if (item.ServiceId == work.ServiceId)
+                            foreach (var item in apartmentPackage.ApartmentPackageServices)
                             {
-                                item.UsedQuantity -= 1;
-                                item.RemainQuantity += 1;
-                                break;
+                                if (item.ServiceId == work.ServiceId)
+                                {
+                                    item.UsedQuantity -= 1;
+                                    item.RemainQuantity += 1;
+                                    break;
+                                }
+                            }
+                            int updateQuantity = await _apartmentPackageRepo.UpdateApartmentPackageAsync(apartmentPackage.Id, apartmentPackage);
+
+                            work.Status = orderDetailModel.Status.ToString();
+                            _context.OrderDetails!.Update(work);
+                            await _context.SaveChangesAsync();
+
+                            if (updateQuantity != 0)
+                            {
+                                var order = await _orderRepository.GetOrderByIdAsync(work.Id);
+                                if (order != null)
+                                {
+                                    var customer = await _userRepository.GetAccountByUsernameAsync(order.UserName);
+                                    var usingService = await _serviceRepo.GetServiceAsync(work.ServiceId.Value);
+                                    if (customer != null && usingService != null)
+                                    {
+                                        Notification notification = new Notification
+                                        {
+                                            AccountId = customer.Id,
+                                            CreateDate = DateTime.Now,
+                                            Type = NotificationType.Service.ToString(),
+                                            Title = usingService.Name,
+                                            Action = "Huỷ lịch",
+                                            Message = $"Nhân viên đã huỷ lịch làm việc, bạn vui lòng đặt lại lịch khác. Xin cảm ơn!",
+                                            ModelId = apartmentPackage.Id
+                                        };
+                                        await _notificationRepo.AddNotificationByAccountId(customer.Id, notification);
+                                    }
+                                }
+                                return work.Id;
                             }
                         }
-                        int updateQuantity = await _apartmentPackageRepo.UpdateApartmentPackageAsync(apartmentPackage.Id, apartmentPackage);
-                        
-                        work.Status = orderDetailModel.Status.ToString();
+                    } 
+                    else
+                    {
+                        // update work for staff re-assign
+                        work.StaffId = workStaff.Id;
+                        work.Status = TaskStatusModel.Pending.ToString();
                         _context.OrderDetails!.Update(work);
                         await _context.SaveChangesAsync();
 
-                        if (updateQuantity != 0) 
+                        // send noti to staff and customer
+                        var order = await _orderRepository.GetOrderByIdAsync(work.Id);
+                        if (order != null)
                         {
-                            return work.Id;
+                            var customer = await _userRepository.GetAccountByUsernameAsync(order.UserName);
+                            var usingService = await _serviceRepo.GetServiceAsync(work.ServiceId.Value);
+                            if (customer != null && usingService != null)
+                            {
+                                Notification notificationStaff = new Notification
+                                {
+                                    AccountId = work.StaffId,
+                                    CreateDate = DateTime.Now,
+                                    Type = NotificationType.Service.ToString(),
+                                    Title = usingService.Name,
+                                    Action = "Trạng thái",
+                                    Message = $"Chuẩn bị đến nhà khách hàng làm việc trong khoảng {work.ShiftTime}",
+                                    ModelId = work.Id
+                                };
+                                await _notificationRepo.AddNotificationByAccountId(work.StaffId, notificationStaff);
+
+                                Notification notification = new Notification
+                                {
+                                    AccountId = customer.Id,
+                                    CreateDate = DateTime.Now,
+                                    Type = NotificationType.Service.ToString(),
+                                    Title = usingService.Name,
+                                    Action = "Đã có nhân viên mới",
+                                    Message = $"Nhân viên {workStaff.Name} đã tiếp nhận công việc và sẽ sớm liên hệ với bạn. Hãy nhớ chú ý điện thoại!",
+                                    ModelId = apartmentPackage.Id
+                                };
+                                await _notificationRepo.AddNotificationByAccountId(customer.Id, notification);
+                            }
                         }
+                        return work.Id;
                     }
                 }
-
             }
             return 0;
         }
@@ -336,6 +530,53 @@ namespace NET1705_FService.Repositories.Repositories
             return workStaff;
         }
 
+        private async Task<Accounts> ReAssignStaff(string cancelStaffId)
+        {
+            var staffs = await _accountRepo.GetAllStaffsAsync();
+            Accounts workStaff = null;
+            foreach (var staff in staffs)
+            {
+                // Skip the staff member with the specified ID
+                if (staff.Id == cancelStaffId)
+                {
+                    continue;
+                }
+
+                // staff chua co job trong ngay
+                var orderDetails = await _context.OrderDetails
+                    .Where(o => o.StaffId == staff.Id)
+                    .Where(o => o.CreatedDate.Date == DateTime.Now.Date)
+                    .ToListAsync();
+                if (!orderDetails.Any())
+                {
+                    workStaff = staff;
+                    break;
+                }
+
+            }
+            // tat ca staff da co job trong ngay
+            if (workStaff == null)
+            {
+                
+                var staffIdWithMinRecords = staffs
+                    .Where(staff => staff.Id != cancelStaffId)
+                    .Select(staff => new
+                    {
+                        StaffId = staff.Id,
+                        RecordCount = _context.OrderDetails
+                            .Count(o => o.StaffId == staff.Id && o.CreatedDate.Date == DateTime.Now.Date)
+                    })
+                    .OrderBy(group => group.RecordCount)
+                    .ThenBy(group => group.StaffId)
+                    .Select(group => group.StaffId)
+                    .FirstOrDefault();
+
+                // Retrieve the staff member with the minimum jobs using their ID
+                workStaff = staffs.FirstOrDefault(staff => staff.Id == staffIdWithMinRecords);
+            }
+            return workStaff;
+        }
+
         public string GetShiftTimeAsString(ShiftTimeModel shiftTime)
         {
             switch (shiftTime)
@@ -353,6 +594,5 @@ namespace NET1705_FService.Repositories.Repositories
             }
         }
 
-        
     }
 }

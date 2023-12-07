@@ -22,4 +22,6 @@ public partial class Accounts : IdentityUser
     public virtual ICollection<Apartment> Apartments { get; } = new List<Apartment>();
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+
+    public virtual ICollection<Notification> Notifications { get; } = new List<Notification>();
 }

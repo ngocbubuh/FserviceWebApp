@@ -44,13 +44,15 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
 
     public virtual DbSet<PackagePrice> PackagePrices { get; set; }
 
+    public virtual DbSet<Notification> Notifications { get; set; }
+
     //public virtual DbSet<ServiceJoinStaff> ServiceJoinStaffs { get; set; }
 
     //public virtual DbSet<Staff> Staff { get; set; }
 
-//    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//        => optionsBuilder.UseSqlServer("Server=tcp:fserviceapi-databasedbserver.database.windows.net,1433;uid=fservices;pwd=abc@12345;database=FServiceAPI_Database;TrustServerCertificate=True");
+    //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+    //        => optionsBuilder.UseSqlServer("Server=tcp:fserviceapi-databasedbserver.database.windows.net,1433;uid=fservices;pwd=abc@12345;database=FServiceAPI_Database;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -296,6 +298,20 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
             //entity.HasOne(e => e.Type).WithMany(p => p.PackagePrices)
             //    .HasForeignKey(e => e.TypeId)
             //    .HasConstraintName("FK_PackagePrice_ApartmentType").IsRequired(false);
+        });
+
+        modelBuilder.Entity<Notification>(entity =>
+        {
+            entity.ToTable("Notification");
+            entity.HasKey(e => e.Id).HasName("PK_Notification");
+            entity.Property(e => e.Type).HasMaxLength(50);
+            entity.Property(e => e.Title).HasMaxLength(100);
+            entity.Property(e => e.Action).HasMaxLength(50);
+            entity.Property(e => e.Message).HasMaxLength(500);
+
+            entity.HasOne(e => e.Account).WithMany(p => p.Notifications)
+                .HasForeignKey(e => e.AccountId)
+                .HasConstraintName("FK_Notification_Account").IsRequired(false);
         });
 
         //modelBuilder.Entity<ServiceJoinStaff>(entity =>
