@@ -3,7 +3,7 @@
 ## Project SWP391 - Student House Membership
 
 <div align="center">
-    <img style="width: 100px;" src="https://cdn.discordapp.com/attachments/1084829266581147658/1172830452499894272/logo_web.png" />
+    <img style="width: 100px;" src="https://cdn.discordapp.com/attachments/1036663699458490408/1166764222080888893/logo_web_2.png" />
 </div>
 
 #### Website: [FService](https://fservices.vercel.app)
