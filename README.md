@@ -2,6 +2,10 @@
 
 ## Project SWP391 - Student House Membership
 
+<div align="center">
+    <img style="width: 100px;" src="https://cdn.discordapp.com/attachments/1084829266581147658/1172830452499894272/logo_web.png" />
+</div>
+
 #### Website: [FService](https://fservices.vercel.app)
 - Platform that provides apartment service for residents at [Vinhomes Grand Park](https://vinhome.com.vn/vinhomes-grand-park/) (Thu Duc City, HCMC)
 
