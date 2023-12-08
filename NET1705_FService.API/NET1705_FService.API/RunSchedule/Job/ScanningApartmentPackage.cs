@@ -18,9 +18,9 @@ namespace NET1705_FService.API.RunSchedule.Job
         {
             try
             {
-                _logger.LogInformation("{UtcNow} - Start - Scanning apartment package", DateTime.UtcNow);
+                _logger.LogInformation("{Now} - Start - Scanning apartment package", DateTime.Now);
                 await _apartmentPackageRepo.CheckExpiredAllApartmentpackage();
-                _logger.LogInformation("{UtcNow} - Done - Scanning apartment package", DateTime.UtcNow);
+                _logger.LogInformation("{Now} - Done - Scanning apartment package", DateTime.Now);
             }
             catch (Exception ex)
             {
