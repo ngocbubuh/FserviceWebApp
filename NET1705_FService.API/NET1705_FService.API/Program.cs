@@ -21,6 +21,7 @@ using Microsoft.Identity.Web;
 using Microsoft.Extensions.Configuration;
 using NET1705_FService.Repositories.Data;
 using NET1705_FService.API.Helper;
+using NET1705_FService.API.RunSchedule;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -167,6 +168,9 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddTransient<IMailService, MailService>();
 builder.Services.AddScoped<IdentityErrorDescriber, LocalizedIdentityErrorDescriber>();
+
+//Setup Quartz.NET
+builder.Services.AddInfrastructure();
 
 var app = builder.Build();
 
