@@ -11,7 +11,7 @@ namespace NET1705_FService.API.RunSchedule.Setup
             var jobkey = JobKey.Create(nameof(ScanningApartmentPackage));
             options.AddJob<ScanningApartmentPackage>(JobBuilder => JobBuilder.WithIdentity(jobkey))
             .AddTrigger(trigger =>
-                trigger.ForJob(jobkey).WithCronSchedule("0 * * * * ?"));
+                trigger.ForJob(jobkey).WithCronSchedule("0 0 * * * ?"));
         }
     }
 }
