@@ -170,7 +170,7 @@ namespace NET1705_FService.Repositories.Repositories
                         Type = NotificationType.Service.ToString(),
                         Title = usingService.Name,
                         Action = "Đã có nhân viên",
-                        Message = $"Nhân viên {staffWork.Name} sẽ sớm liên hệ với bạn. Hãy nhớ chú ý điện thoại!",
+                        Message = $"Nhân viên {staffWork.Name} sẽ sớm liên hệ với bạn. Hãy chú ý điện thoại!",
                         ModelId = apartmentPackage.Id
                     };
                     await _notificationRepo.AddNotificationByAccountId(customer.Id, notification);
@@ -184,7 +184,7 @@ namespace NET1705_FService.Repositories.Repositories
                     Type = NotificationType.Service.ToString(),
                     Title = usingService.Name,
                     Action = "Công việc mới",
-                    Message = $"Công việc mới của bạn đã được lên lịch làm việc, hãy kiểm tra bảng công việc của mình.",
+                    Message = $"Công việc mới của bạn đã được lên lịch, hãy kiểm tra bảng công việc.",
                     ModelId = orderDetail.Id
                 };
                 await _notificationRepo.AddNotificationByAccountId(customer.Id, notificationStaff);
@@ -243,7 +243,7 @@ namespace NET1705_FService.Repositories.Repositories
                                 Type = NotificationType.Service.ToString(),
                                 Title = usingService.Name,
                                 Action = "Trạng thái",
-                                Message = $"Chuẩn bị đến nhà khách hàng làm việc trong khoảng {updateOrderDetail.ShiftTime}",
+                                Message = $"Đến nhà khách hàng làm việc trong khoảng {updateOrderDetail.ShiftTime}",
                                 ModelId = updateOrderDetail.Id
                             };
                             await _notificationRepo.AddNotificationByAccountId(updateOrderDetail.StaffId, notification);
@@ -262,7 +262,7 @@ namespace NET1705_FService.Repositories.Repositories
                                     Type = NotificationType.Service.ToString(),
                                     Title = usingService.Name,
                                     Action = "Trạng thái",
-                                    Message = $"Nhân viên đang sắp đến.",
+                                    Message = $"Nhân viên sắp đến.",
                                     ModelId = updateOrderDetail.ApartmentPackageId
                                 };
                                 await _notificationRepo.AddNotificationByAccountId(customer.Id, notification);
@@ -451,7 +451,7 @@ namespace NET1705_FService.Repositories.Repositories
                                     Type = NotificationType.Service.ToString(),
                                     Title = usingService.Name,
                                     Action = "Trạng thái",
-                                    Message = $"Chuẩn bị đến nhà khách hàng làm việc trong khoảng {work.ShiftTime}",
+                                    Message = $"Đến nhà khách hàng làm việc trong khoảng {work.ShiftTime}",
                                     ModelId = work.Id
                                 };
                                 await _notificationRepo.AddNotificationByAccountId(work.StaffId, notificationStaff);
@@ -463,7 +463,7 @@ namespace NET1705_FService.Repositories.Repositories
                                     Type = NotificationType.Service.ToString(),
                                     Title = usingService.Name,
                                     Action = "Đã có nhân viên mới",
-                                    Message = $"Nhân viên {workStaff.Name} đã tiếp nhận công việc và sẽ sớm liên hệ với bạn. Hãy nhớ chú ý điện thoại!",
+                                    Message = $"Nhân viên {workStaff.Name} đã tiếp nhận công việc và sẽ sớm liên hệ với bạn. Hãy chú ý điện thoại!",
                                     ModelId = apartmentPackage.Id
                                 };
                                 await _notificationRepo.AddNotificationByAccountId(customer.Id, notification);
