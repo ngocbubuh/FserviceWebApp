@@ -7,12 +7,14 @@ namespace NET1705_FService.API.RunSchedule.Job
     {
         private readonly ILogger<ScanningApartmentPackage> _logger;
         private readonly IApartmentPackageRepository _apartmentPackageRepo;
+        private readonly ISystemLogRepository _systemLogRepo;
 
         public ScanningApartmentPackage(ILogger<ScanningApartmentPackage> logger,
-            IApartmentPackageRepository apartmentPackageRepo)
+            IApartmentPackageRepository apartmentPackageRepo, ISystemLogRepository systemLogRepo)
         {
             _logger = logger;
             _apartmentPackageRepo = apartmentPackageRepo;
+            _systemLogRepo = systemLogRepo;
         }
         public async Task Execute(IJobExecutionContext context)
         {
@@ -21,6 +23,7 @@ namespace NET1705_FService.API.RunSchedule.Job
                 _logger.LogInformation("{Now} - Start - Scanning apartment package", DateTime.Now);
                 await _apartmentPackageRepo.CheckExpiredAllApartmentpackage();
                 _logger.LogInformation("{Now} - Done - Scanning apartment package", DateTime.Now);
+                await _systemLogRepo.WriteLog("Scan expired time package done");
             }
             catch (Exception ex)
             {

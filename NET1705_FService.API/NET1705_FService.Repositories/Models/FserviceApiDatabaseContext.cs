@@ -46,6 +46,8 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
 
     public virtual DbSet<Notification> Notifications { get; set; }
 
+    public virtual DbSet<SystemLog> SystemLogs { get; set; }
+
     //public virtual DbSet<ServiceJoinStaff> ServiceJoinStaffs { get; set; }
 
     //public virtual DbSet<Staff> Staff { get; set; }
@@ -312,6 +314,13 @@ public partial class FserviceApiDatabaseContext : IdentityDbContext<Accounts>
             entity.HasOne(e => e.Account).WithMany(p => p.Notifications)
                 .HasForeignKey(e => e.AccountId)
                 .HasConstraintName("FK_Notification_Account").IsRequired(false);
+        });
+
+        modelBuilder.Entity<SystemLog>(entity =>
+        {
+            entity.ToTable("SystemLog");
+            entity.HasKey(e => e.Id).HasName("PK_SystemLog");
+            entity.Property(e => e.CreateDate).HasColumnType("datetime");
         });
 
         //modelBuilder.Entity<ServiceJoinStaff>(entity =>
