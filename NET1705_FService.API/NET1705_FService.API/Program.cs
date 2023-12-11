@@ -155,6 +155,7 @@ builder.Services.AddScoped<IOrderDetailsService, OrderDetailsService>();
 builder.Services.AddScoped<IVnpayService, VnpayService>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<ISystemLogRepository, SystemLogRepository>();
 
 //NgocBuh
 builder.Services.AddScoped<IBannerRepository, BannerRepository>();
