@@ -26,7 +26,7 @@ namespace NET1705_FService.Services.Services
             {
                 return 0;
             }
-            var account = _userService.GetAccountAsync(accountId);
+            var account = await _userService.GetAccountAsync(accountId);
             if (account != null && notification != null)
             {
                 await _repo.AddNotificationByAccountId(accountId, notification);

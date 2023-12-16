@@ -66,14 +66,14 @@ namespace NET1705_FService.Services.Services
 
             // send noti to user
             var account = await _userService.GetAccountByUsernameAsync(orderModel.UserName);
-            if (account != null) 
+            if (account != null)
             {
                 Notification notification = new Notification
                 {
                     AccountId = account.Id,
                     CreateDate = DateTime.Now,
                     Type = NotificationType.Order.ToString(),
-                    Title = "Đặt hàng",
+                    Title = "Đơn hàng",
                     Action = "Đang chờ thanh toán",
                     Message = $"Đơn hàng #{result.Id} - {package.Name} đã được tạo thành công. Bạn vui lòng thanh toán nhé.",
                     ModelId = result.Id
@@ -121,7 +121,7 @@ namespace NET1705_FService.Services.Services
                     AccountId = account.Id,
                     CreateDate = DateTime.Now,
                     Type = NotificationType.Order.ToString(),
-                    Title = "Đặt hàng",
+                    Title = "Đơn hàng",
                     Action = "Đang chờ thanh toán",
                     Message = $"Đơn hàng #{result.Id} - Dịch vụ {service.Name} đã được tạo thành công. Bạn vui lòng thanh toán nhé.",
                     ModelId = result.Id
