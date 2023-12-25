@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿    using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -19,6 +19,7 @@ public partial class Accounts : IdentityUser
     public string? RefreshToken { get; set; }
     public DateTime? RefreshTokenExpiryTime { get; set; }
     public DateTime? CreateDate { get; set; }
+    public string? DeviceToken { get; set; }
     public virtual ICollection<Apartment> Apartments { get; } = new List<Apartment>();
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();

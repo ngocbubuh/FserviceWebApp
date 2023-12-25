@@ -20,7 +20,7 @@ namespace FServiceAPI.Repositories
 {
     public class AccountRepository : IAccountRepository
     {
-        private readonly FserviceApiDatabaseContext _context;
+        private readonly FserviceApiDatabaseContext context;
         private readonly UserManager<Accounts> accountManager;
         private readonly SignInManager<Accounts> signInManager;
         private readonly IConfiguration configuration;
@@ -30,13 +30,13 @@ namespace FServiceAPI.Repositories
             UserManager<Accounts> accountManager, 
             SignInManager<Accounts> signInManager, 
             IConfiguration configuration,
-            RoleManager<IdentityRole> roleManager,
-            IUserRepository userRepository)
+            RoleManager<IdentityRole> roleManager, FserviceApiDatabaseContext context)
         {
             this.accountManager = accountManager;
             this.signInManager = signInManager;
             this.configuration = configuration;
             this.roleManager = roleManager;
+            this.context = context;
         }
 
         public async Task<ResponseModel> ConfirmEmail(string token, string email)
@@ -413,6 +413,23 @@ namespace FServiceAPI.Repositories
                 };
             }
             return new ResponseModel { Status = "Success", Message = "Đổi mật khẩu thành công!" };
+        }
+
+        public async Task<bool> UpdateDeviceToken(string accountId, string deviceToken)
+        {
+            if (context == null)
+            {
+                return false;
+            }
+            var account = await context.Accounts.FirstOrDefaultAsync(a => a.Id == accountId && a.Status == true);
+            if (account != null && !deviceToken.IsNullOrEmpty())
+            {
+                account.DeviceToken = deviceToken;
+                context.Update(account);
+                await context.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
 
 
