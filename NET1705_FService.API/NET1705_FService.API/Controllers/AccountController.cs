@@ -233,5 +233,34 @@ namespace NET1715_FService.API.Controllers
 
             return Ok(result);
         }
+
+        // update device token for send message by firebase
+        [Authorize]
+        [HttpPut("update-device-token", Name = "Update device token")]
+        public async Task<IActionResult> UpdateDeviceToken(string accountId, string token)
+        {
+            try
+            {
+                var result = await accountService.UpdateDeviceToken(accountId, token);
+                if (result)
+                {
+                    return Ok(new ResponseModel
+                    {
+                        Status = "Success",
+                        Message = "Update token successfully"
+                    });
+                }
+                return BadRequest(new ResponseModel
+                {
+                    Status = "Error",
+                    Message = "Can not update token"
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
+        }
     }
 }
