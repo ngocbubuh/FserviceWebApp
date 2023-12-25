@@ -1,4 +1,5 @@
-﻿using NET1705_FService.Repositories.Helper;
+﻿using NET1705_FService.Repositories.Data;
+using NET1705_FService.Repositories.Helper;
 using NET1705_FService.Repositories.Models;
 using System;
 using System.Collections.Generic;
@@ -19,5 +20,7 @@ namespace NET1705_FService.Services.Interface
         public Task<int> MarkAllNotificationByAccountIdIsRead(string userName);
 
         public Task<int> MarkNotificationIsReadById(int notificationId);
+
+        public Task<int> GetNumbersOfUnReadNotification(string userName);
     }
 }

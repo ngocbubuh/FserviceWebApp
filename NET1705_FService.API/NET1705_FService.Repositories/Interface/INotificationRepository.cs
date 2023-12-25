@@ -19,5 +19,7 @@ namespace NET1705_FService.Repositories.Interface
         public Task<int> MarkAllNotificationByAccountIdIsRead(string accountId);
 
         public Task<int> MarkNotificationIsReadById(int notificationId);
+
+        public Task<int> GetNumbersOfUnReadNotification(string accountId);
     }
 }

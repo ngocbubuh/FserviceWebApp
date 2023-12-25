@@ -75,6 +75,41 @@ namespace NET1705_FService.API.Controllers
         }
 
         [Authorize]
+        [HttpGet("numbers-unread", Name = "Get numbers of unread notification")]
+        public async Task<IActionResult> GetNumbersUnReadNotification()
+        {
+            try
+            {
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                var userName = AuthenTools.GetCurrentEmail(identity);
+                if (userName == null)
+                {
+                    return Unauthorized("Token is expired!");
+                }
+                int result = await _notiService.GetNumbersOfUnReadNotification(userName);
+                if (result == -1)
+                {
+                    ResponseModel resError = new ResponseModel
+                    {
+                        Status = "Error",
+                        Message = "Cannot get numbers of unread notification",
+                    };
+                    return NotFound(resError);
+                }
+                ResponseModel res = new ResponseModel
+                {
+                    Status = "Success",
+                    Message = result.ToString(),
+                };
+                return Ok(res);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [Authorize]
         [HttpPut("account", Name = "MarkAllReadByAccountId")]
         public async Task<IActionResult> MarkAllReadByAccountId()
         {

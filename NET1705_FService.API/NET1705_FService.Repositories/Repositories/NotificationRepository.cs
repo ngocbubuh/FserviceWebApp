@@ -64,6 +64,17 @@ namespace NET1705_FService.Repositories.Repositories
             return _mapper.Map<NotificationModel>(notification);
         }
 
+        public async Task<int> GetNumbersOfUnReadNotification(string accountId)
+        {
+            if (string.IsNullOrEmpty(accountId))
+            {
+                return 0;
+            }
+            var numbers = await _context.Notifications.Where(x => x.AccountId == accountId && x.IsRead == false).CountAsync();
+            return numbers;
+
+        }
+
         public async Task<int> MarkAllNotificationByAccountIdIsRead(string accountId)
         {
             if (string.IsNullOrEmpty(accountId))

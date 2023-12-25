@@ -1,4 +1,5 @@
-﻿using NET1705_FService.Repositories.Helper;
+﻿using NET1705_FService.Repositories.Data;
+using NET1705_FService.Repositories.Helper;
 using NET1705_FService.Repositories.Interface;
 using NET1705_FService.Repositories.Models;
 using NET1705_FService.Services.Interface;
@@ -15,8 +16,8 @@ namespace NET1705_FService.Services.Services
         private readonly INotificationRepository _repo;
         private readonly IUserService _userService;
 
-        public NotificationService(INotificationRepository repo, IUserService userService) 
-        { 
+        public NotificationService(INotificationRepository repo, IUserService userService)
+        {
             _repo = repo;
             _userService = userService;
         }
@@ -52,11 +53,25 @@ namespace NET1705_FService.Services.Services
 
         public async Task<NotificationModel> GetNotificationById(int notificationId)
         {
-            if (notificationId  == 0)
+            if (notificationId == 0)
             {
                 return null;
             }
             return await _repo.GetNotificationById(notificationId);
+        }
+
+        public async Task<int> GetNumbersOfUnReadNotification(string userName)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                return -1;
+            }
+            var account = await _userService.GetAccountByUsernameAsync(userName);
+            if (account != null)
+            {
+                return await _repo.GetNumbersOfUnReadNotification(account.Id);
+            }
+            return -1;
         }
 
         public async Task<int> MarkAllNotificationByAccountIdIsRead(string userName)
