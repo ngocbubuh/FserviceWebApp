@@ -28,13 +28,14 @@ namespace NET1705_FService.Repositories.Repositories
         private readonly IOrderRepository _orderRepository;
         private readonly IUserRepository _userRepository;
         private readonly IServiceRepository _serviceRepo;
+        private readonly IFirebaseRepository _firebaseRepository;
         private readonly IMapper _mapper;
 
         public OrderDetailsRepository(FserviceApiDatabaseContext context, IApartmentPackageRepository apartmentPackageRepo,
             IApartPackageServiceRepository apmPackageServiceRepo, IPackageRepository packageRepo,
             IAccountRepository accountRepo, IMapper mapper, INotificationRepository notificationRepo,
             IOrderRepository orderRepository, IUserRepository userRepository,
-            IServiceRepository serviceRepo)
+            IServiceRepository serviceRepo, IFirebaseRepository firebaseRepository)
         {
             _context = context;
             _apartmentPackageRepo = apartmentPackageRepo;
@@ -45,14 +46,15 @@ namespace NET1705_FService.Repositories.Repositories
             _orderRepository = orderRepository;
             _userRepository = userRepository;
             _serviceRepo = serviceRepo;
+            _firebaseRepository = firebaseRepository;
             _mapper = mapper;
         }
 
         public async Task<OrderDetailsViewModel> GetOrderDetailByIdAsync(int id)
         {
-            var orderDetails = _context.OrderDetails
+            var orderDetails = await _context.OrderDetails
                 .Include(o => o.Service)
-                .Include(o => o.ApartmentPackage).FirstOrDefault(o => o.Id == id);
+                .Include(o => o.ApartmentPackage).FirstOrDefaultAsync(o => o.Id == id);
             var orderDetailsView = _mapper.Map<OrderDetailsViewModel>(orderDetails);
             return orderDetailsView;
         }
@@ -81,7 +83,7 @@ namespace NET1705_FService.Repositories.Repositories
                     orderDetailExtra.Amount = priceService;
                     orderDetailExtra.StaffId = staffWorkExtra.Id;
                     orderDetailExtra.ShiftTime = GetShiftTimeAsString(usingPackage.ShiftTime);
-                    orderDetailExtra.Status = "Pending";
+                    orderDetailExtra.Status = TaskStatusModel.Pending.ToString();
 
                     //OrderDetail orderDetailExtra = new OrderDetail()
                     //{
@@ -128,7 +130,7 @@ namespace NET1705_FService.Repositories.Repositories
             orderDetail.Amount = 0;
             orderDetail.StaffId = staffWork.Id;
             orderDetail.ShiftTime = GetShiftTimeAsString(usingPackage.ShiftTime);
-            orderDetail.Status = "Pending";
+            orderDetail.Status = TaskStatusModel.Pending.ToString();
 
             //OrderDetail orderDetail = new OrderDetail()
             //{
@@ -176,6 +178,9 @@ namespace NET1705_FService.Repositories.Repositories
                         ModelId = apartmentPackage.Id
                     };
                     await _notificationRepo.AddNotificationByAccountId(customer.Id, notification);
+
+                    // push noti firebase
+                    await _firebaseRepository.PushNotificationFireBase($"{usingService.Name}", $"Nhân viên {staffWork.Name} sẽ sớm liên hệ với bạn. Hãy chú ý điện thoại!", customer.Id);
                 }
 
                 // send noti to staff
@@ -189,7 +194,9 @@ namespace NET1705_FService.Repositories.Repositories
                     Message = $"Công việc mới của bạn đã được lên lịch, hãy kiểm tra bảng công việc.",
                     ModelId = orderDetail.Id
                 };
-                await _notificationRepo.AddNotificationByAccountId(customer.Id, notificationStaff);
+                await _notificationRepo.AddNotificationByAccountId(staffWork.Id, notificationStaff);
+                // push noti firebase
+                await _firebaseRepository.PushNotificationFireBase($"{usingService.Name}", "Công việc mới của bạn đã được lên lịch, hãy kiểm tra bảng công việc.", staffWork.Id);
             }
 
             return new ResponseModel
@@ -249,6 +256,9 @@ namespace NET1705_FService.Repositories.Repositories
                                 ModelId = updateOrderDetail.Id
                             };
                             await _notificationRepo.AddNotificationByAccountId(updateOrderDetail.StaffId, notification);
+
+                            // push noti firebase
+                            await _firebaseRepository.PushNotificationFireBase($"{usingService.Name}", $"Đến nhà khách hàng làm việc trong khoảng {updateOrderDetail.ShiftTime}", updateOrderDetail.StaffId);
                         }
 
                         // send noti to customer
@@ -268,6 +278,7 @@ namespace NET1705_FService.Repositories.Repositories
                                     ModelId = updateOrderDetail.ApartmentPackageId
                                 };
                                 await _notificationRepo.AddNotificationByAccountId(customer.Id, notification);
+                                await _firebaseRepository.PushNotificationFireBase($"{usingService.Name}", "Nhân viên sắp đến.", customer.Id);
                             }
                         }
 
@@ -295,6 +306,7 @@ namespace NET1705_FService.Repositories.Repositories
                                 ModelId = updateOrderDetail.Id
                             };
                             await _notificationRepo.AddNotificationByAccountId(updateOrderDetail.StaffId, notification);
+                            await _firebaseRepository.PushNotificationFireBase($"{usingService.Name}", "Bạn đã hoàn thành công việc của mình. Hãy chờ khách hàng đánh giá!", updateOrderDetail.StaffId);
                         }
 
                         // send noti to customer
@@ -314,13 +326,15 @@ namespace NET1705_FService.Repositories.Repositories
                                     ModelId = updateOrderDetail.ApartmentPackageId
                                 };
                                 await _notificationRepo.AddNotificationByAccountId(customer.Id, notification);
+                                await _firebaseRepository.PushNotificationFireBase($"{usingService.Name}", "Nhân viên đã hoàn thành công việc. Đánh giá ngay!", customer.Id);
+
                             }
                         }
                     }
                     _context.OrderDetails!.Update(updateOrderDetail);
                     await _context.SaveChangesAsync();
 
-                    
+
                 }
                 return updateOrderDetail.Id;
             }
@@ -386,7 +400,7 @@ namespace NET1705_FService.Repositories.Repositories
                     if (workStaff == null)
                     {
                         // refund number of remain quantity service for customer
-                        
+
                         if (apartmentPackage != null)
                         {
                             foreach (var item in apartmentPackage.ApartmentPackageServices)
@@ -424,12 +438,13 @@ namespace NET1705_FService.Repositories.Repositories
                                             ModelId = apartmentPackage.Id
                                         };
                                         await _notificationRepo.AddNotificationByAccountId(customer.Id, notification);
+                                        await _firebaseRepository.PushNotificationFireBase($"{usingService.Name}", "Nhân viên đã huỷ lịch làm việc, bạn vui lòng đặt lại lịch khác. Xin cảm ơn!", customer.Id);
                                     }
                                 }
                                 return work.Id;
                             }
                         }
-                    } 
+                    }
                     else
                     {
                         // update work for staff re-assign
@@ -457,6 +472,7 @@ namespace NET1705_FService.Repositories.Repositories
                                     ModelId = work.Id
                                 };
                                 await _notificationRepo.AddNotificationByAccountId(work.StaffId, notificationStaff);
+                                await _firebaseRepository.PushNotificationFireBase($"{usingService.Name}", "Đến nhà khách hàng làm việc trong khoảng {work.ShiftTime}", work.StaffId);
 
                                 Notification notification = new Notification
                                 {
@@ -469,6 +485,7 @@ namespace NET1705_FService.Repositories.Repositories
                                     ModelId = apartmentPackage.Id
                                 };
                                 await _notificationRepo.AddNotificationByAccountId(customer.Id, notification);
+                                await _firebaseRepository.PushNotificationFireBase($"{usingService.Name}", "Nhân viên {workStaff.Name} đã tiếp nhận công việc và sẽ sớm liên hệ với bạn. Hãy chú ý điện thoại!", customer.Id);
                             }
                         }
                         return work.Id;
@@ -559,7 +576,7 @@ namespace NET1705_FService.Repositories.Repositories
             // tat ca staff da co job trong ngay
             if (workStaff == null)
             {
-                
+
                 var staffIdWithMinRecords = staffs
                     .Where(staff => staff.Id != cancelStaffId)
                     .Select(staff => new
