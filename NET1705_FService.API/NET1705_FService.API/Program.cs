@@ -22,6 +22,9 @@ using Microsoft.Extensions.Configuration;
 using NET1705_FService.Repositories.Data;
 using NET1705_FService.API.Helper;
 using NET1705_FService.API.RunSchedule;
+using Microsoft.AspNetCore.Builder.Extensions;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -156,6 +159,7 @@ builder.Services.AddScoped<IVnpayService, VnpayService>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<ISystemLogRepository, SystemLogRepository>();
+builder.Services.AddScoped<IFirebaseRepository, FirebaseRepository>();
 
 //NgocBuh
 builder.Services.AddScoped<IBannerRepository, BannerRepository>();
@@ -172,6 +176,12 @@ builder.Services.AddScoped<IdentityErrorDescriber, LocalizedIdentityErrorDescrib
 
 //Setup Quartz.NET
 builder.Services.AddInfrastructure();
+
+//Setup Firebase
+FirebaseApp.Create(new AppOptions()
+{
+    Credential = GoogleCredential.FromFile("message-reactjs-firebase-adminsdk-vlz1s-f7b2caf7ae.json")
+});
 
 var app = builder.Build();
 
