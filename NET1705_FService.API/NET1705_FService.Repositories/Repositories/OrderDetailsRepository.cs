@@ -50,7 +50,9 @@ namespace NET1705_FService.Repositories.Repositories
 
         public async Task<OrderDetailsViewModel> GetOrderDetailByIdAsync(int id)
         {
-            var orderDetails = _context.OrderDetails.Include(o => o.Service).FirstOrDefault(o => o.Id == id);
+            var orderDetails = _context.OrderDetails
+                .Include(o => o.Service)
+                .Include(o => o.ApartmentPackage).FirstOrDefault(o => o.Id == id);
             var orderDetailsView = _mapper.Map<OrderDetailsViewModel>(orderDetails);
             return orderDetailsView;
         }
