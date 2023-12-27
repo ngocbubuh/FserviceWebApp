@@ -180,7 +180,7 @@ builder.Services.AddInfrastructure();
 //Setup Firebase
 FirebaseApp.Create(new AppOptions()
 {
-    Credential = GoogleCredential.FromFile("message-reactjs-firebase-adminsdk-vlz1s-f7b2caf7ae.json")
+    Credential = GoogleCredential.FromFile("swp391-f3aae-firebase-adminsdk-9h08x-05e29a1176.json")
 });
 
 var app = builder.Build();
