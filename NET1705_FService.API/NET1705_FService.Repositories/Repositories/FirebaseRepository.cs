@@ -1,6 +1,7 @@
 ﻿using FServiceAPI.Repositories;
 using NET1705_FService.Repositories.Helper;
 using NET1705_FService.Repositories.Interface;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,26 +14,41 @@ namespace NET1705_FService.Repositories.Repositories
     {
         private readonly IUserRepository _userRepository;
 
-        public FirebaseRepository(IUserRepository userRepository) 
+        public FirebaseRepository(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
         public async Task<string> PushNotificationFireBase(string title, string body, string accountId)
         {
-            var account = await _userRepository.GetAccountAsync(accountId);
-            if (account != null) 
-            { 
-                if (account.DeviceToken != null)
+            try
+            {
+                var account = await _userRepository.GetAccountAsync(accountId);
+                if (account != null)
                 {
-                    return await FirebaseLibrary.SendMessageFireBase(title, body, account.DeviceToken);
+                    if (account.DeviceToken != null)
+                    {
+                        return await FirebaseLibrary.SendMessageFireBase(title, body, account.DeviceToken);
+                    }
                 }
+                return "";
             }
-            return "";
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            
         }
 
         public async Task<string> PushNotificationFireBaseToken(string title, string body, string token)
         {
-            return await FirebaseLibrary.SendMessageFireBase(title, body, token);
+            try
+            {
+                return await FirebaseLibrary.SendMessageFireBase(title, body, token);
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
     }
 }

@@ -237,11 +237,11 @@ namespace NET1715_FService.API.Controllers
         // update device token for send message by firebase
         [Authorize]
         [HttpPut("update-device-token", Name = "Update device token")]
-        public async Task<IActionResult> UpdateDeviceToken(string accountId, string token)
+        public async Task<IActionResult> UpdateDeviceToken(DeviceTokenModal deviceToken)
         {
             try
             {
-                var result = await accountService.UpdateDeviceToken(accountId, token);
+                var result = await accountService.UpdateDeviceToken(deviceToken.AccountId, deviceToken.DeviceToken);
                 if (result)
                 {
                     return Ok(new ResponseModel

@@ -12,19 +12,26 @@ namespace NET1705_FService.Repositories.Helper
     {
         public static async Task<string> SendMessageFireBase(string title, string body, string token)
         {
-            var message = new Message()
+            try
             {
-                Notification = new Notification()
+                var message = new Message()
                 {
-                    Title = title,
-                    Body = body
-                },
-                Token = token
-            };
+                    Notification = new Notification()
+                    {
+                        Title = title,
+                        Body = body
+                    },
+                    Token = token
+                };
 
-            var reponse = await FirebaseMessaging.DefaultInstance.SendAsync(message);
-            Console.WriteLine($"Successfully: {reponse}");
-            return reponse;
+                var reponse = await FirebaseMessaging.DefaultInstance.SendAsync(message);
+                Console.WriteLine($"Successfully: {reponse}");
+                return reponse;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message.ToString();
+            }
         }
     }
 }
