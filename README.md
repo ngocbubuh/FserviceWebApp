@@ -2,10 +2,6 @@
 
 ## Project SWP391 - Student House Membership
 
-<div align="left">
-    <img style="width: 130px;" src="https://cdn.discordapp.com/attachments/1036663699458490408/1166764222080888893/logo_web_2.png" />
-</div>
-
 #### Website: [FService](https://fservices.vercel.app)
 - Platform that provides apartment service for residents at [Vinhomes Grand Park](https://vinhome.com.vn/vinhomes-grand-park/) (Thu Duc City, HCMC)
 
@@ -21,7 +17,7 @@
 #### Introduction:
 
 FService is a platform allowing Vinhomes Grand Park residents (Thu Duc, HCMC) to purchase pre-designed apartment services and make online payments through the integrated VNPAY on the website. The packages come with usage periods and a number of services per cycle, and additional individual services can be purchased when the allocated ones are exhausted.
-=======
+
 - [Đặng Phan Gia Đức](https://github.com/giaducdang03) (Leader, Back-end, Front-end Dev, UI Design)
 - [Nguyễn Bình Phương Trâm](https://github.com/phwtram) (Front-end Dev)
 - [Dương Tôn Bảo](https://github.com/duongbao0803) (Front-end Dev)
