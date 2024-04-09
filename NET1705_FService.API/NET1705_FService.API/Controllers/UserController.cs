@@ -47,7 +47,7 @@ namespace NET1705_FService.API.Controllers
             }
         }
 
-        [HttpGet("/account-by-id/{id}")]
+        [HttpGet("account-by-id/{id}")]
         [Authorize]
         public async Task<IActionResult> GetAccount(string id)
         {
@@ -71,7 +71,7 @@ namespace NET1705_FService.API.Controllers
             catch { return BadRequest(); }
         }
 
-        [HttpGet("/account-by-role")]
+        [HttpGet("account-by-role")]
         [Authorize]
         public async Task<IActionResult> GetAccountByRole([FromQuery] PaginationParameter pagination, RoleModel role)
         {

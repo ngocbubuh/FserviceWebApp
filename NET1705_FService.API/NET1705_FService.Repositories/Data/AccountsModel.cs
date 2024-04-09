@@ -29,5 +29,7 @@ namespace NET1705_FService.Repositories.Data
         [Display(Name = "Date of Birth")]
         public DateTime DateOfBirth { get; set; }
         public string Avatar { get; set; }
+
+        public string? DeviceToken { get; set; } = "";
     }
 }

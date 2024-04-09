@@ -20,6 +20,11 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Identity.Web;
 using Microsoft.Extensions.Configuration;
 using NET1705_FService.Repositories.Data;
+using NET1705_FService.API.Helper;
+using NET1705_FService.API.RunSchedule;
+using Microsoft.AspNetCore.Builder.Extensions;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -151,6 +156,10 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderDetailsRepository, OrderDetailsRepository>();
 builder.Services.AddScoped<IOrderDetailsService, OrderDetailsService>();
 builder.Services.AddScoped<IVnpayService, VnpayService>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<ISystemLogRepository, SystemLogRepository>();
+builder.Services.AddScoped<IFirebaseRepository, FirebaseRepository>();
 
 //NgocBuh
 builder.Services.AddScoped<IBannerRepository, BannerRepository>();
@@ -165,8 +174,14 @@ builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddTransient<IMailService, MailService>();
 builder.Services.AddScoped<IdentityErrorDescriber, LocalizedIdentityErrorDescriber>();
 
-//builder.Services.AddLocalization(opt => opt.ResourcesPath = "NET1705_FService.Repositories.Helper.LocalizedIdentityErrorDescriber");
-//builder.Services.AddMvc();
+//Setup Quartz.NET
+builder.Services.AddInfrastructure();
+
+//Setup Firebase
+FirebaseApp.Create(new AppOptions()
+{
+    Credential = GoogleCredential.FromFile("swp391-f3aae-firebase-adminsdk-9h08x-05e29a1176.json")
+});
 
 var app = builder.Build();
 

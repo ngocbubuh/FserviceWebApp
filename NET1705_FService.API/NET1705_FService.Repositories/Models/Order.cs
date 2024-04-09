@@ -36,6 +36,8 @@ public partial class Order
 
     public string? TransactionNo { get; set; }
 
+    public bool? UpdatedPayment { get; set; } = false;
+
     public virtual Apartment? Apartment { get; set; }
 
     public virtual Package? Package { get; set; }

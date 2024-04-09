@@ -85,6 +85,11 @@ namespace NET1715_FService.Service.Services
             return result;
         }
 
+        public async Task<bool> UpdateDeviceToken(string accountId, string deviceToken)
+        {
+            return await _repo.UpdateDeviceToken(accountId, deviceToken);
+        }
+
         //public async Task<ResponseModel> SignUpStaffAsync(SignUpModel model)
         //{
         //    var result = await _repo.SignUpStaffAsync(model);

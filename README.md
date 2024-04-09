@@ -2,7 +2,12 @@
 
 ## Project SWP391 - Student House Membership
 
-### Website: [FService](https://fservices.vercel.app)
+<div align="left">
+    <img style="width: 130px;" src="https://cdn.discordapp.com/attachments/1036663699458490408/1166764222080888893/logo_web_2.png" />
+</div>
+
+#### Website: [FService](https://fservices.vercel.app)
+- Platform that provides apartment service for residents at [Vinhomes Grand Park](https://vinhome.com.vn/vinhomes-grand-park/) (Thu Duc City, HCMC)
 
 #### Instructor: Lâm Hữu Khánh Phương (FU-HCM)
 
@@ -16,13 +21,28 @@
 #### Introduction:
 
 FService is a platform allowing Vinhomes Grand Park residents (Thu Duc, HCMC) to purchase pre-designed apartment services and make online payments through the integrated VNPAY on the website. The packages come with usage periods and a number of services per cycle, and additional individual services can be purchased when the allocated ones are exhausted.
+=======
+- [Đặng Phan Gia Đức](https://github.com/giaducdang03) (Leader, Back-end, Front-end Dev, UI Design)
+- [Nguyễn Bình Phương Trâm](https://github.com/phwtram) (Front-end Dev)
+- [Dương Tôn Bảo](https://github.com/duongbao0803) (Front-end Dev)
+- [Phạm Ngọc Bảo](https://github.com/ngocbubuh) (Back-end dev)
+
+#### Introduction:
+
+FService was developed such as a simplified online platform for Vinhomes Grand Park residents in Thu Duc, HCMC, facilitating convenient purchase of pre-designed apartment services via integrated VNPAY. Offers defined service periods and the flexibility to buy more individual services as needed.
+
+- Admin can manage services, service packages, user, staff,...
+- Staff performs work and updates results of task.
+- Customer orders and tracks used services (Customer must regis apartment before order the package).
+- Prices of services and service packages are calculated according to room type at Vinhomes Grand Park.
 
 #### Technologies:
 
 - Front-end: ReactJS, ViteJS.
-- Back-end: ASP.NET Core Web API, MS SQL, Azure SQL.
+- Back-end: ASP.NET Core Web API, MS SQL Server, Azure SQL Database.
 - Deployment: Azure App Service (Back-end), Vercel (Front-end).
-- Other: GitHub, Jira, Figma, Swagger, JWT Token.
+- Payment: VNPAY
+- Other: GitHub, GitHub Actions, CI/CD, Jira, Figma, Swagger, JWT Token.
 
 #### Deployment:
 - Back-end: https://fservices.azurewebsites.net/swagger/index.html

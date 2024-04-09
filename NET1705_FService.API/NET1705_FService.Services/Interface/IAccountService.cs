@@ -19,5 +19,6 @@ namespace NET1715_FService.Service.Inteface
         public Task<ResponseModel> ConfirmEmail(string token, string email);
         public Task<ResponseModel> ChangePassword(ChangePasswordModel model);
         public Task<AuthenticationResponseModel> RefreshToken(TokenModel tokenModel);
+        public Task<bool> UpdateDeviceToken(string accountId, string deviceToken);
     }
 }

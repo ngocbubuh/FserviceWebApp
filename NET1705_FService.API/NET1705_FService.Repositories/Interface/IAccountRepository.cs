@@ -19,5 +19,7 @@ namespace FServiceAPI.Repositories
         public Task<List<Accounts>> GetAllStaffsAsync();
 
         public Task<Accounts> GetAccountByUserName(string userName);
+
+        public Task<bool> UpdateDeviceToken(string accountId, string deviceToken);
     } 
 }
